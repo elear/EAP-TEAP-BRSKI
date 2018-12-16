@@ -1,0 +1,1064 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head profile="http://www.w3.org/2006/03/hcard http://dublincore.org/documents/2008/08/04/dc-html/">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+
+  <title>Bootstrapping Key Infrastructure over EAP</title>
+
+  <style type="text/css" title="Xml2Rfc (sans serif)">
+  /*<![CDATA[*/
+	  a {
+	  text-decoration: none;
+	  }
+      /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
+      a.info {
+          /* This is the key. */
+          position: relative;
+          z-index: 24;
+          text-decoration: none;
+      }
+      a.info:hover {
+          z-index: 25;
+          color: #FFF; background-color: #900;
+      }
+      a.info span { display: none; }
+      a.info:hover span.info {
+          /* The span will display just on :hover state. */
+          display: block;
+          position: absolute;
+          font-size: smaller;
+          top: 2em; left: -5em; width: 15em;
+          padding: 2px; border: 1px solid #333;
+          color: #900; background-color: #EEE;
+          text-align: left;
+      }
+	  a.smpl {
+	  color: black;
+	  }
+	  a:hover {
+	  text-decoration: underline;
+	  }
+	  a:active {
+	  text-decoration: underline;
+	  }
+	  address {
+	  margin-top: 1em;
+	  margin-left: 2em;
+	  font-style: normal;
+	  }
+	  body {
+	  color: black;
+	  font-family: verdana, helvetica, arial, sans-serif;
+	  font-size: 10pt;
+	  max-width: 55em;
+	  
+	  }
+	  cite {
+	  font-style: normal;
+	  }
+	  dd {
+	  margin-right: 2em;
+	  }
+	  dl {
+	  margin-left: 2em;
+	  }
+	
+	  ul.empty {
+	  list-style-type: none;
+	  }
+	  ul.empty li {
+	  margin-top: .5em;
+	  }
+	  dl p {
+	  margin-left: 0em;
+	  }
+	  dt {
+	  margin-top: .5em;
+	  }
+	  h1 {
+	  font-size: 14pt;
+	  line-height: 21pt;
+	  page-break-after: avoid;
+	  }
+	  h1.np {
+	  page-break-before: always;
+	  }
+	  h1 a {
+	  color: #333333;
+	  }
+	  h2 {
+	  font-size: 12pt;
+	  line-height: 15pt;
+	  page-break-after: avoid;
+	  }
+	  h3, h4, h5, h6 {
+	  font-size: 10pt;
+	  page-break-after: avoid;
+	  }
+	  h2 a, h3 a, h4 a, h5 a, h6 a {
+	  color: black;
+	  }
+	  img {
+	  margin-left: 3em;
+	  }
+	  li {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  ol {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  ol p {
+	  margin-left: 0em;
+	  }
+	  p {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  pre {
+	  margin-left: 3em;
+	  background-color: lightyellow;
+	  padding: .25em;
+	  }
+	  pre.text2 {
+	  border-style: dotted;
+	  border-width: 1px;
+	  background-color: #f0f0f0;
+	  width: 69em;
+	  }
+	  pre.inline {
+	  background-color: white;
+	  padding: 0em;
+	  }
+	  pre.text {
+	  border-style: dotted;
+	  border-width: 1px;
+	  background-color: #f8f8f8;
+	  width: 69em;
+	  }
+	  pre.drawing {
+	  border-style: solid;
+	  border-width: 1px;
+	  background-color: #f8f8f8;
+	  padding: 2em;
+	  }
+	  table {
+	  margin-left: 2em;
+	  }
+	  table.tt {
+	  vertical-align: top;
+	  }
+	  table.full {
+	  border-style: outset;
+	  border-width: 1px;
+	  }
+	  table.headers {
+	  border-style: outset;
+	  border-width: 1px;
+	  }
+	  table.tt td {
+	  vertical-align: top;
+	  }
+	  table.full td {
+	  border-style: inset;
+	  border-width: 1px;
+	  }
+	  table.tt th {
+	  vertical-align: top;
+	  }
+	  table.full th {
+	  border-style: inset;
+	  border-width: 1px;
+	  }
+	  table.headers th {
+	  border-style: none none inset none;
+	  border-width: 1px;
+	  }
+	  table.left {
+	  margin-right: auto;
+	  }
+	  table.right {
+	  margin-left: auto;
+	  }
+	  table.center {
+	  margin-left: auto;
+	  margin-right: auto;
+	  }
+	  caption {
+	  caption-side: bottom;
+	  font-weight: bold;
+	  font-size: 9pt;
+	  margin-top: .5em;
+	  }
+	
+	  table.header {
+	  border-spacing: 1px;
+	  width: 95%;
+	  font-size: 10pt;
+	  color: white;
+	  }
+	  td.top {
+	  vertical-align: top;
+	  }
+	  td.topnowrap {
+	  vertical-align: top;
+	  white-space: nowrap; 
+	  }
+	  table.header td {
+	  background-color: gray;
+	  width: 50%;
+	  }
+	  table.header a {
+	  color: white;
+	  }
+	  td.reference {
+	  vertical-align: top;
+	  white-space: nowrap;
+	  padding-right: 1em;
+	  }
+	  thead {
+	  display:table-header-group;
+	  }
+	  ul.toc, ul.toc ul {
+	  list-style: none;
+	  margin-left: 1.5em;
+	  margin-right: 0em;
+	  padding-left: 0em;
+	  }
+	  ul.toc li {
+	  line-height: 150%;
+	  font-weight: bold;
+	  font-size: 10pt;
+	  margin-left: 0em;
+	  margin-right: 0em;
+	  }
+	  ul.toc li li {
+	  line-height: normal;
+	  font-weight: normal;
+	  font-size: 9pt;
+	  margin-left: 0em;
+	  margin-right: 0em;
+	  }
+	  li.excluded {
+	  font-size: 0pt;
+	  }
+	  ul p {
+	  margin-left: 0em;
+	  }
+	
+	  .comment {
+	  background-color: yellow;
+	  }
+	  .center {
+	  text-align: center;
+	  }
+	  .error {
+	  color: red;
+	  font-style: italic;
+	  font-weight: bold;
+	  }
+	  .figure {
+	  font-weight: bold;
+	  text-align: center;
+	  font-size: 9pt;
+	  }
+	  .filename {
+	  color: #333333;
+	  font-weight: bold;
+	  font-size: 12pt;
+	  line-height: 21pt;
+	  text-align: center;
+	  }
+	  .fn {
+	  font-weight: bold;
+	  }
+	  .hidden {
+	  display: none;
+	  }
+	  .left {
+	  text-align: left;
+	  }
+	  .right {
+	  text-align: right;
+	  }
+	  .title {
+	  color: #990000;
+	  font-size: 18pt;
+	  line-height: 18pt;
+	  font-weight: bold;
+	  text-align: center;
+	  margin-top: 36pt;
+	  }
+	  .vcardline {
+	  display: block;
+	  }
+	  .warning {
+	  font-size: 14pt;
+	  background-color: yellow;
+	  }
+	
+	
+	  @media print {
+	  .noprint {
+		display: none;
+	  }
+	
+	  a {
+		color: black;
+		text-decoration: none;
+	  }
+	
+	  table.header {
+		width: 90%;
+	  }
+	
+	  td.header {
+		width: 50%;
+		color: black;
+		background-color: white;
+		vertical-align: top;
+		font-size: 12pt;
+	  }
+	
+	  ul.toc a::after {
+		content: leader('.') target-counter(attr(href), page);
+	  }
+	
+	  ul.ind li li a {
+		content: target-counter(attr(href), page);
+	  }
+	
+	  .print2col {
+		column-count: 2;
+		-moz-column-count: 2;
+		column-fill: auto;
+	  }
+	  }
+	
+	  @page {
+	  @top-left {
+		   content: "Internet-Draft"; 
+	  } 
+	  @top-right {
+		   content: "December 2010"; 
+	  } 
+	  @top-center {
+		   content: "Abbreviated Title";
+	  } 
+	  @bottom-left {
+		   content: "Doe"; 
+	  } 
+	  @bottom-center {
+		   content: "Expires June 2011"; 
+	  } 
+	  @bottom-right {
+		   content: "[Page " counter(page) "]"; 
+	  } 
+	  }
+	
+	  @page:first { 
+		@top-left {
+		  content: normal;
+		}
+		@top-right {
+		  content: normal;
+		}
+		@top-center {
+		  content: normal;
+		}
+	  }
+  /*]]>*/
+  </style>
+
+  <link href="#rfc.toc" rel="Contents">
+<link href="#rfc.section.1" rel="Chapter" title="1 Introduction">
+<link href="#rfc.section.1.1" rel="Chapter" title="1.1 Terminology">
+<link href="#rfc.section.2" rel="Chapter" title="2 TEAP BRSKI Architecture">
+<link href="#rfc.section.3" rel="Chapter" title="3 BRSKI Bootstrap and Enroll Operation">
+<link href="#rfc.section.3.1" rel="Chapter" title="3.1 Executing BRSKI in a TEAP Tunnel">
+<link href="#rfc.section.4" rel="Chapter" title="4 PKI Certificate Authority Considerations">
+<link href="#rfc.section.4.1" rel="Chapter" title="4.1 TEAP Tunnel Establishment">
+<link href="#rfc.section.4.2" rel="Chapter" title="4.2 BRSKI Trust Establishment">
+<link href="#rfc.section.5" rel="Chapter" title="5 Channel and Crypto Binding">
+<link href="#rfc.section.6" rel="Chapter" title="6 Protocol Flows">
+<link href="#rfc.section.6.1" rel="Chapter" title="6.1 TEAP Server Grants Access">
+<link href="#rfc.section.6.2" rel="Chapter" title="6.2 TEAP Server Instructs Client to Perform BRSKI Flow">
+<link href="#rfc.section.6.3" rel="Chapter" title="6.3 TEAP Server Instructs Client to Reenroll">
+<link href="#rfc.section.6.4" rel="Chapter" title="6.4 Out of Band Reenroll">
+<link href="#rfc.section.7" rel="Chapter" title="7 TEAP TLV Formats">
+<link href="#rfc.section.7.1" rel="Chapter" title="7.1 BRSKI TLVs">
+<link href="#rfc.section.7.1.1" rel="Chapter" title="7.1.1 BRSKI-RequestVoucher TLV">
+<link href="#rfc.section.7.1.2" rel="Chapter" title="7.1.2 BRSKI-Voucher TLV">
+<link href="#rfc.section.7.1.3" rel="Chapter" title="7.1.3 CSR-Attributes TLV">
+<link href="#rfc.section.7.2" rel="Chapter" title="7.2 Existing TEAP TLV Specifications">
+<link href="#rfc.section.7.2.1" rel="Chapter" title="7.2.1 PKCS#10 TLV">
+<link href="#rfc.section.8" rel="Chapter" title="8 Fragmentation">
+<link href="#rfc.section.9" rel="Chapter" title="9 IANA Considerations">
+<link href="#rfc.section.10" rel="Chapter" title="10 Security Considerations">
+<link href="#rfc.section.11" rel="Chapter" title="11 Acknowledgments">
+<link href="#rfc.references" rel="Chapter" title="12 Informative References">
+<link href="#rfc.appendix.A" rel="Chapter" title="A Changes from Earlier Versions">
+<link href="#rfc.authors" rel="Chapter">
+
+
+  <meta name="generator" content="xml2rfc version 2.9.6 - https://tools.ietf.org/tools/xml2rfc" />
+  <link rel="schema.dct" href="http://purl.org/dc/terms/" />
+
+  <meta name="dct.creator" content="Lear, E., Friel, O., and N. Cam-Winget" />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-lear-eap-teap-brski-01" />
+  <meta name="dct.issued" scheme="ISO8601" content="2018-10-18" />
+  <meta name="dct.abstract" content="In certain environments, in order for a device to establish any layer three communications, it is necessary for that device to be properly credentialed.  This is a relatively easy problem to solve when a device is associated with a human being and has both input and display functions.  It is less easy when the human, input, and display functions are not present.  To address this case, this memo specifies extensions to the Tunnel Extensible Authentication Protocol (TEAP) method that leverages Bootstrapping Remote Secure Key Infrastructures (BRSKI) in order to provide a credential to a device at layer two.  The basis of this work is that a manufacturer will introduce the device and the local deployment through cryptographic means.  In this sense the same trust model as BRSKI is used." />
+  <meta name="description" content="In certain environments, in order for a device to establish any layer three communications, it is necessary for that device to be properly credentialed.  This is a relatively easy problem to solve when a device is associated with a human being and has both input and display functions.  It is less easy when the human, input, and display functions are not present.  To address this case, this memo specifies extensions to the Tunnel Extensible Authentication Protocol (TEAP) method that leverages Bootstrapping Remote Secure Key Infrastructures (BRSKI) in order to provide a credential to a device at layer two.  The basis of this work is that a manufacturer will introduce the device and the local deployment through cryptographic means.  In this sense the same trust model as BRSKI is used." />
+
+</head>
+
+<body>
+
+  <table class="header">
+    <tbody>
+    
+    	<tr>
+<td class="left">Network Working Group</td>
+<td class="right">E. Lear</td>
+</tr>
+<tr>
+<td class="left">Internet-Draft</td>
+<td class="right">O. Friel</td>
+</tr>
+<tr>
+<td class="left">Intended status: Standards Track</td>
+<td class="right">N. Cam-Winget</td>
+</tr>
+<tr>
+<td class="left">Expires: April 21, 2019</td>
+<td class="right">Cisco Systems</td>
+</tr>
+<tr>
+<td class="left"></td>
+<td class="right">October 18, 2018</td>
+</tr>
+
+    	
+    </tbody>
+  </table>
+
+  <p class="title">Bootstrapping Key Infrastructure over EAP<br />
+  <span class="filename">draft-lear-eap-teap-brski-01</span></p>
+  
+  <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
+<p>In certain environments, in order for a device to establish any layer three communications, it is necessary for that device to be properly credentialed.  This is a relatively easy problem to solve when a device is associated with a human being and has both input and display functions.  It is less easy when the human, input, and display functions are not present.  To address this case, this memo specifies extensions to the Tunnel Extensible Authentication Protocol (TEAP) method that leverages Bootstrapping Remote Secure Key Infrastructures (BRSKI) in order to provide a credential to a device at layer two.  The basis of this work is that a manufacturer will introduce the device and the local deployment through cryptographic means.  In this sense the same trust model as BRSKI is used.</p>
+<h1 id="rfc.status"><a href="#rfc.status">Status of This Memo</a></h1>
+<p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
+<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
+<p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
+<p>This Internet-Draft will expire on April 21, 2019.</p>
+<h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
+<p>Copyright (c) 2018 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
+
+  
+  <hr class="noprint" />
+  <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
+  <ul class="toc">
+
+  	<li>1.   <a href="#rfc.section.1">Introduction</a>
+</li>
+<ul><li>1.1.   <a href="#rfc.section.1.1">Terminology</a>
+</li>
+</ul><li>2.   <a href="#rfc.section.2">TEAP BRSKI Architecture</a>
+</li>
+<li>3.   <a href="#rfc.section.3">BRSKI Bootstrap and Enroll Operation</a>
+</li>
+<ul><li>3.1.   <a href="#rfc.section.3.1">Executing BRSKI in a TEAP Tunnel</a>
+</li>
+</ul><li>4.   <a href="#rfc.section.4">PKI Certificate Authority Considerations</a>
+</li>
+<ul><li>4.1.   <a href="#rfc.section.4.1">TEAP Tunnel Establishment</a>
+</li>
+<li>4.2.   <a href="#rfc.section.4.2">BRSKI Trust Establishment</a>
+</li>
+</ul><li>5.   <a href="#rfc.section.5">Channel and Crypto Binding</a>
+</li>
+<li>6.   <a href="#rfc.section.6">Protocol Flows</a>
+</li>
+<ul><li>6.1.   <a href="#rfc.section.6.1">TEAP Server Grants Access</a>
+</li>
+<li>6.2.   <a href="#rfc.section.6.2">TEAP Server Instructs Client to Perform BRSKI Flow</a>
+</li>
+<li>6.3.   <a href="#rfc.section.6.3">TEAP Server Instructs Client to Reenroll</a>
+</li>
+<li>6.4.   <a href="#rfc.section.6.4">Out of Band Reenroll</a>
+</li>
+</ul><li>7.   <a href="#rfc.section.7">TEAP TLV Formats</a>
+</li>
+<ul><li>7.1.   <a href="#rfc.section.7.1">BRSKI TLVs</a>
+</li>
+<ul><li>7.1.1.   <a href="#rfc.section.7.1.1">BRSKI-RequestVoucher TLV</a>
+</li>
+<li>7.1.2.   <a href="#rfc.section.7.1.2">BRSKI-Voucher TLV</a>
+</li>
+<li>7.1.3.   <a href="#rfc.section.7.1.3">CSR-Attributes TLV</a>
+</li>
+</ul><li>7.2.   <a href="#rfc.section.7.2">Existing TEAP TLV Specifications</a>
+</li>
+<ul><li>7.2.1.   <a href="#rfc.section.7.2.1">PKCS#10 TLV</a>
+</li>
+</ul></ul><li>8.   <a href="#rfc.section.8">Fragmentation</a>
+</li>
+<li>9.   <a href="#rfc.section.9">IANA Considerations</a>
+</li>
+<li>10.   <a href="#rfc.section.10">Security Considerations</a>
+</li>
+<li>11.   <a href="#rfc.section.11">Acknowledgments</a>
+</li>
+<li>12.   <a href="#rfc.references">Informative References</a>
+</li>
+<li>Appendix A.   <a href="#rfc.appendix.A">Changes from Earlier Versions</a>
+</li>
+<li><a href="#rfc.authors">Authors' Addresses</a>
+</li>
+
+
+  </ul>
+
+  <h1 id="rfc.section.1">
+<a href="#rfc.section.1">1.</a> <a href="#introduction" id="introduction">Introduction</a>
+</h1>
+<p><a href="#I-D.ietf-anima-bootstrapping-keyinfra" class="xref">[I-D.ietf-anima-bootstrapping-keyinfra]</a> (BRSKI) specifies a means to provision credentials to be used as credentials to operationally access networks.  It was designed as a standalone means where some limited access to an IP network is already available.  This is not always the case.  For example, IEEE 802.11 networks generally require authentication prior to any form of address assignment.  While it is possible to assign an IP address to a device on some form of an open network, or to accept some sort of default credential to establish initial IP connectivity, the steps that would then follow might well require that the device is placed on a new network, requiring reseting all layer three parameters.</p>
+<p id="rfc.section.1.p.2">A more  natural approach  in such  cases is to  more tightly  bind the provisioning  of credentials with  the authentication  mechanism.  One such way  to do this is  to make use of  the Extensible Authentication Protocol (EAP)  <a href="#RFC3748" class="xref">[RFC3748]</a> and the  Tunnel Extensible Authentication Protocol  (TEAP)  method  <a href="#RFC7170" class="xref">[RFC7170]</a>.    Thus  we  define  new  TEAP Type-Length-Value  (TLV) objects  that can  be used  to  transport the BRSKI protocol messages within the context of a TEAP TLS tunnel.</p>
+<p><a href="#RFC7170" class="xref">[RFC7170]</a> discusses the notion of provisioning peers.  Several different mechanisms are available.  Section 3.8 of that document acknowledges the concept of not initially authenticating the outer TLS session so that provisioning may occur.  In addition, exchange of multiple TLV messages between client and EAP server permits multiple provisioning steps.</p>
+<h1 id="rfc.section.1.1">
+<a href="#rfc.section.1.1">1.1.</a> <a href="#terminology" id="terminology">Terminology</a>
+</h1>
+<p id="rfc.section.1.1.p.1">The reader is presumed to be familiar with EAP terminology as stated in <a href="#RFC3748" class="xref">[RFC3748]</a>.  In addition, the following terms are commonly used in this document.</p>
+<p></p>
+
+<ul>
+<li>BRSKI: Bootstrapping Remote Secure Key Infrastructures, as defined in <a href="#I-D.ietf-anima-bootstrapping-keyinfra" class="xref">[I-D.ietf-anima-bootstrapping-keyinfra]</a>.  The term is also used to refer to the flow described in that document.</li>
+<li>EST: Enrollment over Secure Transport, as defined in <a href="#RFC7030" class="xref">[RFC7030]</a>.</li>
+<li>Voucher: a signed JSON object as defined in <a href="#RFC8366" class="xref">[RFC8366]</a>.</li>
+</ul>
+<h1 id="rfc.section.2">
+<a href="#rfc.section.2">2.</a> <a href="#teap-brski-architecture" id="teap-brski-architecture">TEAP BRSKI Architecture</a>
+</h1>
+<p id="rfc.section.2.p.1">The TEAP BRSKI architecture is illustrated in <a href="#brski-architecture" class="xref">Section 3</a>. The device talks to the TEAP server via the Authenticator as per any normal EAP exchange. There is no need for an inner EAP method server, and there is no explicit EAP method type defined for BRSKI.</p>
+<p id="rfc.section.2.p.2">The architecture illustrated shows the TEAP server and registrar function as being two logically separate entities, however the BRSKI registrar functionality may be integrated into the TEAP server. The device is not explicitly aware of where the registrar functionality is deployed when executing BRSKI inside a TEAP tunnel. Note that the device may connect directly to the registrar for the purposes of certificate reenrollment, but this happens outside the context to 801.1X and TEAP authentication.</p>
+<p id="rfc.section.2.p.3">The registrar in turn communicates with the BRSKI MASA service for the purposes of getting signed vouchers. [[TODO: I guess we should mention TEAP server talking to vendor default registrar in the cloud]]</p>
+<p id="rfc.section.2.p.4">The registrar also comunicates with a Certificate Authority in order to issue LDevIDs. The architecture shows the registrar and CA as being two logically separate entities, however the CA may be integrated into the registrar. The device is not explicitly aware of whether the CA and registrar functions are integrated.</p>
+<pre>
++--------+     +---------+     +--------+     +---------+     +------+
+|        |     |         |     |        |     |         |&lt;---&gt;| MASA |
+|        |     | Authen- |     |  TEAP  |     | BRSKI   |     +------+
+| Device |&lt;---&gt;| ticator |&lt;---&gt;| server |&lt;---&gt;|Registrar|
+|        |     |         |     |        |     |         |     +------+
+|        |     |         |     |        |     |         |&lt;---&gt;|  CA  |
++--------+     +---------+     +--------+     +---------+     +------+
+
+</pre>
+<h1 id="rfc.section.3">
+<a href="#rfc.section.3">3.</a> <a href="#brski-architecture" id="brski-architecture">BRSKI Bootstrap and Enroll Operation</a>
+</h1>
+<p id="rfc.section.3.p.1">This section summarises the current BRSKI operation. The BRSKI flow assumes the device has an IDevID and has a manufacturer installed trust anchor that can be used to validate the BRSKI voucher. The BRSKI flow compromises serveral main steps from the perspective of the device:</p>
+<p></p>
+
+<ul>
+<li>Step 1: Device discovers the registrar</li>
+<li>Step 2: Device establishes provisional TLS connection to registrar</li>
+<li>Step 3: Device sends voucher request message and receives signed voucher response</li>
+<li>Step 4: Device validates voucher and validates provisional TLS connection to registrar</li>
+<li>Step 5: Device downloads additional local domain CA information</li>
+<li>Step 6: Device downloads Certificate Signing Reqeust (CSR) attributes</li>
+<li>Step 7: Device does an EST enroll to obtain an LDevID</li>
+<li>Step 8: Device periodically reenrolls via EST to refresh its LDevID</li>
+</ul>
+<p id="rfc.section.3.p.3">Most of the operational steps require the device, and thus its internal state machine, to automatically complete the next step without being explicitly instructed to do so by the registrar. For example, the registrar does not explicitly tell the device to download additional local domain CA information, or to do an EST enroll to obtain an LDevID.</p>
+<h1 id="rfc.section.3.1">
+<a href="#rfc.section.3.1">3.1.</a> <a href="#executing-brski-in-a-teap-tunnel" id="executing-brski-in-a-teap-tunnel">Executing BRSKI in a TEAP Tunnel</a>
+</h1>
+<p id="rfc.section.3.1.p.1">This section outlines how the main BRSKI steps outlined above map to TEAP, and how BRSKI and enrollment can be accomplished inside a TEAP TLS tunnel. The following new TEAP TLVs are introduced:</p>
+<p></p>
+
+<ul>
+<li>BRSKI-VoucherRequest</li>
+<li>BRSKI-Voucher</li>
+<li>CSR-Attributes</li>
+</ul>
+<p id="rfc.section.3.1.p.3">The following steps outline how the above BRSKI flow maps to TEAP.</p>
+<p></p>
+
+<ul><li>Step 1: Device discovers the registrar</li></ul>
+<p id="rfc.section.3.1.p.5">When BRSKI is executed in a TEAP tunnel, the device exchanges BRSKI TLVs with the TEAP server. The discovery process for devices is therefore the standard wired or wireless LAN EAP server discovery process. The discovery processes outlined in section 4 of <a href="#I-D.ietf-anima-bootstrapping-keyinfra" class="xref">[I-D.ietf-anima-bootstrapping-keyinfra]</a> are not required for initial discovery of the registrar.</p>
+<p></p>
+
+<ul><li>Step 2: Device establishes provisional TLS connection to registrar</li></ul>
+<p id="rfc.section.3.1.p.7">The device establishes an outer TEAP tunnel with the TEAP server and does not validate the server certificate. Similarly, at this provisioning stage, the server does not validate the certificate of the device.  The device presents its LDevID as its identity certificate if it has a valid LDevID, otherwise it presents its IDevID. Server policy may also be used to control which certificate the device is allowed present, as described in section <a href="#pki-certificate-authority-considerations" class="xref">Section 4</a>.</p>
+<p id="rfc.section.3.1.p.8">If the presented credential is sufficient to grant access, the TEAP server can return an EAP-Success immediately. The device may still send a BRSKI-RequestVoucher TLV in response to the EAP-Success if it does not have, but requires, trust anchors for validating the TEAP server certificate.</p>
+<p id="rfc.section.3.1.p.9">If the TEAP server requires that the device execute a BRSKI flow, it sends a Request-Action TLV that includes a BRSKI-VoucherRequest TLV. For example, if the device presented its IDevID but the TEAP server requires an LDevID.</p>
+<p id="rfc.section.3.1.p.10">The TEAP server may also require the device to reenroll, for example, if the device presented a valid LDevID that is very closed to expiration. The server may instruct a device to reenroll by sending a Request-Action TLV that includes a zero byte length PKCS#10 TLV.</p>
+<p></p>
+
+<ul><li>Step 3: Device sends voucher request message and receives signed voucher response</li></ul>
+<p id="rfc.section.3.1.p.12">The device sends a BRSKI-RequestVoucher TLV to the TEAP server. The TEAP server forwards the RequestVoucher message to the MASA server, and the MASA server replies with a signed voucher. The TEAP server sends a BRSKI-Voucher TLV to the device.</p>
+<p id="rfc.section.3.1.p.13">If the MASA server does not issue a signed voucher, the TEAP server sends an EAP-Error TLV with a suitable error code to the device.</p>
+<p id="rfc.section.3.1.p.14">For wireless devices in particular, it is important that the MASA server only return a voucher for devices known to be associated with a particular registrar.  In this sense, success indicates that the device is on the correct network, while failure indicates the device should try to provision itself within wireless networks (e.g, go to the next SSID).</p>
+<p></p>
+
+<ul><li>Step 4: Device validates voucher and validates provisional TLS connection to registrar</li></ul>
+<p id="rfc.section.3.1.p.16">The device validates the signed voucher using its manufacturer installed trust anchor, and uses the CA information in the voucher to validate the outer TEAP TLS connection to the TEAP server.</p>
+<p id="rfc.section.3.1.p.17">If the device fails to validate the voucher, or fails to validate the outer TEAP TLS connection, then it sends a TEAP-Error TLV indicating failure to the TEAP server.</p>
+<p></p>
+
+<ul><li>Step 5: Device downloads additional local domain CA information</li></ul>
+<p id="rfc.section.3.1.p.19">On completion of the BRSKI flow, the device SHOULD send a Trusted-Server-Root TLV to the TEAP server in order to discover additional local domain CAs.</p>
+<p></p>
+
+<ul><li>Step 6: Device downloads CSR attributes</li></ul>
+<p id="rfc.section.3.1.p.21">No later than the completion of step 5, server MUST send a CSR-Attributes TLV to peer server in order to discover the correct fields to include when it enrolls to get an LDevID.</p>
+<p></p>
+
+<ul><li>Step 7: Device does an EST enroll to obtain an LDevID</li></ul>
+<p id="rfc.section.3.1.p.23">When executing the BRSKI flow inside a TEAP tunnel, the device does not directly leverage EST when doing its initial enroll. Instead, the device uses the existing TEAP PKCS#10 and PCKS#7 TEAP mechanisms.</p>
+<p id="rfc.section.3.1.p.24">Once the BRSKI flow is complete, the device can now send a PKCS#10 TLV to enroll and request an LDevID. If the TEAP server instructed the device to start the BRSKI flow via a Request-Action TLV that includes a BRSKI-RequestVoucher TLV, then the device MUST send a PKCS#10 in order to start the enroll process. The TEAP server will handle the PKCS#10 and ultimately return a PKCS#7 including an LDevID to the device.</p>
+<p id="rfc.section.3.1.p.25">If the TEAP server granted the device access on completion of the outer TEAP TLS tunnel in step 2 without sending a Request-Action TLV, the device does not have to send a PKCS#10 to enroll.</p>
+<p id="rfc.section.3.1.p.26">At this point, the device is said to be provisioned for local network access, and may authenticate in the future via 802.1X with its newly acquired credentials.</p>
+<p></p>
+
+<ul><li>Step 8: Device periodically reenrolls to refresh its LDevID</li></ul>
+<p id="rfc.section.3.1.p.28">When a device&#8217;s LDevID is close to expiration, there are two options for re-enrollment in order to obtain a fresh LDevID. As outlined in Step 2 above, the TEAP server may instruct the device to reenroll by sending a Request-Action TLV including a PKCS#10 TLV. If the TEAP server explicilty instructs the device to reenroll via these TLV exchange, then the device MUST send a PKCS#10 to reenroll and request a fresh LDevID.</p>
+<p id="rfc.section.3.1.p.29">However, the device SHOULD reenroll if it determines that its LDevID is close to expiration wihtout waiting for explicit instruction from the TEAP server. There are two options to do this.</p>
+<p id="rfc.section.3.1.p.30">Option 1: The device reenrolls for a new LDevID directly with the EST CA outside the context of the 802.1X TEAP flow. The device uses the registrar discovery mechanisms oulined in <a href="#I-D.ietf-anima-bootstrapping-keyinfra" class="xref">[I-D.ietf-anima-bootstrapping-keyinfra]</a> to discover the registrar and the device sends the EST reenroll messages to the discovered registrar endpoint. No new TEAP TLVs are defined to facilitate discover of the registrar or EST endpoints inside the context of the TEAP tunnel.</p>
+<p id="rfc.section.3.1.p.31">Option 2: When the device is performing a periodic 802.1X authentication using its current LDevID, it reenrolls for a new LDevID by sending a PKCS#10 TLV inside the TEAP TLS tunnel.</p>
+<h1 id="rfc.section.4">
+<a href="#rfc.section.4">4.</a> <a href="#pki-certificate-authority-considerations" id="pki-certificate-authority-considerations">PKI Certificate Authority Considerations</a>
+</h1>
+<p id="rfc.section.4.p.1">Careful consideration must be given to PKI certificate authority handling when:</p>
+<p></p>
+
+<ul>
+<li>Establishing the TEAP tunnel</li>
+<li>Establishing trust using BRSKI</li>
+</ul>
+<p id="rfc.section.4.p.3">These are described in more detail here.</p>
+<h1 id="rfc.section.4.1">
+<a href="#rfc.section.4.1">4.1.</a> <a href="#teap-tunnel-establishment" id="teap-tunnel-establishment">TEAP Tunnel Establishment</a>
+</h1>
+<p id="rfc.section.4.1.p.1">The client sends its ClientHello to initiate TLS tunnel establishment. It is possible for the TEAP server to restrict the certificates that the client can use for tunnel establishment by including a list of CA distinguished names in the certificate_authorities field in the CertificateRequest message. Network operators may want to do this in order to restrict netwok access to clients that have a certificate signed by one of a small set of trusted manufacturer/supplier CAs. If the client has both an IDevID and an LDevID, the client should present the LDevID in preference to its IDevID if allowed by server policy.</p>
+<p id="rfc.section.4.1.p.2">In practice, network operators will likely want to onboard devices from a large number of device manufacturers, with each manufacturer using a different root CA when issuing IDevIDs. If the number of different manufacturer root CAs is large, this could result in very large TLS handshake messages. Operators may prefer to include no CAs in the certificate_authorities field thus allowing devices to present IDevIDs signed by any CA when establishing the TEAP tunnel, and instead enforce policy at LDevID enrollment time.</p>
+<p id="rfc.section.4.1.p.3">It is recommended that the client validate the certificate presented by the server in the server&#8217;s Certificate message, but this may not be possible for clients that have not yet provisioned appropriate trust anchors. If the client is in the provisioning phase and has not yet completed a BRSKI flow, it will not have trust anchors installed yet, and thus will not be able to validate the server&#8217;s certificate. The client must however note the certificate presented by the server for (i) inclusion in the BRSKI-RequestVoucher TLV and for (ii) validation once the client has discovered the local domain trust anchors.</p>
+<p id="rfc.section.4.1.p.4">If the client does not present a suitable certificate to the server, the server MUST terminate the connection and fail the EAP request.</p>
+<p id="rfc.section.4.1.p.5">On establishment of the outer TLS tunnel, the TEAP server will make a policy decision on next steps. Possible policy decisions include:</p>
+<p></p>
+
+<ul>
+<li>Option 1: Server grants client full network access and returns EAP-Success. This will typically happen when the client presents a valid LDevID. Network policy may grant client network access based on IDevID without requiring the device to enroll to obtain an LDevID.</li>
+<li>Option 2: Server requires that client perform a full BRSKI flow, and then enroll to get an LDevID. This will typically happen when the client presents a valid IDevID and network policy requires all clients to have LDevIDs. The server sends a Request-Action TLV that includes a BRSKI-RequestVoucher TLV to the client to instruct it to start the BRSKI flow.</li>
+<li>Option 3: Server requires that the client reenroll to obtain a new LDevID. This could happen when the client presents a valid LDevID that is very close to expiration time, or the server&#8217;s policy requires an LDevID update. The server sends an Action-Request TLV including a PKCS#10 TLV to the client to instruct it to reenroll.</li>
+</ul>
+<h1 id="rfc.section.4.2">
+<a href="#rfc.section.4.2">4.2.</a> <a href="#brski-trust-establishment" id="brski-trust-establishment">BRSKI Trust Establishment</a>
+</h1>
+<p id="rfc.section.4.2.p.1">If the server requires that client perform a full BRSKI flow, it sends a Request-Action TLV that includes a zero byte length BRSKI-RequestVoucher TLV to the client. The client sends a new BRSKI-RequestVoucher TLV to the server, which contains all data specified in <a href="#I-D.ietf-anima-bootstrapping-keyinfra" class="xref">[I-D.ietf-anima-bootstrapping-keyinfra]</a> section 5.2. The client includes the server certificate it received in the server&#8217;s Certificate message during outer TLS tunnel establishment in the proximity-registrar-cert field. The client signs the request using its IDevID.</p>
+<p id="rfc.section.4.2.p.2">The server includes all additional information as required by <a href="#I-D.ietf-anima-bootstrapping-keyinfra" class="xref">[I-D.ietf-anima-bootstrapping-keyinfra]</a> section 5.4 and signs the request prior to forwarding to the MASA.</p>
+<p id="rfc.section.4.2.p.3">The MASA responds as per <a href="#I-D.ietf-anima-bootstrapping-keyinfra" class="xref">[I-D.ietf-anima-bootstrapping-keyinfra]</a> section 5.5. The response may indicate failure and the server should react accordingly to failures by sending a failure response to the client, and failing the TEAP method.</p>
+<p id="rfc.section.4.2.p.4">If the MASA replies with a signed voucher and a successful result, the server then forwards this response to the client in a BRSKI-Voucher TLV.</p>
+<p id="rfc.section.4.2.p.5">When the client receives the signed voucher, it validates the signature using its built in trust anchor list, and extracts the pinned-domain-cert field. The client must use the CA included in the pinned-domain-cert to validate the certificate that was presented by the server when establishing the outer TLS tunnel. If this certificate validation fails, the client must fail the TEAP request and not connect to the network.</p>
+<p id="rfc.section.4.2.p.6">[TBD- based on client responses, the registrar sends a status update to the MASA]</p>
+<h1 id="rfc.section.5">
+<a href="#rfc.section.5">5.</a> <a href="#channel-and-crypto-binding" id="channel-and-crypto-binding">Channel and Crypto Binding</a>
+</h1>
+<p id="rfc.section.5.p.1">As the TEAP BRSKI flow does not define or require an inner EAP method, there is no explicit need for exchange of Channel-Binding TLVs between the device and the TEAP server.</p>
+<p id="rfc.section.5.p.2">The TEAP BRSKI TLVs are expected to occur at the beginning of the TEAP Phase 2 and MUST occur before the final Crypto-Binding TLV.  This draft does not exclude the possibility of having other EAP methods occur following the TEAP BRSKI TLVs and as such, the Crypto-Binding TLV process rules as defined in <a href="#RFC7170" class="xref">[RFC7170]</a> apply.</p>
+<h1 id="rfc.section.6">
+<a href="#rfc.section.6">6.</a> <a href="#protocol-flows" id="protocol-flows">Protocol Flows</a>
+</h1>
+<p id="rfc.section.6.p.1">This section outlines protocol flows that map to the 3 server policy options described in section <a href="#teap-tunnel-establishment" class="xref">Section 4.1</a>. The protocol flows illustrate a TLS1.2 exchange.</p>
+<p id="rfc.section.6.p.2">[[TODO]] MISSING EAP Start/identity/Crypto binding, etc. Flows illustrative, but not 100% accurate.</p>
+<h1 id="rfc.section.6.1">
+<a href="#rfc.section.6.1">6.1.</a> <a href="#teap-server-grants-access" id="teap-server-grants-access">TEAP Server Grants Access</a>
+</h1>
+<div id="rfc.figure.1"></div>
+<div id="flow-1"></div>
+<pre>
++--------+             +-------------+     +------+
+| Client |             | TEAP-Server |     | MASA |
++--------+             +-------------+     +------+
+    |                         |                |
+    |  ClientHello            |                |
+    |------------------------&gt;|                |
+    |  ServerHello,           |                |
+    |  Certificate(1),        |                |
+    |  ServerKeyExchange,     |                |
+    |  CertificateRequest(2), |                |
+    |  ServerHelloDone,       |                |
+    |&lt;------------------------|                |
+    |  Certificate(3),        |                |
+    |  ClientKeyExchange,     |                |
+    |  CertificateVerify,     |                |
+    |  ChangeCipherSpec,      |                |
+    |  Finished               |                |
+    |------------------------&gt;|                |
+    |  ChangeCipherSpec,      |                |
+    |  Finished               |                |
+    |&lt;------------------------|                |
+    |  Crypto-Binding TLV     |                |
+    |&lt;------------------------|                |
+    |  Crypto-Binding TLV     |                |
+    |------------------------&gt;|                |
+    |  Result TLV             |                |
+    |&lt;------------------------|                |
+    |  Result TLV             |                |
+    |------------------------&gt;|                |
+    |      EAP-Success        |                |
+    |&lt;------------------------|                |
+
+</pre>
+<p class="figure">Figure 1: TEAP Server Grants Access</p>
+<p id="rfc.section.6.1.p.1">Notes:</p>
+<p id="rfc.section.6.1.p.2">(1) If the client has completed the BRSKI flow yet, it must validate the Certificate received from the server. If the client has not yet completed the BRSKI flow, then it provisionally accepts the server Certificate and must validate it later once BRSKI is complete.</p>
+<p id="rfc.section.6.1.p.3">(2) The server may include certificate_authorities field in the CertificateRequest message in order to restrict the identity certificates that the device is allowed present.</p>
+<p id="rfc.section.6.1.p.4">(3) The device will present its LDevID, if it has one, in preference to its IDevID, if allowed by server policy.</p>
+<h1 id="rfc.section.6.2">
+<a href="#rfc.section.6.2">6.2.</a> <a href="#teap-server-instructs-client-to-perform-brski-flow" id="teap-server-instructs-client-to-perform-brski-flow">TEAP Server Instructs Client to Perform BRSKI Flow</a>
+</h1>
+<div id="rfc.figure.2"></div>
+<div id="flow-2"></div>
+<pre>
++--------+             +-------------+     +------+
+| Client |             | TEAP-Server |     | MASA |
++--------+             +-------------+     +------+
+    |                         |                |
+    |      ClientHello        |                |
+    |------------------------&gt;|                |
+    |   ServerHello, etc.(1)  |                |
+    |&lt;------------------------|                |
+    |     etc., Finished      |                |
+    |------------------------&gt;|                |
+    |     etc., Finished      |                |
+    |&lt;------------------------|                |
+    | BRSKI-RequestAction(2)  |                |
+    |&lt;------------------------|                |
+    | BRSKI-RequestVoucher(3) |                |
+    |------------------------&gt;| RequestVoucher |
+    |                         |---------------&gt;|
+    |                         |    Voucher     |
+    |     BRSKI-Voucher(4)    |&lt;---------------|
+    |&lt;------------------------|                |
+    |  Trusted-Server-Root    |                |
+    |------------------------&gt;|                |
+    |  Trusted-Server-Root    |                |
+    |&lt;------------------------|                |
+    |     CSR-Attributes      |                |
+    |&lt;------------------------|                |
+    |         PKCS#10         |                |
+    |------------------------&gt;|                |
+    |         PKCS#7          |                |
+    |&lt;------------------------|                |
+    |  Crypto-Binding TLV     |                |
+    |&lt;------------------------|                |
+    |  Crypto-Binding TLV     |                |
+    |------------------------&gt;|                |
+    |  Result TLV             |                |
+    |&lt;------------------------|                |
+    |  Result TLV             |                |
+    |------------------------&gt;|                |
+    |      EAP-Success        |                |
+    |&lt;------------------------|                |
+
+</pre>
+<p class="figure">Figure 2: TEAP Server Instructs Client to Perform BRSKI Flow</p>
+<p id="rfc.section.6.2.p.1">Notes:</p>
+<p id="rfc.section.6.2.p.2">(1) If the client has not yet completed the BRSKI flow, then it provisionally accepts the server certificate and must validate it later once BRSKI is complete.</p>
+<p id="rfc.section.6.2.p.3">(2) The server instructs the client to start the BRSKI flow by sending a RequestAction TLV that includes a BRSKI-RequestVoucher TLV.</p>
+<p id="rfc.section.6.2.p.4">(3) The client includes the certificate it received from the server in the RequestVoucher message.</p>
+<p id="rfc.section.6.2.p.5">(4) Once the client receives and validates the voucher signed by the MASA, it must verify the certificate it previously received from the server.</p>
+<h1 id="rfc.section.6.3">
+<a href="#rfc.section.6.3">6.3.</a> <a href="#teap-server-instructs-client-to-reenroll" id="teap-server-instructs-client-to-reenroll">TEAP Server Instructs Client to Reenroll</a>
+</h1>
+<div id="rfc.figure.3"></div>
+<div id="flow-3"></div>
+<pre>
++--------+            +-------------+     +------+
+| Client |            | TEAP-Server |     | MASA |
++--------+            +-------------+     +------+
+    |                        |                |
+    |      ClientHello       |                |
+    |-----------------------&gt;|                |
+    |   ServerHello, etc.    |                |
+    |&lt;-----------------------|                |
+    |     etc., Finished     |                |
+    |-----------------------&gt;|                |
+    |     etc., Finished     |                |
+    |&lt;-----------------------|                |
+    | RequestAction: PKCS#10 |                |
+    |&lt;-----------------------|                |
+    |     CSR-Attributes     |                |
+    |&lt;-----------------------|                |
+    |         PKCS#10        |                |
+    |-----------------------&gt;|                |
+    |         PKCS#7         |                |
+    |&lt;-----------------------|                |
+    |  Crypto-Binding TLV    |                |
+    |&lt;-----------------------|                |
+    |  Crypto-Binding TLV    |                |
+    |-----------------------&gt;|                |
+    |  Result TLV            |                |
+    |&lt;-----------------------|                |
+    |  Result TLV            |                |
+    |-----------------------&gt;|                |
+    |      EAP-Success       |                |
+    |&lt;-----------------------|                |
+
+</pre>
+<p class="figure">Figure 3: TEAP Server Instructs Client to Reenroll</p>
+<h1 id="rfc.section.6.4">
+<a href="#rfc.section.6.4">6.4.</a> <a href="#out-of-band-reenroll" id="out-of-band-reenroll">Out of Band Reenroll</a>
+</h1>
+<p id="rfc.section.6.4.p.1">This section shows how the device does a reenroll to refresh its LDEvID directly against the registrar outside the context of the TEAP tunnel.</p>
+<h1 id="rfc.section.7">
+<a href="#rfc.section.7">7.</a> <a href="#teap-tlv-formats" id="teap-tlv-formats">TEAP TLV Formats</a>
+</h1>
+<h1 id="rfc.section.7.1">
+<a href="#rfc.section.7.1">7.1.</a> <a href="#brski-tlvs" id="brski-tlvs">BRSKI TLVs</a>
+</h1>
+<p id="rfc.section.7.1.p.1">BRSKI defines 3 new TEAP TLVs. The following table indicates whether the TLVs can be included in Request messages from TEAP server to device, or Response messages from device to TEAP server.</p>
+<pre>
++------------------------+----------+
+| TLV                    | Message  |
++------------------------+----------+
+| BRSKI-VoucherRequest   | Response |
+| BRSKI-Voucher          | Request  |
+| CSR-Attributes         | Response |
++------------------------+----------+
+
+</pre>
+<p id="rfc.section.7.1.p.2">These new TLVs are detailed in this section.</p>
+<h1 id="rfc.section.7.1.1">
+<a href="#rfc.section.7.1.1">7.1.1.</a> <a href="#brski-requestvoucher-tlv" id="brski-requestvoucher-tlv">BRSKI-RequestVoucher TLV</a>
+</h1>
+<p id="rfc.section.7.1.1.p.1">This TLV is used by the server as part of an Action-Request to request from the peer that it initiate a voucher request.  When used in this fashion, the length of this TLV will be set to zero.</p>
+<p id="rfc.section.7.1.1.p.2">It is also used by the peer to initiate the voucher request.  When used in this fashion, the length of the TLV will be set to that of the voucher request, as encoded and described in Section 3.3 in <a href="#I-D.ietf-anima-bootstrapping-keyinfra" class="xref">[I-D.ietf-anima-bootstrapping-keyinfra]</a>.</p>
+<pre>
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |M|R| TLV=TBD1-VoucherRequest   |            Length             |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                              Value...
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre>
+<p id="rfc.section.7.1.1.p.3">The M and R bits are always expected to be set to 0.</p>
+<p id="rfc.section.7.1.1.p.4">The server is expected to forward the voucher request to the MASA, and then return a voucher in a BRSKI-Voucher TLV as described below.  If it is unable to do so, it returns an TEAP Error TLV with one of the defined errors or the following:</p>
+<pre>
+TBD2-MASA-Notavailable  MASA unavailable
+TBD3-MASA-Refused       MASA refuses to sign the voucher
+
+</pre>
+<p id="rfc.section.7.1.1.p.5">The peer terminates the TEAP connection, but may retry at some later point.  The backoff mechanism for such retries should be appropriate for the device.  Retries MUST occur no more frequently than once every two (XXX) minutes.</p>
+<h1 id="rfc.section.7.1.2">
+<a href="#rfc.section.7.1.2">7.1.2.</a> <a href="#brski-voucher-tlv" id="brski-voucher-tlv">BRSKI-Voucher TLV</a>
+</h1>
+<p id="rfc.section.7.1.2.p.1">This TLV is transmitted from the server to the peer.  It contains a signed voucher, as describe in <a href="#RFC8366" class="xref">[RFC8366]</a>.</p>
+<pre>
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |M|R| TLV=TBD4-Voucher          |            Length             |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                              Value...
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre>
+<p id="rfc.section.7.1.2.p.2">Upon receiving this TLV the peer will validate the signature of the voucher, using its pre-installed manufacturer trust anchor (LDevID).  It MUST also validate the certificate used by the server to establish the TLS connection.</p>
+<p id="rfc.section.7.1.2.p.3">If successful, it installs the new trust anchor contained in the voucher.</p>
+<p id="rfc.section.7.1.2.p.4">Otherwise, the peer transmits an TEAP error TLV with one of the following error messages:</p>
+<pre>
+TBD5-Invalid-Signature  The signature of the voucher signer is invalid
+TBD6-Invalid-Voucher    The form or content of the voucher is not valid
+TBD7-Invalid-TLS-Signer The certificate used for the TLS connection
+                       could not be validated.
+
+</pre>
+<h1 id="rfc.section.7.1.3">
+<a href="#rfc.section.7.1.3">7.1.3.</a> <a href="#csr-attributes-tlv" id="csr-attributes-tlv">CSR-Attributes TLV</a>
+</h1>
+<p id="rfc.section.7.1.3.p.1">The server SHALL transmit this TLV to the peer, either along with the BRSKI-Voucher TLV or at any time earlier in a communication.  The peer shall include attributes required by the server in any following CSR.  The value of this TLV is the base64 encoding described in Section 4.5.2 of <a href="#RFC7030" class="xref">[RFC7030]</a>.</p>
+<pre>
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |M|R| TLV=TBD8-CSR-Attributes |         length                  |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   | Value...
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre>
+<p id="rfc.section.7.1.3.p.2">Again, the M and R values are set to 0.  In the case where the client is unable to provide the requested attributes, an TEAP-Error is returned as follows:</p>
+<p id="rfc.section.7.1.3.p.3">TBD9-CSR-Attribute-Fail Unable to supply the requested attributes.</p>
+<h1 id="rfc.section.7.2">
+<a href="#rfc.section.7.2">7.2.</a> <a href="#existing-teap-tlv-specifications" id="existing-teap-tlv-specifications">Existing TEAP TLV Specifications</a>
+</h1>
+<p id="rfc.section.7.2.p.1">This section documents allowed usage of existing TEAP TLVs. The definition of the TLV is not changed, however clarifications on allowed values for the TLV fields is documented.</p>
+<h1 id="rfc.section.7.2.1">
+<a href="#rfc.section.7.2.1">7.2.1.</a> <a href="#pkcs10-tlv" id="pkcs10-tlv">PKCS#10 TLV</a>
+</h1>
+<p><a href="#RFC7170" class="xref">[RFC7170]</a> defines the PKCS#10 TLV as follows:</p>
+<pre>
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |M|R|         TLV Type          |            Length             |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |           PKCS#10 Data...
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+</pre>
+<p><a href="#RFC7170" class="xref">[RFC7170]</a> does not explicitly allow a Length value of zero.</p>
+<p id="rfc.section.7.2.1.p.3">A Length value of zero is allowed for this TLV when the TEAP server sends a Request-Action TLV with a child PKCS#10 TLV to the client. In this scenario, there is no PKCS#10 Data included in the TLV. Clients MUST NOT send a zero length PKCS#10 TLV to the server.</p>
+<h1 id="rfc.section.8">
+<a href="#rfc.section.8">8.</a> <a href="#fragmentation" id="fragmentation">Fragmentation</a>
+</h1>
+<p id="rfc.section.8.p.1">TLS is expected to provide fragmentation support. Thus EAP-TEAP-BRSKI does not specifically provide any, as it is only expected to be used as an inner method to TEAP.</p>
+<h1 id="rfc.section.9">
+<a href="#rfc.section.9">9.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a>
+</h1>
+<p id="rfc.section.9.p.1">The IANA is requested to add entries into the following tables:</p>
+<p id="rfc.section.9.p.2">The following new TEAP TLVs are defined:</p>
+<pre>
+TBD1-VoucherRequest   Described in this document.
+TBD4-Voucher          Described in this document.
+TBD8-CSR-Attributes   Described in this document.
+
+</pre>
+<p id="rfc.section.9.p.3">The following TEAP Error Codes are defined, with their meanings listed here and in previous sections:</p>
+<pre>
+TBD2-MASA-Notavailable  MASA unavailable
+TBD3-MASA-Refused       MASA refuses to sign the voucher
+TBD5-Invalid-Signature  The signature of the voucher signer is invalid
+TBD6-Invalid-Voucher    The form or content of the voucher is not valid
+TBD7-Invalid-TLS-Signer The certificate used for the TLS connection
+                        could not be validated.
+TBD9-CSR-Attribute-Fail Unable to supply the requested attributes.
+
+</pre>
+<h1 id="rfc.section.10">
+<a href="#rfc.section.10">10.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
+</h1>
+<p id="rfc.section.10.p.1">There will be many.</p>
+<h1 id="rfc.section.11">
+<a href="#rfc.section.11">11.</a> <a href="#acknowledgments" id="acknowledgments">Acknowledgments</a>
+</h1>
+<p id="rfc.section.11.p.1">The authors would like to thank Brian Weis for his assistance, and Alan Dakok for improving language consistency.</p>
+<h1 id="rfc.references">
+<a href="#rfc.references">12.</a> Informative References</h1>
+<table><tbody>
+<tr>
+<td class="reference"><b id="I-D.ietf-anima-bootstrapping-keyinfra">[I-D.ietf-anima-bootstrapping-keyinfra]</b></td>
+<td class="top">
+<a>Pritikin, M.</a>, <a>Richardson, M.</a>, <a>Behringer, M.</a>, <a>Bjarnason, S.</a> and <a>K. Watsen</a>, "<a href="https://tools.ietf.org/html/draft-ietf-anima-bootstrapping-keyinfra-16">Bootstrapping Remote Secure Key Infrastructures (BRSKI)</a>", Internet-Draft draft-ietf-anima-bootstrapping-keyinfra-16, June 2018.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC3748">[RFC3748]</b></td>
+<td class="top">
+<a>Aboba, B.</a>, <a>Blunk, L.</a>, <a>Vollbrecht, J.</a>, <a>Carlson, J.</a> and <a>H. Levkowetz</a>, "<a href="https://tools.ietf.org/html/rfc3748">Extensible Authentication Protocol (EAP)</a>", RFC 3748, DOI 10.17487/RFC3748, June 2004.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC7030">[RFC7030]</b></td>
+<td class="top">
+<a>Pritikin, M.</a>, <a>Yee, P.</a> and <a>D. Harkins</a>, "<a href="https://tools.ietf.org/html/rfc7030">Enrollment over Secure Transport</a>", RFC 7030, DOI 10.17487/RFC7030, October 2013.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC7170">[RFC7170]</b></td>
+<td class="top">
+<a>Zhou, H.</a>, <a>Cam-Winget, N.</a>, <a>Salowey, J.</a> and <a>S. Hanna</a>, "<a href="https://tools.ietf.org/html/rfc7170">Tunnel Extensible Authentication Protocol (TEAP) Version 1</a>", RFC 7170, DOI 10.17487/RFC7170, May 2014.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC8366">[RFC8366]</b></td>
+<td class="top">
+<a>Watsen, K.</a>, <a>Richardson, M.</a>, <a>Pritikin, M.</a> and <a>T. Eckert</a>, "<a href="https://tools.ietf.org/html/rfc8366">A Voucher Artifact for Bootstrapping Protocols</a>", RFC 8366, DOI 10.17487/RFC8366, May 2018.</td>
+</tr>
+</tbody></table>
+<h1 id="rfc.appendix.A">
+<a href="#rfc.appendix.A">Appendix A.</a> <a href="#changes-from-earlier-versions" id="changes-from-earlier-versions">Changes from Earlier Versions</a>
+</h1>
+<p id="rfc.section.A.p.1">Draft -01: * Add packet descriptions, IANA considerations, smooth out language.</p>
+<p id="rfc.section.A.p.2">Draft -00:</p>
+<p></p>
+
+<ul><li>Initial revision</li></ul>
+<h1 id="rfc.authors"><a href="#rfc.authors">Authors' Addresses</a></h1>
+<div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Eliot Lear</span> 
+	  <span class="n hidden">
+		<span class="family-name">Lear</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Cisco Systems</span>
+	<span class="adr">
+	  <span class="vcardline">Richtistrasse 7</span>
+
+	  <span class="vcardline">
+		<span class="locality">Wallisellen</span>,  
+		<span class="region"></span>
+		<span class="code">CH-8304</span>
+	  </span>
+	  <span class="country-name vcardline">Switzerland</span>
+	</span>
+	<span class="vcardline">Phone: +41 44 878 9200</span>
+
+<span class="vcardline">EMail: <a href="mailto:lear@cisco.com">lear@cisco.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Owen Friel</span> 
+	  <span class="n hidden">
+		<span class="family-name">Friel</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Cisco Systems</span>
+	<span class="adr">
+	  <span class="vcardline">170 W. Tasman Dr.</span>
+
+	  <span class="vcardline">
+		<span class="locality">San Jose, CA</span>,  
+		<span class="region"></span>
+		<span class="code">95134</span>
+	  </span>
+	  <span class="country-name vcardline">United States</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:ofriel@cisco.com">ofriel@cisco.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Nancy Cam-Winget</span> 
+	  <span class="n hidden">
+		<span class="family-name">Cam-Winget</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Cisco Systems</span>
+	<span class="adr">
+	  <span class="vcardline">170 W. Tasman Dr.</span>
+
+	  <span class="vcardline">
+		<span class="locality">San Jose, CA</span>,  
+		<span class="region"></span>
+		<span class="code">95134</span>
+	  </span>
+	  <span class="country-name vcardline">United States</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:ncamwing@cisco.com">ncamwing@cisco.com</a></span>
+
+  </address>
+</div>
+
+</body>
+</html>
