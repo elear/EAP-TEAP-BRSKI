@@ -408,8 +408,8 @@
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Lear, E., Friel, O., and N. Cam-Winget" />
-  <meta name="dct.identifier" content="urn:ietf:id:draft-lear-eap-teap-brski-01" />
-  <meta name="dct.issued" scheme="ISO8601" content="2018-10-18" />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-lear-eap-teap-brski-02" />
+  <meta name="dct.issued" scheme="ISO8601" content="2019-02-20" />
   <meta name="dct.abstract" content="In certain environments, in order for a device to establish any layer three communications, it is necessary for that device to be properly credentialed.  This is a relatively easy problem to solve when a device is associated with a human being and has both input and display functions.  It is less easy when the human, input, and display functions are not present.  To address this case, this memo specifies extensions to the Tunnel Extensible Authentication Protocol (TEAP) method that leverages Bootstrapping Remote Secure Key Infrastructures (BRSKI) in order to provide a credential to a device at layer two.  The basis of this work is that a manufacturer will introduce the device and the local deployment through cryptographic means.  In this sense the same trust model as BRSKI is used." />
   <meta name="description" content="In certain environments, in order for a device to establish any layer three communications, it is necessary for that device to be properly credentialed.  This is a relatively easy problem to solve when a device is associated with a human being and has both input and display functions.  It is less easy when the human, input, and display functions are not present.  To address this case, this memo specifies extensions to the Tunnel Extensible Authentication Protocol (TEAP) method that leverages Bootstrapping Remote Secure Key Infrastructures (BRSKI) in order to provide a credential to a device at layer two.  The basis of this work is that a manufacturer will introduce the device and the local deployment through cryptographic means.  In this sense the same trust model as BRSKI is used." />
 
@@ -433,12 +433,12 @@
 <td class="right">N. Cam-Winget</td>
 </tr>
 <tr>
-<td class="left">Expires: April 21, 2019</td>
+<td class="left">Expires: August 24, 2019</td>
 <td class="right">Cisco Systems</td>
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">October 18, 2018</td>
+<td class="right">February 20, 2019</td>
 </tr>
 
     	
@@ -446,7 +446,7 @@
   </table>
 
   <p class="title">Bootstrapping Key Infrastructure over EAP<br />
-  <span class="filename">draft-lear-eap-teap-brski-01</span></p>
+  <span class="filename">draft-lear-eap-teap-brski-02</span></p>
   
   <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
 <p>In certain environments, in order for a device to establish any layer three communications, it is necessary for that device to be properly credentialed.  This is a relatively easy problem to solve when a device is associated with a human being and has both input and display functions.  It is less easy when the human, input, and display functions are not present.  To address this case, this memo specifies extensions to the Tunnel Extensible Authentication Protocol (TEAP) method that leverages Bootstrapping Remote Secure Key Infrastructures (BRSKI) in order to provide a credential to a device at layer two.  The basis of this work is that a manufacturer will introduce the device and the local deployment through cryptographic means.  In this sense the same trust model as BRSKI is used.</p>
@@ -454,9 +454,9 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on April 21, 2019.</p>
+<p>This Internet-Draft will expire on August 24, 2019.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
-<p>Copyright (c) 2018 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
 
   
@@ -645,11 +645,12 @@
 <h1 id="rfc.section.4.1">
 <a href="#rfc.section.4.1">4.1.</a> <a href="#teap-tunnel-establishment" id="teap-tunnel-establishment">TEAP Tunnel Establishment</a>
 </h1>
-<p id="rfc.section.4.1.p.1">The client sends its ClientHello to initiate TLS tunnel establishment. It is possible for the TEAP server to restrict the certificates that the client can use for tunnel establishment by including a list of CA distinguished names in the certificate_authorities field in the CertificateRequest message. Network operators may want to do this in order to restrict netwok access to clients that have a certificate signed by one of a small set of trusted manufacturer/supplier CAs. If the client has both an IDevID and an LDevID, the client should present the LDevID in preference to its IDevID if allowed by server policy.</p>
-<p id="rfc.section.4.1.p.2">In practice, network operators will likely want to onboard devices from a large number of device manufacturers, with each manufacturer using a different root CA when issuing IDevIDs. If the number of different manufacturer root CAs is large, this could result in very large TLS handshake messages. Operators may prefer to include no CAs in the certificate_authorities field thus allowing devices to present IDevIDs signed by any CA when establishing the TEAP tunnel, and instead enforce policy at LDevID enrollment time.</p>
-<p id="rfc.section.4.1.p.3">It is recommended that the client validate the certificate presented by the server in the server&#8217;s Certificate message, but this may not be possible for clients that have not yet provisioned appropriate trust anchors. If the client is in the provisioning phase and has not yet completed a BRSKI flow, it will not have trust anchors installed yet, and thus will not be able to validate the server&#8217;s certificate. The client must however note the certificate presented by the server for (i) inclusion in the BRSKI-RequestVoucher TLV and for (ii) validation once the client has discovered the local domain trust anchors.</p>
-<p id="rfc.section.4.1.p.4">If the client does not present a suitable certificate to the server, the server MUST terminate the connection and fail the EAP request.</p>
-<p id="rfc.section.4.1.p.5">On establishment of the outer TLS tunnel, the TEAP server will make a policy decision on next steps. Possible policy decisions include:</p>
+<p id="rfc.section.4.1.p.1">Because this method establishes a client identity, and for purposes of partioning of responsibility, the peer uses a generic identity string of teap-brsk@TBD1 as its network access identifier (NAI).</p>
+<p id="rfc.section.4.1.p.2">The client sends its ClientHello to initiate TLS tunnel establishment. It is possible for the TEAP server to restrict the certificates that the client can use for tunnel establishment by including a list of CA distinguished names in the certificate_authorities field in the CertificateRequest message. Network operators may want to do this in order to restrict netwok access to clients that have a certificate signed by one of a small set of trusted manufacturer/supplier CAs. If the client has both an IDevID and an LDevID, the client should present the LDevID in preference to its IDevID if allowed by server policy.</p>
+<p id="rfc.section.4.1.p.3">In practice, network operators will likely want to onboard devices from a large number of device manufacturers, with each manufacturer using a different root CA when issuing IDevIDs. If the number of different manufacturer root CAs is large, this could result in very large TLS handshake messages. Operators may prefer to include no CAs in the certificate_authorities field thus allowing devices to present IDevIDs signed by any CA when establishing the TEAP tunnel, and instead enforce policy at LDevID enrollment time.</p>
+<p id="rfc.section.4.1.p.4">It is recommended that the client validate the certificate presented by the server in the server&#8217;s Certificate message, but this may not be possible for clients that have not yet provisioned appropriate trust anchors. If the client is in the provisioning phase and has not yet completed a BRSKI flow, it will not have trust anchors installed yet, and thus will not be able to validate the server&#8217;s certificate. The client must however note the certificate presented by the server for (i) inclusion in the BRSKI-RequestVoucher TLV and for (ii) validation once the client has discovered the local domain trust anchors.</p>
+<p id="rfc.section.4.1.p.5">If the client does not present a suitable certificate to the server, the server MUST terminate the connection and fail the EAP request.</p>
+<p id="rfc.section.4.1.p.6">On establishment of the outer TLS tunnel, the TEAP server will make a policy decision on next steps. Possible policy decisions include:</p>
 <p></p>
 
 <ul>
@@ -951,14 +952,14 @@ TBD9-CSR-Attribute-Fail Unable to supply the requested attributes.
 <h1 id="rfc.section.11">
 <a href="#rfc.section.11">11.</a> <a href="#acknowledgments" id="acknowledgments">Acknowledgments</a>
 </h1>
-<p id="rfc.section.11.p.1">The authors would like to thank Brian Weis for his assistance, and Alan Dakok for improving language consistency.</p>
+<p id="rfc.section.11.p.1">The authors would like to thank Brian Weis for his assistance, and Alan Dakok for improving language consistency.  In addition, with ruthlessly &#8220;borrowed&#8221; the concept around NAI handling from Tuomas Aura and Mohit Sethi.</p>
 <h1 id="rfc.references">
 <a href="#rfc.references">12.</a> Informative References</h1>
 <table><tbody>
 <tr>
 <td class="reference"><b id="I-D.ietf-anima-bootstrapping-keyinfra">[I-D.ietf-anima-bootstrapping-keyinfra]</b></td>
 <td class="top">
-<a>Pritikin, M.</a>, <a>Richardson, M.</a>, <a>Behringer, M.</a>, <a>Bjarnason, S.</a> and <a>K. Watsen</a>, "<a href="https://tools.ietf.org/html/draft-ietf-anima-bootstrapping-keyinfra-16">Bootstrapping Remote Secure Key Infrastructures (BRSKI)</a>", Internet-Draft draft-ietf-anima-bootstrapping-keyinfra-16, June 2018.</td>
+<a>Pritikin, M.</a>, <a>Richardson, M.</a>, <a>Behringer, M.</a>, <a>Bjarnason, S.</a> and <a>K. Watsen</a>, "<a href="https://tools.ietf.org/html/draft-ietf-anima-bootstrapping-keyinfra-18">Bootstrapping Remote Secure Key Infrastructures (BRSKI)</a>", Internet-Draft draft-ietf-anima-bootstrapping-keyinfra-18, January 2019.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC3748">[RFC3748]</b></td>

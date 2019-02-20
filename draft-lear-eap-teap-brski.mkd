@@ -1,7 +1,7 @@
 ---
 title: Bootstrapping Key Infrastructure over EAP
 abbrev: BRSKI TEAP EAP
-docname: draft-lear-eap-teap-brski-01
+docname: draft-lear-eap-teap-brski-02
 category: std
 
 ipr: trust200902
@@ -300,7 +300,20 @@ These are described in more detail here.
 
 ## TEAP Tunnel Establishment
 
-The client sends its ClientHello to initiate TLS tunnel establishment. It is possible for the TEAP server to restrict the certificates that the client can use for tunnel establishment by including a list of CA distinguished names in the certificate_authorities field in the CertificateRequest message. Network operators may want to do this in order to restrict netwok access to clients that have a certificate signed by one of a small set of trusted manufacturer/supplier CAs. If the client has both an IDevID and an LDevID, the client should present the LDevID in preference to its IDevID if allowed by server policy.
+Because this method establishes a client identity, and for purposes of
+partioning of responsibility, the peer uses a generic identity string
+of teap-brsk@TBD1 as its network access identifier (NAI).
+
+The client sends its ClientHello to initiate TLS tunnel
+establishment. It is possible for the TEAP server to restrict the
+certificates that the client can use for tunnel establishment by
+including a list of CA distinguished names in the
+certificate_authorities field in the CertificateRequest
+message. Network operators may want to do this in order to restrict
+netwok access to clients that have a certificate signed by one of a
+small set of trusted manufacturer/supplier CAs. If the client has both
+an IDevID and an LDevID, the client should present the LDevID in
+preference to its IDevID if allowed by server policy.
 
 In practice, network operators will likely want to onboard devices from a large number of device manufacturers, with each manufacturer using a different root CA when issuing IDevIDs. If the number of different manufacturer root CAs is large, this could result in very large TLS handshake messages. Operators may prefer to include no CAs in the certificate_authorities field thus allowing devices to present IDevIDs signed by any CA when establishing the TEAP tunnel, and instead enforce policy at LDevID enrollment time.
 
@@ -700,7 +713,9 @@ Acknowledgments
 ===============
 
 The authors would like to thank Brian Weis for his assistance, and
-Alan Dakok for improving language consistency.
+Alan Dakok for improving language consistency.  In addition, with
+ruthlessly "borrowed" the concept around NAI handling from Tuomas Aura
+and Mohit Sethi.
 
 --- back
 

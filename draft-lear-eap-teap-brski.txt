@@ -5,12 +5,12 @@
 Network Working Group                                            E. Lear
 Internet-Draft                                                  O. Friel
 Intended status: Standards Track                           N. Cam-Winget
-Expires: April 21, 2019                                    Cisco Systems
-                                                        October 18, 2018
+Expires: August 24, 2019                                   Cisco Systems
+                                                       February 20, 2019
 
 
                Bootstrapping Key Infrastructure over EAP
-                      draft-lear-eap-teap-brski-01
+                      draft-lear-eap-teap-brski-02
 
 Abstract
 
@@ -42,20 +42,20 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 21, 2019.
+   This Internet-Draft will expire on August 24, 2019.
 
 Copyright Notice
 
-   Copyright (c) 2018 IETF Trust and the persons identified as the
+   Copyright (c) 2019 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
 
 
 
 
-Lear, et al.             Expires April 21, 2019                 [Page 1]
+Lear, et al.             Expires August 24, 2019                [Page 1]
 
-Internet-Draft               BRSKI TEAP EAP                 October 2018
+Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Lear, et al.             Expires April 21, 2019                 [Page 2]
+Lear, et al.             Expires August 24, 2019                [Page 2]
 
-Internet-Draft               BRSKI TEAP EAP                 October 2018
+Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
    authentication prior to any form of address assignment.  While it is
@@ -165,9 +165,9 @@ Internet-Draft               BRSKI TEAP EAP                 October 2018
 
 
 
-Lear, et al.             Expires April 21, 2019                 [Page 3]
+Lear, et al.             Expires August 24, 2019                [Page 3]
 
-Internet-Draft               BRSKI TEAP EAP                 October 2018
+Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
    device may connect directly to the registrar for the purposes of
@@ -221,9 +221,9 @@ Internet-Draft               BRSKI TEAP EAP                 October 2018
 
 
 
-Lear, et al.             Expires April 21, 2019                 [Page 4]
+Lear, et al.             Expires August 24, 2019                [Page 4]
 
-Internet-Draft               BRSKI TEAP EAP                 October 2018
+Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
    o  Step 8: Device periodically reenrolls via EST to refresh its
@@ -277,9 +277,9 @@ Internet-Draft               BRSKI TEAP EAP                 October 2018
 
 
 
-Lear, et al.             Expires April 21, 2019                 [Page 5]
+Lear, et al.             Expires August 24, 2019                [Page 5]
 
-Internet-Draft               BRSKI TEAP EAP                 October 2018
+Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
    If the TEAP server requires that the device execute a BRSKI flow, it
@@ -333,9 +333,9 @@ Internet-Draft               BRSKI TEAP EAP                 October 2018
 
 
 
-Lear, et al.             Expires April 21, 2019                 [Page 6]
+Lear, et al.             Expires August 24, 2019                [Page 6]
 
-Internet-Draft               BRSKI TEAP EAP                 October 2018
+Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
    No later than the completion of step 5, server MUST send a CSR-
@@ -389,9 +389,9 @@ Internet-Draft               BRSKI TEAP EAP                 October 2018
 
 
 
-Lear, et al.             Expires April 21, 2019                 [Page 7]
+Lear, et al.             Expires August 24, 2019                [Page 7]
 
-Internet-Draft               BRSKI TEAP EAP                 October 2018
+Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
    Option 2: When the device is performing a periodic 802.1X
@@ -410,6 +410,10 @@ Internet-Draft               BRSKI TEAP EAP                 October 2018
    These are described in more detail here.
 
 4.1.  TEAP Tunnel Establishment
+
+   Because this method establishes a client identity, and for purposes
+   of partioning of responsibility, the peer uses a generic identity
+   string of teap-brsk@TBD1 as its network access identifier (NAI).
 
    The client sends its ClientHello to initiate TLS tunnel
    establishment.  It is possible for the TEAP server to restrict the
@@ -438,17 +442,17 @@ Internet-Draft               BRSKI TEAP EAP                 October 2018
    not yet completed a BRSKI flow, it will not have trust anchors
    installed yet, and thus will not be able to validate the server's
    certificate.  The client must however note the certificate presented
+
+
+
+Lear, et al.             Expires August 24, 2019                [Page 8]
+
+Internet-Draft               BRSKI TEAP EAP                February 2019
+
+
    by the server for (i) inclusion in the BRSKI-RequestVoucher TLV and
    for (ii) validation once the client has discovered the local domain
    trust anchors.
-
-
-
-
-Lear, et al.             Expires April 21, 2019                 [Page 8]
-
-Internet-Draft               BRSKI TEAP EAP                 October 2018
-
 
    If the client does not present a suitable certificate to the server,
    the server MUST terminate the connection and fail the EAP request.
@@ -493,18 +497,17 @@ Internet-Draft               BRSKI TEAP EAP                 October 2018
 
    The MASA responds as per [I-D.ietf-anima-bootstrapping-keyinfra]
    section 5.5.  The response may indicate failure and the server should
+
+
+
+
+Lear, et al.             Expires August 24, 2019                [Page 9]
+
+Internet-Draft               BRSKI TEAP EAP                February 2019
+
+
    react accordingly to failures by sending a failure response to the
    client, and failing the TEAP method.
-
-
-
-
-
-
-Lear, et al.             Expires April 21, 2019                 [Page 9]
-
-Internet-Draft               BRSKI TEAP EAP                 October 2018
-
 
    If the MASA replies with a signed voucher and a successful result,
    the server then forwards this response to the client in a BRSKI-
@@ -554,12 +557,9 @@ Internet-Draft               BRSKI TEAP EAP                 October 2018
 
 
 
-
-
-
-Lear, et al.             Expires April 21, 2019                [Page 10]
+Lear, et al.             Expires August 24, 2019               [Page 10]
 
-Internet-Draft               BRSKI TEAP EAP                 October 2018
+Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
    +--------+             +-------------+     +------+
@@ -613,9 +613,9 @@ Internet-Draft               BRSKI TEAP EAP                 October 2018
 
 
 
-Lear, et al.             Expires April 21, 2019                [Page 11]
+Lear, et al.             Expires August 24, 2019               [Page 11]
 
-Internet-Draft               BRSKI TEAP EAP                 October 2018
+Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
 6.2.  TEAP Server Instructs Client to Perform BRSKI Flow
@@ -669,9 +669,9 @@ Internet-Draft               BRSKI TEAP EAP                 October 2018
 
 
 
-Lear, et al.             Expires April 21, 2019                [Page 12]
+Lear, et al.             Expires August 24, 2019               [Page 12]
 
-Internet-Draft               BRSKI TEAP EAP                 October 2018
+Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
    (1) If the client has not yet completed the BRSKI flow, then it
@@ -725,9 +725,9 @@ Internet-Draft               BRSKI TEAP EAP                 October 2018
 
 
 
-Lear, et al.             Expires April 21, 2019                [Page 13]
+Lear, et al.             Expires August 24, 2019               [Page 13]
 
-Internet-Draft               BRSKI TEAP EAP                 October 2018
+Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
    +--------+            +-------------+     +------+
@@ -781,9 +781,9 @@ Internet-Draft               BRSKI TEAP EAP                 October 2018
 
 
 
-Lear, et al.             Expires April 21, 2019                [Page 14]
+Lear, et al.             Expires August 24, 2019               [Page 14]
 
-Internet-Draft               BRSKI TEAP EAP                 October 2018
+Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
    +------------------------+----------+
@@ -837,9 +837,9 @@ Internet-Draft               BRSKI TEAP EAP                 October 2018
 
 
 
-Lear, et al.             Expires April 21, 2019                [Page 15]
+Lear, et al.             Expires August 24, 2019               [Page 15]
 
-Internet-Draft               BRSKI TEAP EAP                 October 2018
+Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
 7.1.2.  BRSKI-Voucher TLV
@@ -893,9 +893,9 @@ Internet-Draft               BRSKI TEAP EAP                 October 2018
 
 
 
-Lear, et al.             Expires April 21, 2019                [Page 16]
+Lear, et al.             Expires August 24, 2019               [Page 16]
 
-Internet-Draft               BRSKI TEAP EAP                 October 2018
+Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
    Again, the M and R values are set to 0.  In the case where the client
@@ -949,9 +949,9 @@ Internet-Draft               BRSKI TEAP EAP                 October 2018
 
 
 
-Lear, et al.             Expires April 21, 2019                [Page 17]
+Lear, et al.             Expires August 24, 2019               [Page 17]
 
-Internet-Draft               BRSKI TEAP EAP                 October 2018
+Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
    The following TEAP Error Codes are defined, with their meanings
@@ -973,7 +973,9 @@ Internet-Draft               BRSKI TEAP EAP                 October 2018
 11.  Acknowledgments
 
    The authors would like to thank Brian Weis for his assistance, and
-   Alan Dakok for improving language consistency.
+   Alan Dakok for improving language consistency.  In addition, with
+   ruthlessly "borrowed" the concept around NAI handling from Tuomas
+   Aura and Mohit Sethi.
 
 12.  Informative References
 
@@ -981,7 +983,7 @@ Internet-Draft               BRSKI TEAP EAP                 October 2018
               Pritikin, M., Richardson, M., Behringer, M., Bjarnason,
               S., and K. Watsen, "Bootstrapping Remote Secure Key
               Infrastructures (BRSKI)", draft-ietf-anima-bootstrapping-
-              keyinfra-16 (work in progress), June 2018.
+              keyinfra-18 (work in progress), January 2019.
 
    [RFC3748]  Aboba, B., Blunk, L., Vollbrecht, J., Carlson, J., and H.
               Levkowetz, Ed., "Extensible Authentication Protocol
@@ -998,17 +1000,20 @@ Internet-Draft               BRSKI TEAP EAP                 October 2018
               1", RFC 7170, DOI 10.17487/RFC7170, May 2014,
               <https://www.rfc-editor.org/info/rfc7170>.
 
+
+
+
+
+
+Lear, et al.             Expires August 24, 2019               [Page 18]
+
+Internet-Draft               BRSKI TEAP EAP                February 2019
+
+
    [RFC8366]  Watsen, K., Richardson, M., Pritikin, M., and T. Eckert,
               "A Voucher Artifact for Bootstrapping Protocols",
               RFC 8366, DOI 10.17487/RFC8366, May 2018,
               <https://www.rfc-editor.org/info/rfc8366>.
-
-
-
-Lear, et al.             Expires April 21, 2019                [Page 18]
-
-Internet-Draft               BRSKI TEAP EAP                 October 2018
-
 
 Appendix A.  Changes from Earlier Versions
 
@@ -1056,9 +1061,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-Lear, et al.             Expires April 21, 2019                [Page 19]
+Lear, et al.             Expires August 24, 2019               [Page 19]
