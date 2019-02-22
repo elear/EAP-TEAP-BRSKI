@@ -5,8 +5,8 @@
 Network Working Group                                            E. Lear
 Internet-Draft                                                  O. Friel
 Intended status: Standards Track                           N. Cam-Winget
-Expires: August 24, 2019                                   Cisco Systems
-                                                       February 20, 2019
+Expires: August 26, 2019                                   Cisco Systems
+                                                       February 22, 2019
 
 
                Bootstrapping Key Infrastructure over EAP
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 24, 2019.
+   This Internet-Draft will expire on August 26, 2019.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Lear, et al.             Expires August 24, 2019                [Page 1]
+Lear, et al.             Expires August 26, 2019                [Page 1]
 
 Internet-Draft               BRSKI TEAP EAP                February 2019
 
@@ -82,22 +82,22 @@ Table of Contents
    6.  Protocol Flows  . . . . . . . . . . . . . . . . . . . . . . .  10
      6.1.  TEAP Server Grants Access . . . . . . . . . . . . . . . .  10
      6.2.  TEAP Server Instructs Client to Perform BRSKI Flow  . . .  12
-     6.3.  TEAP Server Instructs Client to Reenroll  . . . . . . . .  13
-     6.4.  Out of Band Reenroll  . . . . . . . . . . . . . . . . . .  14
-   7.  TEAP TLV Formats  . . . . . . . . . . . . . . . . . . . . . .  14
-     7.1.  BRSKI TLVs  . . . . . . . . . . . . . . . . . . . . . . .  14
-       7.1.1.  BRSKI-RequestVoucher TLV  . . . . . . . . . . . . . .  15
-       7.1.2.  BRSKI-Voucher TLV . . . . . . . . . . . . . . . . . .  16
-       7.1.3.  CSR-Attributes TLV  . . . . . . . . . . . . . . . . .  16
-     7.2.  Existing TEAP TLV Specifications  . . . . . . . . . . . .  17
-       7.2.1.  PKCS#10 TLV . . . . . . . . . . . . . . . . . . . . .  17
-   8.  Fragmentation . . . . . . . . . . . . . . . . . . . . . . . .  17
-   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  17
-   10. Security Considerations . . . . . . . . . . . . . . . . . . .  18
-   11. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  18
-   12. Informative References  . . . . . . . . . . . . . . . . . . .  18
-   Appendix A.  Changes from Earlier Versions  . . . . . . . . . . .  19
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  19
+     6.3.  TEAP Server Instructs Client to Reenroll  . . . . . . . .  15
+     6.4.  Out of Band Reenroll  . . . . . . . . . . . . . . . . . .  17
+   7.  TEAP TLV Formats  . . . . . . . . . . . . . . . . . . . . . .  18
+     7.1.  BRSKI TLVs  . . . . . . . . . . . . . . . . . . . . . . .  18
+       7.1.1.  BRSKI-RequestVoucher TLV  . . . . . . . . . . . . . .  18
+       7.1.2.  BRSKI-Voucher TLV . . . . . . . . . . . . . . . . . .  19
+       7.1.3.  CSR-Attributes TLV  . . . . . . . . . . . . . . . . .  19
+     7.2.  Existing TEAP TLV Specifications  . . . . . . . . . . . .  20
+       7.2.1.  PKCS#10 TLV . . . . . . . . . . . . . . . . . . . . .  20
+   8.  Fragmentation . . . . . . . . . . . . . . . . . . . . . . . .  20
+   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  21
+   10. Security Considerations . . . . . . . . . . . . . . . . . . .  21
+   11. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  21
+   12. Informative References  . . . . . . . . . . . . . . . . . . .  21
+   Appendix A.  Changes from Earlier Versions  . . . . . . . . . . .  22
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  22
 
 1.  Introduction
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Lear, et al.             Expires August 24, 2019                [Page 2]
+Lear, et al.             Expires August 26, 2019                [Page 2]
 
 Internet-Draft               BRSKI TEAP EAP                February 2019
 
@@ -165,7 +165,7 @@ Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
 
-Lear, et al.             Expires August 24, 2019                [Page 3]
+Lear, et al.             Expires August 26, 2019                [Page 3]
 
 Internet-Draft               BRSKI TEAP EAP                February 2019
 
@@ -221,7 +221,7 @@ Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
 
-Lear, et al.             Expires August 24, 2019                [Page 4]
+Lear, et al.             Expires August 26, 2019                [Page 4]
 
 Internet-Draft               BRSKI TEAP EAP                February 2019
 
@@ -277,7 +277,7 @@ Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
 
-Lear, et al.             Expires August 24, 2019                [Page 5]
+Lear, et al.             Expires August 26, 2019                [Page 5]
 
 Internet-Draft               BRSKI TEAP EAP                February 2019
 
@@ -333,7 +333,7 @@ Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
 
-Lear, et al.             Expires August 24, 2019                [Page 6]
+Lear, et al.             Expires August 26, 2019                [Page 6]
 
 Internet-Draft               BRSKI TEAP EAP                February 2019
 
@@ -389,7 +389,7 @@ Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
 
-Lear, et al.             Expires August 24, 2019                [Page 7]
+Lear, et al.             Expires August 26, 2019                [Page 7]
 
 Internet-Draft               BRSKI TEAP EAP                February 2019
 
@@ -445,7 +445,7 @@ Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
 
-Lear, et al.             Expires August 24, 2019                [Page 8]
+Lear, et al.             Expires August 26, 2019                [Page 8]
 
 Internet-Draft               BRSKI TEAP EAP                February 2019
 
@@ -501,7 +501,7 @@ Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
 
-Lear, et al.             Expires August 24, 2019                [Page 9]
+Lear, et al.             Expires August 26, 2019                [Page 9]
 
 Internet-Draft               BRSKI TEAP EAP                February 2019
 
@@ -540,24 +540,24 @@ Internet-Draft               BRSKI TEAP EAP                February 2019
 
    This section outlines protocol flows that map to the 3 server policy
    options described in section Section 4.1.  The protocol flows
-   illustrate a TLS1.2 exchange.
-
-   [[TODO]] MISSING EAP Start/identity/Crypto binding, etc.  Flows
-   illustrative, but not 100% accurate.
+   illustrate a TLS1.2 exchange.  Pertinent notes are outlined in the
+   protocol flows.
 
 6.1.  TEAP Server Grants Access
 
+   In this flow, the server grants access as server policy allows the
+   client to access the network based on the identity certificate that
+   the client presented.  This means that either (i) the client has
+   previously completed BRSKI and has presented a valid LDevID or (ii)
+   the client presents an IDevID and network policy allows access based
+   purely on IDevID.
 
 
 
 
 
 
-
-
-
-
-Lear, et al.             Expires August 24, 2019               [Page 10]
+Lear, et al.             Expires August 26, 2019               [Page 10]
 
 Internet-Draft               BRSKI TEAP EAP                February 2019
 
@@ -565,44 +565,79 @@ Internet-Draft               BRSKI TEAP EAP                February 2019
    +--------+             +-------------+     +------+
    | Client |             | TEAP-Server |     | MASA |
    +--------+             +-------------+     +------+
+       |  EAP-Request/           |                |
+       |   Type=Identity         |                |
+       |<------------------------|                |
        |                         |                |
-       |  ClientHello            |                |
+       |  EAP-Response/          |                |
+       |   Type=Identity         |                |
        |------------------------>|                |
-       |  ServerHello,           |                |
-       |  Certificate(1),        |                |
-       |  ServerKeyExchange,     |                |
-       |  CertificateRequest(2), |                |
-       |  ServerHelloDone,       |                |
+       |                         |                |
+       |  EAP-Request/           |                |
+       |   Type=TEAP,            |                |
+       |   TEAP Start,           |                |
+       |   Authority-ID TLV      |                |
        |<------------------------|                |
-       |  Certificate(3),        |                |
-       |  ClientKeyExchange,     |                |
-       |  CertificateVerify,     |                |
-       |  ChangeCipherSpec,      |                |
-       |  Finished               |                |
+       |                         |                |
+       |  EAP-Response/          |                |
+       |   Type=TEAP,            |                |
+       |   TLS(ClientHello)      |                |
        |------------------------>|                |
-       |  ChangeCipherSpec,      |                |
-       |  Finished               |                |
+       |                         |                |
+       |  EAP-Request/           |                |
+       |   Type=TEAP,            |                |
+       |   TLS(ServerHello,      |                |
+    (1)|   Certificate,          |                |
+       |   ServerKeyExchange,    |                |
+    (2)|   CertificateRequest,   |                |
+       |   ServerHelloDone)      |                |
        |<------------------------|                |
-       |  Crypto-Binding TLV     |                |
-       |<------------------------|                |
-       |  Crypto-Binding TLV     |                |
+       |                         |                |
+       |  EAP-Response/          |                |
+       |   Type=TEAP,            |                |
+    (3)|   TLS(Certificate,      |                |
+       |   ClientKeyExchange,    |                |
+       |   CertificateVerify,    |                |
+       |   ChangeCipherSpec,     |                |
+       |   Finished)             |                |
        |------------------------>|                |
-       |  Result TLV             |                |
+       |                         |                |
+       |  EAP-Request/           |                |
+       |   Type=TEAP,            |                |
+       |   TLS(ChangeCipherSpec, |                |
+       |   Finished),            |                |
+       |   {Crypto-Binding TLV,  |                |
+       |   Result TLV=Success}   |                |
        |<------------------------|                |
-       |  Result TLV             |                |
+       |                         |                |
+
+
+
+Lear, et al.             Expires August 26, 2019               [Page 11]
+
+Internet-Draft               BRSKI TEAP EAP                February 2019
+
+
+       |  EAP-Response/          |                |
+       |   Type=TEAP,            |                |
+       |   {Crypto-Binding TLV,  |                |
+       |   Result TLV=Success}   |                |
        |------------------------>|                |
-       |      EAP-Success        |                |
+       |                         |                |
+       |  EAP-Success            |                |
        |<------------------------|                |
+
 
 
                     Figure 1: TEAP Server Grants Access
 
    Notes:
 
-   (1) If the client has completed the BRSKI flow yet, it must validate
-   the Certificate received from the server.  If the client has not yet
-   completed the BRSKI flow, then it provisionally accepts the server
-   Certificate and must validate it later once BRSKI is complete.
+   (1) If the client has completed the BRSKI flow and has locally
+   significant trust anchors, it must validate the Certificate received
+   from the server.  If the client has not yet completed the BRSKI flow,
+   then it provisionally accepts the server Certificate and must
+   validate it later once BRSKI is complete.
 
    (2) The server may include certificate_authorities field in the
    CertificateRequest message in order to restrict the identity
@@ -611,75 +646,171 @@ Internet-Draft               BRSKI TEAP EAP                February 2019
    (3) The device will present its LDevID, if it has one, in preference
    to its IDevID, if allowed by server policy.
 
+6.2.  TEAP Server Instructs Client to Perform BRSKI Flow
+
+   In this flow, the server instructs the client to perform a BRSKI flow
+   by exchanging TLVs once the outer TLS tunnel is established.
+
+   +--------+             +-------------+         +------+
+   | Client |             | TEAP-Server |         | MASA |
+   +--------+             +-------------+         +------+
+       |  EAP-Request/               |                |
+       |   Type=Identity             |                |
+       |<----------------------------|                |
+       |                             |                |
+       |  EAP-Response/              |                |
+       |   Type=Identity             |                |
+       |---------------------------->|                |
+       |                             |                |
+       |  EAP-Request/               |                |
+       |   Type=TEAP,                |                |
+       |   TEAP Start,               |                |
+       |   Authority-ID TLV          |                |
 
 
-Lear, et al.             Expires August 24, 2019               [Page 11]
+
+Lear, et al.             Expires August 26, 2019               [Page 12]
 
 Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
-6.2.  TEAP Server Instructs Client to Perform BRSKI Flow
+       |<----------------------------|                |
+       |                             |                |
+       |  EAP-Response/              |                |
+       |   Type=TEAP,                |                |
+       |   TLS(ClientHello)          |                |
+       |---------------------------->|                |
+       |                             |                |
+       |  EAP-Request/               |                |
+       |   Type=TEAP,                |                |
+       |   TLS(ServerHello,          |                |
+    (1)|   Certificate,              |                |
+       |   ServerKeyExchange,        |                |
+       |   CertificateRequest,       |                |
+       |   ServerHelloDone)          |                |
+       |<----------------------------|                |
+       |                             |                |
+       |  EAP-Response/              |                |
+       |   Type=TEAP,                |                |
+       |   TLS(Certificate           |                |
+       |   ClientKeyExchange,        |                |
+       |   CertificateVerify,        |                |
+       |   ChangeCipherSpec,         |                |
+       |   Finished)                 |                |
+       |---------------------------->|                |
+       |                             |                |
+       |  EAP-Request/               |                |
+       |   Type=TEAP,                |                |
+       |   TLS(ChangeCipherSpec,     |                |
+       |   Finished),                |                |
+       |   {Crypto-Binding TLV,      |                |
+       |   Result TLV=Success}       |                |
+       |<----------------------------|                |
+       |                             |                |
+       |  EAP-Response/              |                |
+       |   Type=TEAP,                |                |
+       |   {Crypto-Binding TLV,      |                |
+       |   Result TLV=Success}       |                |
+       |---------------------------->|                |
+       |                             |                |
+     ** At this stage the outer TLS tunnel is established **
+     ** The following message exchanges are for BRSKI     **
+       |                             |                |
+       |  EAP-Request/               |                |
+       |   Type=TEAP,                |                |
+    (2)|   {Request-Action TLV:      |                |
+       |     Status=Failure,         |                |
+       |     Action=Process-TLV,     |                |
+       |     TLV=Request-Voucher,    |                |
 
-   +--------+             +-------------+     +------+
-   | Client |             | TEAP-Server |     | MASA |
-   +--------+             +-------------+     +------+
-       |                         |                |
-       |      ClientHello        |                |
-       |------------------------>|                |
-       |   ServerHello, etc.(1)  |                |
-       |<------------------------|                |
-       |     etc., Finished      |                |
-       |------------------------>|                |
-       |     etc., Finished      |                |
-       |<------------------------|                |
-       | BRSKI-RequestAction(2)  |                |
-       |<------------------------|                |
-       | BRSKI-RequestVoucher(3) |                |
-       |------------------------>| RequestVoucher |
-       |                         |--------------->|
-       |                         |    Voucher     |
-       |     BRSKI-Voucher(4)    |<---------------|
-       |<------------------------|                |
-       |  Trusted-Server-Root    |                |
-       |------------------------>|                |
-       |  Trusted-Server-Root    |                |
-       |<------------------------|                |
-       |     CSR-Attributes      |                |
-       |<------------------------|                |
-       |         PKCS#10         |                |
-       |------------------------>|                |
-       |         PKCS#7          |                |
-       |<------------------------|                |
-       |  Crypto-Binding TLV     |                |
-       |<------------------------|                |
-       |  Crypto-Binding TLV     |                |
-       |------------------------>|                |
-       |  Result TLV             |                |
-       |<------------------------|                |
-       |  Result TLV             |                |
-       |------------------------>|                |
-       |      EAP-Success        |                |
-       |<------------------------|                |
+
+
+Lear, et al.             Expires August 26, 2019               [Page 13]
+
+Internet-Draft               BRSKI TEAP EAP                February 2019
+
+
+       |     TLV=Trusted-Server-Root,|                |
+       |     TLV=CSR-Attributes,     |                |
+       |     TLV=PKCS#10}            |                |
+       |<----------------------------|                |
+       |                             |                |
+       |  EAP-Response/              |                |
+       |   Type=TEAP,                |                |
+    (3)|   {Request-Voucher TLV}     |                |
+       |---------------------------->| RequestVoucher |
+       |                             |--------------->|
+       |                             |    Voucher     |
+       |                             |<---------------|
+       |  EAP-Request/               |                |
+       |   Type=TEAP,                |                |
+    (4)|   {Voucher TLV}             |                |
+       |<----------------------------|                |
+       |                             |                |
+       |  EAP-Response/              |                |
+       |   Type=TEAP,                |                |
+    (5)|   {Trusted-Server-Root TLV} |                |
+       |---------------------------->|                |
+       |                             |                |
+       |  EAP-Request/               |                |
+       |   Type=TEAP,                |                |
+       |   {Trusted-Server-Root TLV} |                |
+       |<----------------------------|                |
+       |                             |                |
+       |  EAP-Response/              |                |
+       |   Type=TEAP,                |                |
+       |   {CSR-Attributes TLV}      |                |
+       |---------------------------->|                |
+       |                             |                |
+       |  EAP-Request/               |                |
+       |   Type=TEAP,                |                |
+       |   {CSR-Attributes TLV}      |                |
+       |<----------------------------|                |
+       |                             |                |
+       |  EAP-Response/              |                |
+       |   Type=TEAP,                |                |
+       |   {PKCS#10 TLV}             |                |
+       |---------------------------->|                |
+       |                             |                |
+       |  EAP-Request/               |                |
+       |   Type=TEAP,                |                |
+       |   {PKCS#7 TLV,              |                |
+    (6)|    Result TLV=Success}      |                |
+       |<----------------------------|                |
+       |                             |                |
+
+
+
+Lear, et al.             Expires August 26, 2019               [Page 14]
+
+Internet-Draft               BRSKI TEAP EAP                February 2019
+
+
+       |  EAP-Response/              |                |
+       |   Type=TEAP,                |                |
+       |   {Result TLV=Success}      |                |
+       |---------------------------->|                |
+       |                             |                |
+       |  EAP-Success                |                |
+       |<----------------------------|                |
+
+
 
 
        Figure 2: TEAP Server Instructs Client to Perform BRSKI Flow
 
    Notes:
 
-
-
-
-Lear, et al.             Expires August 24, 2019               [Page 12]
-
-Internet-Draft               BRSKI TEAP EAP                February 2019
-
-
    (1) If the client has not yet completed the BRSKI flow, then it
    provisionally accepts the server certificate and must validate it
    later once BRSKI is complete.
 
    (2) The server instructs the client to start the BRSKI flow by
-   sending a RequestAction TLV that includes a BRSKI-RequestVoucher TLV.
+   sending a Request-Action TLV that includes a BRSKI-RequestVoucher
+   TLV.  The server also instructs the client to request trust anchors,
+   to request CSR Attrites, and to initiate a PKCS certificate
+   enrolment.  As outlined in [RFC7170], the Request-Action TLV is sent
+   after the Crypto-Binding TLV and Result TLV exchange.
 
    (3) The client includes the certificate it received from the server
    in the RequestVoucher message.
@@ -688,87 +819,140 @@ Internet-Draft               BRSKI TEAP EAP                February 2019
    MASA, it must verify the certificate it previously received from the
    server.
 
+   (5) As outlined in [RFC7170], the Trusted-Server-Root TLV is
+   exchanged after the Crypto-Binding TLV exchange, and after the client
+   has used the Voucher to authenticate the TEAP server identity.
+
+   (6) There is not need for an additional Crypto-Binding TLV exchange
+   as there is no inner EAP method.  All BRSKI exchanges are simply TLVs
+   exchanged inside the outer TLS tunnel.
+
 6.3.  TEAP Server Instructs Client to Reenroll
 
+   In this flow, the server instructs the client to reenroll and get a
+   new LDevID by exchanging TLVs once the outer TLS tunnel is
+   established.
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Lear, et al.             Expires August 24, 2019               [Page 13]
+Lear, et al.             Expires August 26, 2019               [Page 15]
 
 Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
-   +--------+            +-------------+     +------+
-   | Client |            | TEAP-Server |     | MASA |
-   +--------+            +-------------+     +------+
-       |                        |                |
-       |      ClientHello       |                |
-       |----------------------->|                |
-       |   ServerHello, etc.    |                |
-       |<-----------------------|                |
-       |     etc., Finished     |                |
-       |----------------------->|                |
-       |     etc., Finished     |                |
-       |<-----------------------|                |
-       | RequestAction: PKCS#10 |                |
-       |<-----------------------|                |
-       |     CSR-Attributes     |                |
-       |<-----------------------|                |
-       |         PKCS#10        |                |
-       |----------------------->|                |
-       |         PKCS#7         |                |
-       |<-----------------------|                |
-       |  Crypto-Binding TLV    |                |
-       |<-----------------------|                |
-       |  Crypto-Binding TLV    |                |
-       |----------------------->|                |
-       |  Result TLV            |                |
-       |<-----------------------|                |
-       |  Result TLV            |                |
-       |----------------------->|                |
-       |      EAP-Success       |                |
-       |<-----------------------|                |
+   +--------+             +-------------+     +------+
+   | Client |             | TEAP-Server |     | MASA |
+   +--------+             +-------------+     +------+
+       |  EAP-Request/           |                |
+       |   Type=Identity         |                |
+       |<------------------------|                |
+       |                         |                |
+       |  EAP-Response/          |                |
+       |   Type=Identity         |                |
+       |------------------------>|                |
+       |                         |                |
+       |  EAP-Request/           |                |
+       |   Type=TEAP,            |                |
+       |   TEAP Start,           |                |
+       |   Authority-ID TLV      |                |
+       |<------------------------|                |
+       |                         |                |
+       |  EAP-Response/          |                |
+       |   Type=TEAP,            |                |
+       |   TLS(ClientHello)      |                |
+       |------------------------>|                |
+       |                         |                |
+       |  EAP-Request/           |                |
+       |   Type=TEAP,            |                |
+       |   TLS(ServerHello,      |                |
+       |   Certificate,          |                |
+       |   ServerKeyExchange,    |                |
+       |   CertificateRequest,   |                |
+       |   ServerHelloDone)      |                |
+       |<------------------------|                |
+       |                         |                |
+       |  EAP-Response/          |                |
+       |   Type=TEAP,            |                |
+       |   TLS(Certificate,      |                |
+       |   ClientKeyExchange,    |                |
+       |   CertificateVerify,    |                |
+       |   ChangeCipherSpec,     |                |
+       |   Finished)             |                |
+       |------------------------>|                |
+       |                         |                |
+       |  EAP-Request/           |                |
+       |   Type=TEAP,            |                |
+       |   TLS(ChangeCipherSpec, |                |
+       |   Finished),            |                |
+       |   {Crypto-Binding TLV,  |                |
+       |   Result TLV=Success}   |                |
+       |<------------------------|                |
+       |                         |                |
+
+
+
+Lear, et al.             Expires August 26, 2019               [Page 16]
+
+Internet-Draft               BRSKI TEAP EAP                February 2019
+
+
+       |  EAP-Response/          |                |
+       |   Type=TEAP,            |                |
+       |   {Crypto-Binding TLV,  |                |
+       |   Result TLV=Success}   |                |
+       |------------------------>|                |
+       |                         |                |
+       |  EAP-Request/           |                |
+       |   Type=TEAP,            |                |
+    (1)|   {Request-Action TLV:  |                |
+       |     Status=Failure,     |                |
+       |     Action=Process-TLV, |                |
+       |     TLV=PKCS#10}        |                |
+       |<------------------------|                |
+       |                         |                |
+       |  EAP-Response/          |                |
+       |   Type=TEAP,            |                |
+       |   {PKCS#10 TLV}         |                |
+       |------------------------>|                |
+       |                         |                |
+       |  EAP-Request/           |                |
+       |   Type=TEAP,            |                |
+       |   {PKCS#7 TLV,          |                |
+       |    Result TLV=Success}  |                |
+       |<------------------------|                |
+       |                         |                |
+       |  EAP-Response/          |                |
+       |   Type=TEAP,            |                |
+       |   {Result TLV=Success}  |                |
+       |------------------------>|                |
+       |                         |                |
+       |  EAP-Success            |                |
+       |<------------------------|                |
+
 
 
             Figure 3: TEAP Server Instructs Client to Reenroll
+
+   (1) The server instructs the client to reenroll by sending a Request-
+   Action TLV that includes a PKCS#10 TLV.
 
 6.4.  Out of Band Reenroll
 
    This section shows how the device does a reenroll to refresh its
    LDEvID directly against the registrar outside the context of the TEAP
    tunnel.
+
+
+
+
+
+
+Lear, et al.             Expires August 26, 2019               [Page 17]
+
+Internet-Draft               BRSKI TEAP EAP                February 2019
+
 
 7.  TEAP TLV Formats
 
@@ -777,14 +961,6 @@ Internet-Draft               BRSKI TEAP EAP                February 2019
    BRSKI defines 3 new TEAP TLVs.  The following table indicates whether
    the TLVs can be included in Request messages from TEAP server to
    device, or Response messages from device to TEAP server.
-
-
-
-
-Lear, et al.             Expires August 24, 2019               [Page 14]
-
-Internet-Draft               BRSKI TEAP EAP                February 2019
-
 
    +------------------------+----------+
    | TLV                    | Message  |
@@ -824,6 +1000,16 @@ Internet-Draft               BRSKI TEAP EAP                February 2019
    If it is unable to do so, it returns an TEAP Error TLV with one of
    the defined errors or the following:
 
+
+
+
+
+
+Lear, et al.             Expires August 26, 2019               [Page 18]
+
+Internet-Draft               BRSKI TEAP EAP                February 2019
+
+
    TBD2-MASA-Notavailable  MASA unavailable
    TBD3-MASA-Refused       MASA refuses to sign the voucher
 
@@ -832,15 +1018,6 @@ Internet-Draft               BRSKI TEAP EAP                February 2019
    point.  The backoff mechanism for such retries should be appropriate
    for the device.  Retries MUST occur no more frequently than once
    every two (XXX) minutes.
-
-
-
-
-
-Lear, et al.             Expires August 24, 2019               [Page 15]
-
-Internet-Draft               BRSKI TEAP EAP                February 2019
-
 
 7.1.2.  BRSKI-Voucher TLV
 
@@ -881,6 +1058,14 @@ Internet-Draft               BRSKI TEAP EAP                February 2019
    CSR.  The value of this TLV is the base64 encoding described in
    Section 4.5.2 of [RFC7030].
 
+
+
+
+Lear, et al.             Expires August 26, 2019               [Page 19]
+
+Internet-Draft               BRSKI TEAP EAP                February 2019
+
+
       0                   1                   2                   3
       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -888,14 +1073,6 @@ Internet-Draft               BRSKI TEAP EAP                February 2019
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       | Value...
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-
-
-
-
-Lear, et al.             Expires August 24, 2019               [Page 16]
-
-Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
    Again, the M and R values are set to 0.  In the case where the client
@@ -936,6 +1113,15 @@ Internet-Draft               BRSKI TEAP EAP                February 2019
    BRSKI does not specifically provide any, as it is only expected to be
    used as an inner method to TEAP.
 
+
+
+
+
+Lear, et al.             Expires August 26, 2019               [Page 20]
+
+Internet-Draft               BRSKI TEAP EAP                February 2019
+
+
 9.  IANA Considerations
 
    The IANA is requested to add entries into the following tables:
@@ -945,13 +1131,6 @@ Internet-Draft               BRSKI TEAP EAP                February 2019
    TBD1-VoucherRequest   Described in this document.
    TBD4-Voucher          Described in this document.
    TBD8-CSR-Attributes   Described in this document.
-
-
-
-
-Lear, et al.             Expires August 24, 2019               [Page 17]
-
-Internet-Draft               BRSKI TEAP EAP                February 2019
 
 
    The following TEAP Error Codes are defined, with their meanings
@@ -990,6 +1169,15 @@ Internet-Draft               BRSKI TEAP EAP                February 2019
               (EAP)", RFC 3748, DOI 10.17487/RFC3748, June 2004,
               <https://www.rfc-editor.org/info/rfc3748>.
 
+
+
+
+
+Lear, et al.             Expires August 26, 2019               [Page 21]
+
+Internet-Draft               BRSKI TEAP EAP                February 2019
+
+
    [RFC7030]  Pritikin, M., Ed., Yee, P., Ed., and D. Harkins, Ed.,
               "Enrollment over Secure Transport", RFC 7030,
               DOI 10.17487/RFC7030, October 2013,
@@ -999,16 +1187,6 @@ Internet-Draft               BRSKI TEAP EAP                February 2019
               "Tunnel Extensible Authentication Protocol (TEAP) Version
               1", RFC 7170, DOI 10.17487/RFC7170, May 2014,
               <https://www.rfc-editor.org/info/rfc7170>.
-
-
-
-
-
-
-Lear, et al.             Expires August 24, 2019               [Page 18]
-
-Internet-Draft               BRSKI TEAP EAP                February 2019
-
 
    [RFC8366]  Watsen, K., Richardson, M., Pritikin, M., and T. Eckert,
               "A Voucher Artifact for Bootstrapping Protocols",
@@ -1045,6 +1223,17 @@ Authors' Addresses
    Email: ofriel@cisco.com
 
 
+
+
+
+
+
+
+Lear, et al.             Expires August 26, 2019               [Page 22]
+
+Internet-Draft               BRSKI TEAP EAP                February 2019
+
+
    Nancy Cam-Winget
    Cisco Systems
    170 W. Tasman Dr.
@@ -1061,4 +1250,39 @@ Authors' Addresses
 
 
 
-Lear, et al.             Expires August 24, 2019               [Page 19]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Lear, et al.             Expires August 26, 2019               [Page 23]
