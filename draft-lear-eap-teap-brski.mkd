@@ -160,7 +160,7 @@ device:
 
 - Step 6: Device downloads Certificate Signing Reqeust (CSR) attributes
 
-- Step 7: Device does an EST enroll to obtain an LDevID
+- Step 7: Device does a certificate enroll to obtain an LDevID
 
 - Step 8: Device periodically reenrolls via EST to refresh its LDevID
 
@@ -193,9 +193,15 @@ IDevID. Server policy may also be used to control which certificate
 the device is allowed present, as described in section
 {{pki-certificate-authority-considerations}}.
 
-If the presented credential is sufficient to grant access, the TEAP server can return an EAP-Success immediately. The device may still send a BRSKI-RequestVoucher TLV in response to the EAP-Success if it does not have, but requires, trust anchors for validating the TEAP server certificate.
+If the presented credential is sufficient to grant access, the TEAP server can return a TEAP Result TLV indicating success immediately. The device may still send a Request-Action TLV including a BRSKI-VoucherRequest TLV in response to the TEAP Result TLV if it does not have, but requires, provisioning of trust anchors for validating the TEAP server certificate. Note that no inner EAP method is required for this, only an exchange of TEAP TLVs.
 
-If the TEAP server requires that the device execute a BRSKI flow, it sends a Request-Action TLV that includes a BRSKI-VoucherRequest TLV. For example, if the device presented its IDevID but the TEAP server requires an LDevID.
+[todo] Question: as the device wants the server to reply with a BRSKI-Voucher TLV, does it really send a Request-Action TLV containing a BRSKI-VoucherRequest TLV, or does it send a Request-Action TLV containing a BRSKI-Voucher TLV?? The TEAP draft is a bit ambiguous here. Normally, if one end sends a Request-Action including XXX-TLV, it means it wants the far end ot send an XXX-TLV...
+
+[todo] Question: general TEAP protocol question: does the device have to send a Request-Action w/BRSKI-VoucherRequest or can it send a BRSKI-VoucherRequest on its own? I'm not clear on this.
+
+If the TEAP server requires that the device execute a BRSKI flow, the server sends a Request-Action TLV that includes a BRSKI-VoucherRequest TLV. For example, if the device presented its IDevID but the TEAP server requires an LDevID.
+
+[todo] Question: to nit pick, the server should send a Request-Action TLV including a PKCS#10 TLV to tell the client to enroll. How does the server really know that the client has the correct trust established (as previously received by a BRSKI-Voucher)? If the client sends an IDevID, does server always send a Request-Action including both BRSKI-VoucherRequest and PKCS#10 TLVs? Whats the client behaviour? I assume client can spontaneously send BRSKI-VoucherRequest and/or PCSK#10 without being explicitly instructed to. Just need to get the language correct here.
 
 The TEAP server may also require the device to reenroll, for example, if the device presented a valid LDevID that is very closed to expiration. The server may instruct a device to reenroll by sending a Request-Action TLV that includes a zero byte length PKCS#10 TLV.
 
@@ -222,17 +228,15 @@ The device validates the signed voucher using its manufacturer
 installed trust anchor, and uses the CA information in the voucher to
 validate the outer TEAP TLS connection to the TEAP server.
 
-If the device fails to validate the voucher, or fails to validate the
-outer TEAP TLS connection, then it sends a TEAP-Error TLV indicating
-failure to the TEAP server.
+If the device fails to validate the voucher, then it sends a TEAP-Error TLV indicating failiure to the TEAP server.
 
-
+Similarly, if the device validates the voucher, but fails to validate the provisional outer TEAP TLS connection, then it sends a TEAP-Error TLV indicating failure to the TEAP server. Note that the outer TLS tunnel has already been established, thus allowing the client to send a TEAP-Error TLV to the server inside that tunnel to indicate that it failed to verify the provisionally accepted outer TLS tunnel server identity.
 
 - Step 5: Device downloads additional local domain CA information
 
 On completion of the BRSKI flow, the device SHOULD send a
 Trusted-Server-Root TLV to the TEAP server in order to discover
-additional local domain CAs.
+additional local domain CAs. This is equivalent to section [todo] from {{I-D.ietf-anima-bootstrapping-keyinfra}}.
 
 - Step 6: Device downloads CSR attributes
 
@@ -240,7 +244,7 @@ No later than the completion of step 5, server MUST send a
 CSR-Attributes TLV to peer server in order to discover the correct
 fields to include when it enrolls to get an LDevID.
 
-- Step 7: Device does an EST enroll to obtain an LDevID
+- Step 7: Device does a certificate enroll to obtain an LDevID
 
 When executing the BRSKI flow inside a TEAP tunnel, the device does
 not directly leverage EST when doing its initial enroll. Instead, the
@@ -273,7 +277,7 @@ exchange, then the device MUST send a PKCS#10 to reenroll and request
 a fresh LDevID.
 
 However, the device SHOULD reenroll if it determines that its LDevID
-is close to expiration wihtout waiting for explicit instruction from
+is close to expiration without waiting for explicit instruction from
 the TEAP server. There are two options to do this.
 
 Option 1: The device reenrolls for a new LDevID directly with the EST
@@ -289,12 +293,14 @@ Option 2: When the device is performing a periodic 802.1X
 authentication using its current LDevID, it reenrolls for a new LDevID
 by sending a PKCS#10 TLV inside the TEAP TLS tunnel.
 
-# PKI Certificate Authority Considerations
+# PKI Certificate Considerations
 
 Careful consideration must be given to PKI certificate authority handling when:
 
 - Establishing the TEAP tunnel
 - Establishing trust using BRSKI
+
+Additionally, consideration must be given to IDevID and LDevID expiration times.
 
 These are described in more detail here.
 
@@ -310,7 +316,7 @@ certificates that the client can use for tunnel establishment by
 including a list of CA distinguished names in the
 certificate_authorities field in the CertificateRequest
 message. Network operators may want to do this in order to restrict
-netwok access to clients that have a certificate signed by one of a
+network access to clients that have a certificate signed by one of a
 small set of trusted manufacturer/supplier CAs. If the client has both
 an IDevID and an LDevID, the client should present the LDevID in
 preference to its IDevID if allowed by server policy.
@@ -353,6 +359,18 @@ When the client receives the signed voucher, it validates the signature using it
 \[TBD- based on client responses, the registrar sends a status update
 to the MASA\]
 
+## Certificate Expiration Times
+
+[802.1AR] section 7.2.7.2 states:
+
+~~~
+notAfter: The latest time a DevID is expected to be used. Devices possessing an IDevID are expected to operate indefinitely into the future and should use the value 99991231235959Z. Solutions verifying a DevID are expected to accept this value indefinitely.
+~~~
+
+TEAP servers SHOULD follow the 802.1AR standard when validating IDevIDs.
+
+TEAP servers SHOULD reject LDevIDs with expired certificates and SHOULD NOT allow clients to connect with recently expired LDevIDs. If a client presents a recently expired LDevID it SHOULD be forced to authenticate using its IDevID and then reenroll to obtain a valid LDevID.
+
 # Channel and Crypto Binding
 
 As the TEAP BRSKI flow does not define or require an inner EAP method, there is no explicit need for exchange of Channel-Binding TLVs between the device and the TEAP server.
@@ -372,10 +390,10 @@ In this flow, the server grants access as server policy allows the client to acc
 ~~~
 
 
-
-+--------+             +-------------+     +------+
-| Client |             | TEAP-Server |     | MASA |
-+--------+             +-------------+     +------+
+                      +----------------+
++--------+            | Authenticator/ |    +------+
+| Client |            |   TEAP-Server  |    | MASA |
++--------+            +----------------+    +------+
     |  EAP-Request/           |                |
     |   Type=Identity         |                |
     |<------------------------|                |
@@ -448,9 +466,10 @@ In this flow, the server instructs the client to perform a BRSKI flow by exchang
 
 ~~~
 
-+--------+             +-------------+         +------+
-| Client |             | TEAP-Server |         | MASA |
-+--------+             +-------------+         +------+
+                          +----------------+
++--------+                | Authenticator/ |    +------+
+| Client |                |   TEAP-Server  |    | MASA |
++--------+                +----------------+    +------+
     |  EAP-Request/               |                |
     |   Type=Identity             |                |
     |<----------------------------|                |
@@ -582,7 +601,7 @@ Notes:
 
 (4) Once the client receives and validates the voucher signed by the MASA, it must verify the certificate it previously received from the server.
 
-(5) As outlined in {{?RFC7170}}, the Trusted-Server-Root TLV is exchanged after the Crypto-Binding TLV exchange, and after the client has used the Voucher to authenticate the TEAP server identity.
+(5) As outlined in {{?RFC7170}}, the Trusted-Server-Root TLV is exchanged after the Crypto-Binding TLV exchange, and after the client has used the Voucher to authenticate the TEAP server identity. This is equivalent to section [todo] from {{I-D.ietf-anima-bootstrapping-keyinfra}}.
 
 (6) There is not need for an additional Crypto-Binding TLV exchange as there is no inner EAP method. All BRSKI exchanges are simply TLVs exchanged inside the outer TLS tunnel.
 
@@ -592,10 +611,10 @@ In this flow, the server instructs the client to reenroll and get a new LDevID b
 
 ~~~
 
-
-+--------+             +-------------+     +------+
-| Client |             | TEAP-Server |     | MASA |
-+--------+             +-------------+     +------+
+                      +----------------+
++--------+            | Authenticator/ |    +------+
+| Client |            |   TEAP-Server  |    | MASA |
++--------+            +----------------+    +------+
     |  EAP-Request/           |                |
     |   Type=Identity         |                |
     |<------------------------|                |
@@ -706,12 +725,11 @@ device, or Response messages from device to TEAP server.
 
 These new TLVs are detailed in this section.
 
-
 ### BRSKI-RequestVoucher TLV
 
-This TLV is used by the server as part of an Action-Request to
+This TLV is used by the server as part of a Request-Action TLV to
 request from the peer that it initiate a voucher request.  When used
-in this fashion, the length of this TLV will be set to zero.
+in this fashion, the length of this TLV will be set to zero. The Status field of the Request-Action TLV MUST be set to Failure.
 
 It is also used by the peer to initiate the voucher request.  When
 used in this fashion, the length of the TLV will be set to that of the
@@ -747,7 +765,7 @@ TBD3-MASA-Refused       MASA refuses to sign the voucher
 The peer terminates the TEAP connection, but may retry at some later
 point.  The backoff mechanism for such retries should be appropriate
 for the device.  Retries MUST occur no more frequently than once
-every two (XXX) minutes.
+every two (TBD) minutes.
 
 ### BRSKI-Voucher TLV
 
@@ -836,6 +854,28 @@ This section documents allowed usage of existing TEAP TLVs. The definition of th
 {{?RFC7170}} does not explicitly allow a Length value of zero.
 
 A Length value of zero is allowed for this TLV when the TEAP server sends a Request-Action TLV with a child PKCS#10 TLV to the client. In this scenario, there is no PKCS#10 Data included in the TLV. Clients MUST NOT send a zero length PKCS#10 TLV to the server.
+
+## TLV Rules
+
+BRSKI TLVs can only be transported inside the TLS tunnel. The following table provides a guide to which TLVs may be encapsulated in which kind of packets, and in what quantity. The messages are as follows: Request is a TEAP Request, Response is a TEAP Response, Success is a message containing a successful Result TLV, and Failure is a message containing a failed Result TLV.
+
+The following define the meaning of the table entries in the sections below:
+
+0   This TLV MUST NOT be present in the message.
+
+0+  Zero or more instances of this TLV MAY be present in the
+    message.
+
+0-1 Zero or one instance of this TLV MAY be present in the message.
+
+1   Exactly one instance of this TLV MUST be present in the
+    message.
+
+
+Request Response Success Failure TLVs
+0       0-1      0       0       BRSKI-VoucherRequest
+0-1     0        0       0       BRSKI-Voucher
+0       0-1      0       0       CSR-Attributes
 
 Fragmentation
 =============
