@@ -1,7 +1,7 @@
 ---
 title: Bootstrapping Key Infrastructure over EAP
 abbrev: BRSKI TEAP EAP
-docname: draft-lear-eap-teap-brski-02
+docname: draft-lear-eap-teap-brski-03
 category: std
 
 ipr: trust200902
@@ -39,6 +39,34 @@ author:
     city: San Jose, CA
     country: United States
     email: ncamwing@cisco.com
+ -
+    ins: D. Harkins
+    name: Dan harkins
+    org:  HP Enterprise
+    street: 3333 Scott Boulevard
+    code: 95054
+    city: Santa Clara, CA
+    country: United States
+    email: dharkins@arubanetworks.com
+
+normative:
+   IEEE8021AR:
+      title: Secure Device Identity
+      author:
+        organization: Institute for Electrical and Electronics Engineers
+      seriesInfo:
+        name: IEEE
+        value: 802.1AR
+      date: 1998
+   IEEE8021X:
+      title: IEEE Standard for Local and metropolitan area 
+             networks--Port-Based Network Access Control
+      author:
+        organization: Institute for Electrical and Electronics Engineers
+      seriesInfo:
+        name: IEEE
+        value: 802.1X
+      date: 2010
 
 --- abstract
 
@@ -59,7 +87,7 @@ sense the same trust model as BRSKI is used.
 
 # Introduction
 
-{{I-D.ietf-anima-bootstrapping-keyinfra}} (BRSKI) specifies a means to
+{{!I-D.ietf-anima-bootstrapping-keyinfra}} (BRSKI) specifies a means to
 provision credentials to be used as credentials to operationally
 access networks.  It was designed as a standalone means where some
 limited access to an IP network is already available.  This is not
@@ -74,12 +102,12 @@ all layer three parameters.
 A more  natural approach  in such  cases is to  more tightly  bind the
 provisioning  of credentials with  the authentication  mechanism.  One
 such way  to do this is  to make use of  the Extensible Authentication
-Protocol (EAP)  {{?RFC3748}} and the  Tunnel Extensible Authentication
-Protocol  (TEAP)  method  {{?RFC7170}}.    Thus  we  define  new  TEAP
+Protocol (EAP)  {{!RFC3748}} and the  Tunnel Extensible Authentication
+Protocol  (TEAP)  method  {{!RFC7170}}.    Thus  we  define  new  TEAP
 Type-Length-Value  (TLV) objects  that can  be used  to  transport the
 BRSKI protocol messages within the context of a TEAP TLS tunnel.
 
-{{?RFC7170}} discusses the notion of provisioning peers.  Several
+{{!RFC7170}} discusses the notion of provisioning peers.  Several
 different mechanisms are available.  Section 3.8 of that document
 acknowledges the concept of not initially authenticating the outer TLS
 session so that provisioning may occur.  In addition, exchange of
@@ -89,20 +117,20 @@ provisioning steps.
 ## Terminology
 
 The reader is presumed to be familiar with EAP terminology as stated
-in {{?RFC3748}}.  In addition, the following terms are commonly used in
+in {{!RFC3748}}.  In addition, the following terms are commonly used in
 this document.
 
  * BRSKI: Bootstrapping Remote Secure Key Infrastructures, as defined in
-   {{I-D.ietf-anima-bootstrapping-keyinfra}}.  The term is also used
+   {{!I-D.ietf-anima-bootstrapping-keyinfra}}.  The term is also used
    to refer to the flow described in that document.
- * EST: Enrollment over Secure Transport, as defined in {{?RFC7030}}.
- * Voucher: a signed JSON object as defined in {{?RFC8366}}.
+ * EST: Enrollment over Secure Transport, as defined in {{!RFC7030}}.
+ * Voucher: a signed JSON object as defined in {{!RFC8366}}.
 
-# TEAP BRSKI Architecture
+# TEAP BRSKI Architecture {#arch}
 
 The TEAP BRSKI architecture is illustrated in
 {{brski-architecture}}. The device talks to the TEAP server via the
-Authenticator using any compliant transport such as IEEE 802.1X.
+Authenticator using any compliant transport such as [IEEE8021X].
 The architecture illustrated shows an Authenticator distinct from
 the TEAP server. This is a deployment optimization and when so
 deployed the communication between Authenticator and TEAP server
@@ -165,7 +193,7 @@ device:
 
 Most of the operational steps require the device, and thus its internal state machine, to automatically complete the next step without being explicitly instructed to do so by the registrar. For example, the registrar does not explicitly tell the device to download additional local domain CA information, or to do an EST enroll to obtain an LDevID.
 
-## Executing BRSKI in a TEAP Tunnel
+## Executing BRSKI in a TEAP Tunnel {#bint}
 
 This section outlines how the main BRSKI steps outlined above map to TEAP, and how BRSKI and enrollment can be accomplished inside a TEAP TLS tunnel. The following new TEAP TLVs are introduced:
 
@@ -347,11 +375,11 @@ On establishment of the outer TLS tunnel, the TEAP server will make a policy dec
 
 ## BRSKI Trust Establishment
 
-If the server requires that client perform a full BRSKI flow, it sends a Request-Action TLV that includes a zero byte length BRSKI-RequestVoucher TLV to the client. The client sends a new BRSKI-RequestVoucher TLV to the server, which contains all data specified in {{?I-D.ietf-anima-bootstrapping-keyinfra}} section 5.2. The client includes the server certificate it received in the server's Certificate message during outer TLS tunnel establishment in the proximity-registrar-cert field. The client signs the request using its IDevID.
+If the server requires that client perform a full BRSKI flow, it sends a Request-Action TLV that includes a zero byte length BRSKI-RequestVoucher TLV to the client. The client sends a new BRSKI-RequestVoucher TLV to the server, which contains all data specified in {{!I-D.ietf-anima-bootstrapping-keyinfra}} section 5.2. The client includes the server certificate it received in the server's Certificate message during outer TLS tunnel establishment in the proximity-registrar-cert field. The client signs the request using its IDevID.
 
-The server includes all additional information as required by {{?I-D.ietf-anima-bootstrapping-keyinfra}} section 5.4 and signs the request prior to forwarding to the MASA.
+The server includes all additional information as required by {{!I-D.ietf-anima-bootstrapping-keyinfra}} section 5.4 and signs the request prior to forwarding to the MASA.
 
-The MASA responds as per {{?I-D.ietf-anima-bootstrapping-keyinfra}} section 5.5. The response may indicate failure and the server should react accordingly to failures by sending a failure response to the client, and failing the TEAP method.
+The MASA responds as per {{!I-D.ietf-anima-bootstrapping-keyinfra}} section 5.5. The response may indicate failure and the server should react accordingly to failures by sending a failure response to the client, and failing the TEAP method.
 
 If the MASA replies with a signed voucher and a successful result, the server then forwards this response to the client in a BRSKI-Voucher TLV.
 
@@ -362,7 +390,7 @@ to the MASA\]
 
 ## Certificate Expiration Times
 
-[802.1AR] section 7.2.7.2 states:
+[IEEE8021AR] section 7.2.7.2 states:
 
 > notAfter: The latest time a DevID is expected to be used. Devices possessing an IDevID are expected to operate indefinitely into the future and should use the value 99991231235959Z. Solutions verifying a DevID are expected to accept this value indefinitely.
 
@@ -374,11 +402,15 @@ TEAP servers SHOULD reject LDevIDs with expired certificates and SHOULD NOT allo
 
 As the TEAP BRSKI flow does not define or require an inner EAP method, there is no explicit need for exchange of Channel-Binding TLVs between the device and the TEAP server.
 
-The TEAP BRSKI TLVs are expected to occur at the beginning of the TEAP Phase 2 and MUST occur before the final Crypto-Binding TLV.  This draft does not exclude the possibility of having other EAP methods occur following the TEAP BRSKI TLVs and as such, the Crypto-Binding TLV process rules as defined in {{?RFC7170}} apply.
+The TEAP BRSKI TLVs are expected to occur at the beginning of the TEAP Phase 2 and MUST occur before the final Crypto-Binding TLV.  This draft does not exclude the possibility of having other EAP methods occur following the TEAP BRSKI TLVs and as such, the Crypto-Binding TLV process rules as defined in {{!RFC7170}} apply.
 
-# Protocol Flows
+Protocol Flows
+==============
 
-This section outlines protocol flows that map to the 3 server policy options described in section {{teap-tunnel-establishment}}. The protocol flows illustrate a TLS1.2 exchange. Pertinent notes are outlined in the protocol flows.
+This section outlines protocol flows that map to the three server policy
+options described in section {{teap-tunnel-establishment}}. The
+protocol flows illustrate a TLS1.2 exchange. Pertinent notes are
+outlined in the protocol flows.
 
 ## TEAP Server Grants Access
 
@@ -594,13 +626,13 @@ Notes:
 
 (1) If the client has not yet completed the BRSKI flow, then it provisionally accepts the server certificate and must validate it later once BRSKI is complete. The server validates the client certificate using its trust anchor database.
 
-(2) The server instructs the client to start the BRSKI flow by sending a Request-Action TLV that includes a BRSKI-RequestVoucher TLV. The server also instructs the client to request trust anchors, to request CSR Attrites, and to initiate a PKCS certificate enrolment. As outlined in {{?RFC7170}}, the Request-Action TLV is sent after the Crypto-Binding TLV and Result TLV exchange.
+(2) The server instructs the client to start the BRSKI flow by sending a Request-Action TLV that includes a BRSKI-RequestVoucher TLV. The server also instructs the client to request trust anchors, to request CSR Attrites, and to initiate a PKCS certificate enrolment. As outlined in {{!RFC7170}}, the Request-Action TLV is sent after the Crypto-Binding TLV and Result TLV exchange.
 
 (3) The client includes the certificate it received from the server in the RequestVoucher message.
 
 (4) Once the client receives and validates the voucher signed by the MASA, it must verify the certificate it previously received from the server.
 
-(5) As outlined in {{?RFC7170}}, the Trusted-Server-Root TLV is exchanged after the Crypto-Binding TLV exchange, and after the client has used the Voucher to authenticate the TEAP server identity. This is equivalent to section [todo] from {{I-D.ietf-anima-bootstrapping-keyinfra}}.
+(5) As outlined in {{!RFC7170}}, the Trusted-Server-Root TLV is exchanged after the Crypto-Binding TLV exchange, and after the client has used the Voucher to authenticate the TEAP server identity. This is equivalent to section [todo] from {{I-D.ietf-anima-bootstrapping-keyinfra}}.
 
 (6) There is no need for an additional Crypto-Binding TLV exchange as there is no inner EAP method. All BRSKI exchanges are simply TLVs exchanged inside the outer TLS tunnel.
 
@@ -701,7 +733,8 @@ In this flow, the server instructs the client to reenroll and get a new LDevID b
 
 This section shows how the device does a reenroll to refresh its LDEvID directly against the registrar outside the context of the TEAP tunnel.
 
-# TEAP TLV Formats
+TEAP TLV Formats
+================
 
 ## BRSKI TLVs
 
@@ -732,7 +765,7 @@ in this fashion, the length of this TLV will be set to zero. The Status field of
 It is also used by the peer to initiate the voucher request.  When
 used in this fashion, the length of the TLV will be set to that of the
 voucher request, as encoded and described in Section 3.3 in
-{{?I-D.ietf-anima-bootstrapping-keyinfra}}.
+{{!I-D.ietf-anima-bootstrapping-keyinfra}}.
 
 ~~~
 
@@ -915,7 +948,81 @@ TBD9-CSR-Attribute-Fail Unable to supply the requested attributes.
 Security Considerations
 =======================
 
-There will be many.
+  BRSKI {{I-D.ietf-anima-bootstrapping-keyinfra}} provides a zero touch
+  way for devices to enroll in a certification authority (CA). It assumes
+  the device has IP connectivity. For networks that will not grant
+  IP connectivitiy before authenticating (with a local credential)
+  this poses a Catch-22-- can't get on the network without a credential
+  and can't get a credential without getting on the network.
+
+  This protocol provides a way for BRSKI to be in an EAP method
+  which allows the BRSKI conversation to happen as part of EAP
+  authentication and prior to obtaining IP connectivity.
+
+  The  security considerations of {{I-D.ietf-anima-bootstrapping-keyinfra}}
+  apply to this protocol. Running BRSKI through EAP introduces some
+  additional areas of concern though.
+
+Issues with Provisionally Authenticated TEAP
+-------------------------------------------
+
+  This protocol establishes an unauthenticated TLS connection and passes
+  data through it. Provided that the only messages passed in this state
+  are self-protected BRSKI messages this does not present a problem.
+  Passing any other messages or TLVs prior to authentication of the
+  provisional TLS connection could potentially introduce security issues.
+
+  While the TLS connection is unauthenticated, it must still be validated
+  to the fullest extent possible. It is critical that the device and the
+  TEAP server perform all steps in TLS-- checking the validity of the
+  presented certificate, validating the signature using the public key
+  of the certificate, etc-- except ensuring the trust of the presented
+  certificate.
+
+Attack Against Discovery
+------------------------
+
+  The device discovery technique specified in this protocol is the standard
+  EAP server discovery process. Since it is trivial to set up an 802.11
+  wireless access point and advertise any network, an attacker can impersonate
+  a legitimate wireless network and attract unprovisioned pledges. Given that
+  an unprovisioned device will not know the legitimate network to connect
+  to, it will probably attempt the first network it finds, making the attack
+  that much easier. This allows for a "rogue registrar" to provision and
+  take control of the device.
+
+  If the MASA verifies ownership prior to issuance of a voucher, this attack
+  can be thwarted. But if the MASA is in reduced security mode and does not
+  verify ownership this attack cannot be prevented. Registrars SHOULD use the
+  audit log of a MASA when deploying newly purchased equipment in order to
+  mitigate this attack.
+
+  Another way to mitigate this attack is through normal "rogue AP" detection
+  and prevention.
+
+TEAP Server as Registration Authority
+-------------------------------------
+
+  If the TEAP server is logically separate from the Certification Authority (CA)
+  (see {{arch}}) it will be acting as a Registration Authority (RA) when it
+  obtains the PKCS#10 TLV and replies with a PKCS#7 TLV (see {{RFC7170}}, Sections
+  4.2.16 and 4.2.17, respectively). The assurance a RA makes to a CA is that the
+  public key in the presented CSR is bound to an authenticated identity in way
+  that will assure non-repudiation.
+
+  To make such an assurance, the TEAP server MUST authenticate the provisional
+  TLS connection with the device by validating the voucher response received
+  from the MASA. In addition, it is RECOMMENDED that the TEAP server indicate
+  that proof-of-possession (see {{RFC7170}}, Section 3.8.2) is required by
+  including the challengePassword OID in the CSR Attributes TLV.
+
+Trust of Registrar
+-----------------------
+
+  The device accepts a trusted server (CA) certificate and installs it
+  in its trust anchor database during step 5 (see {{bint}}). This can
+  happen only after the provisional TLS connection has been authenticated
+  using the voucher and the Crypto-Binding TLV has been validated.
 
 
 Acknowledgments
@@ -930,6 +1037,16 @@ and Mohit Sethi.
 
 Changes from Earlier Versions
 =============================
+
+Draft -03:
+  * Merge EAP server and Registrar
+  * Security considerations
+  * References improvements
+  * Add Dan Harkins as co-author
+
+
+Draft -02:
+  * Flow corrections
 
 Draft -01:
   * Add packet descriptions, IANA considerations, smooth out language.

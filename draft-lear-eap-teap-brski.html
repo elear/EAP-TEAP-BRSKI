@@ -400,8 +400,12 @@
 <link href="#rfc.section.8" rel="Chapter" title="8 Fragmentation">
 <link href="#rfc.section.9" rel="Chapter" title="9 IANA Considerations">
 <link href="#rfc.section.10" rel="Chapter" title="10 Security Considerations">
+<link href="#rfc.section.10.1" rel="Chapter" title="10.1 Issues with Provisionally Authenticated TEAP">
+<link href="#rfc.section.10.2" rel="Chapter" title="10.2 Attack Against Discovery">
+<link href="#rfc.section.10.3" rel="Chapter" title="10.3 TEAP Server as Registration Authority">
+<link href="#rfc.section.10.4" rel="Chapter" title="10.4 Trust of Registrar">
 <link href="#rfc.section.11" rel="Chapter" title="11 Acknowledgments">
-<link href="#rfc.references" rel="Chapter" title="12 Informative References">
+<link href="#rfc.references" rel="Chapter" title="12 Normative References">
 <link href="#rfc.appendix.A" rel="Chapter" title="A Changes from Earlier Versions">
 <link href="#rfc.authors" rel="Chapter">
 
@@ -409,9 +413,9 @@
   <meta name="generator" content="xml2rfc version 2.9.6 - https://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
-  <meta name="dct.creator" content="Lear, E., Friel, O., and N. Cam-Winget" />
-  <meta name="dct.identifier" content="urn:ietf:id:draft-lear-eap-teap-brski-02" />
-  <meta name="dct.issued" scheme="ISO8601" content="2019-06-07" />
+  <meta name="dct.creator" content="Lear, E., Friel, O., Cam-Winget, N., and D. Harkins" />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-lear-eap-teap-brski-03" />
+  <meta name="dct.issued" scheme="ISO8601" content="2019-06-28" />
   <meta name="dct.abstract" content="In certain environments, in order for a device to establish any layer three communications, it is necessary for that device to be properly credentialed.  This is a relatively easy problem to solve when a device is associated with a human being and has both input and display functions.  It is less easy when the human, input, and display functions are not present.  To address this case, this memo specifies extensions to the Tunnel Extensible Authentication Protocol (TEAP) method that leverages Bootstrapping Remote Secure Key Infrastructures (BRSKI) in order to provide a credential to a device at layer two.  The basis of this work is that a manufacturer will introduce the device and the local deployment through cryptographic means.  In this sense the same trust model as BRSKI is used." />
   <meta name="description" content="In certain environments, in order for a device to establish any layer three communications, it is necessary for that device to be properly credentialed.  This is a relatively easy problem to solve when a device is associated with a human being and has both input and display functions.  It is less easy when the human, input, and display functions are not present.  To address this case, this memo specifies extensions to the Tunnel Extensible Authentication Protocol (TEAP) method that leverages Bootstrapping Remote Secure Key Infrastructures (BRSKI) in order to provide a credential to a device at layer two.  The basis of this work is that a manufacturer will introduce the device and the local deployment through cryptographic means.  In this sense the same trust model as BRSKI is used." />
 
@@ -435,12 +439,20 @@
 <td class="right">N. Cam-Winget</td>
 </tr>
 <tr>
-<td class="left">Expires: December 9, 2019</td>
+<td class="left">Expires: December 30, 2019</td>
 <td class="right">Cisco Systems</td>
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">June 07, 2019</td>
+<td class="right">D. Harkins</td>
+</tr>
+<tr>
+<td class="left"></td>
+<td class="right">HP Enterprise</td>
+</tr>
+<tr>
+<td class="left"></td>
+<td class="right">June 28, 2019</td>
 </tr>
 
     	
@@ -448,7 +460,7 @@
   </table>
 
   <p class="title">Bootstrapping Key Infrastructure over EAP<br />
-  <span class="filename">draft-lear-eap-teap-brski-02</span></p>
+  <span class="filename">draft-lear-eap-teap-brski-03</span></p>
   
   <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
 <p>In certain environments, in order for a device to establish any layer three communications, it is necessary for that device to be properly credentialed.  This is a relatively easy problem to solve when a device is associated with a human being and has both input and display functions.  It is less easy when the human, input, and display functions are not present.  To address this case, this memo specifies extensions to the Tunnel Extensible Authentication Protocol (TEAP) method that leverages Bootstrapping Remote Secure Key Infrastructures (BRSKI) in order to provide a credential to a device at layer two.  The basis of this work is that a manufacturer will introduce the device and the local deployment through cryptographic means.  In this sense the same trust model as BRSKI is used.</p>
@@ -456,7 +468,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on December 9, 2019.</p>
+<p>This Internet-Draft will expire on December 30, 2019.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -518,9 +530,17 @@
 </li>
 <li>10.   <a href="#rfc.section.10">Security Considerations</a>
 </li>
-<li>11.   <a href="#rfc.section.11">Acknowledgments</a>
+<ul><li>10.1.   <a href="#rfc.section.10.1">Issues with Provisionally Authenticated TEAP</a>
 </li>
-<li>12.   <a href="#rfc.references">Informative References</a>
+<li>10.2.   <a href="#rfc.section.10.2">Attack Against Discovery</a>
+</li>
+<li>10.3.   <a href="#rfc.section.10.3">TEAP Server as Registration Authority</a>
+</li>
+<li>10.4.   <a href="#rfc.section.10.4">Trust of Registrar</a>
+</li>
+</ul><li>11.   <a href="#rfc.section.11">Acknowledgments</a>
+</li>
+<li>12.   <a href="#rfc.references">Normative References</a>
 </li>
 <li>Appendix A.   <a href="#rfc.appendix.A">Changes from Earlier Versions</a>
 </li>
@@ -548,9 +568,9 @@
 <li>Voucher: a signed JSON object as defined in <a href="#RFC8366" class="xref">[RFC8366]</a>.</li>
 </ul>
 <h1 id="rfc.section.2">
-<a href="#rfc.section.2">2.</a> <a href="#teap-brski-architecture" id="teap-brski-architecture">TEAP BRSKI Architecture</a>
+<a href="#rfc.section.2">2.</a> <a href="#arch" id="arch">TEAP BRSKI Architecture</a>
 </h1>
-<p id="rfc.section.2.p.1">The TEAP BRSKI architecture is illustrated in <a href="#brski-architecture" class="xref">Section 3</a>. The device talks to the TEAP server via the Authenticator using any compliant transport such as IEEE 802.1X.  The architecture illustrated shows an Authenticator distinct from the TEAP server. This is a deployment optimization and when so deployed the communication between Authenticator and TEAP server is a AAA protocol such as RADIUS or DIAMETER.</p>
+<p id="rfc.section.2.p.1">The TEAP BRSKI architecture is illustrated in <a href="#brski-architecture" class="xref">Section 3</a>. The device talks to the TEAP server via the Authenticator using any compliant transport such as <a href="#IEEE8021X" class="xref">[IEEE8021X]</a>.  The architecture illustrated shows an Authenticator distinct from the TEAP server. This is a deployment optimization and when so deployed the communication between Authenticator and TEAP server is a AAA protocol such as RADIUS or DIAMETER.</p>
 <p id="rfc.section.2.p.2">The architecture illustrated shows a co-located TEAP server and BRSKI registrar. Not only are these two functions co-located, they MUST be the same entity. This ensures that the entity identified in the device&#8217;s voucher request (the TEAP server) is the same entity that signs the voucher request (the registrar).</p>
 <p id="rfc.section.2.p.3">The registrar communicates with the BRSKI MASA service for the purposes of getting signed vouchers. [[TODO: I guess we should mention TEAP server talking to vendor default registrar in the cloud]]</p>
 <p id="rfc.section.2.p.4">The registrar also comunicates with a Certificate Authority in order to issue LDevIDs. The architecture shows the registrar and CA as being two logically separate entities, however the CA may be integrated into the registrar. The device is not explicitly aware of whether the CA and registrar functions are integrated.</p>
@@ -582,7 +602,7 @@
 </ul>
 <p id="rfc.section.3.p.3">Most of the operational steps require the device, and thus its internal state machine, to automatically complete the next step without being explicitly instructed to do so by the registrar. For example, the registrar does not explicitly tell the device to download additional local domain CA information, or to do an EST enroll to obtain an LDevID.</p>
 <h1 id="rfc.section.3.1">
-<a href="#rfc.section.3.1">3.1.</a> <a href="#executing-brski-in-a-teap-tunnel" id="executing-brski-in-a-teap-tunnel">Executing BRSKI in a TEAP Tunnel</a>
+<a href="#rfc.section.3.1">3.1.</a> <a href="#bint" id="bint">Executing BRSKI in a TEAP Tunnel</a>
 </h1>
 <p id="rfc.section.3.1.p.1">This section outlines how the main BRSKI steps outlined above map to TEAP, and how BRSKI and enrollment can be accomplished inside a TEAP TLS tunnel. The following new TEAP TLVs are introduced:</p>
 <p></p>
@@ -681,7 +701,7 @@
 <h1 id="rfc.section.4.3">
 <a href="#rfc.section.4.3">4.3.</a> <a href="#certificate-expiration-times" id="certificate-expiration-times">Certificate Expiration Times</a>
 </h1>
-<p id="rfc.section.4.3.p.1">[802.1AR] section 7.2.7.2 states:</p>
+<p><a href="#IEEE8021AR" class="xref">[IEEE8021AR]</a> section 7.2.7.2 states:</p>
 <p></p>
 
 <ul class="empty"><li>notAfter: The latest time a DevID is expected to be used. Devices possessing an IDevID are expected to operate indefinitely into the future and should use the value 99991231235959Z. Solutions verifying a DevID are expected to accept this value indefinitely.</li></ul>
@@ -695,7 +715,7 @@
 <h1 id="rfc.section.6">
 <a href="#rfc.section.6">6.</a> <a href="#protocol-flows" id="protocol-flows">Protocol Flows</a>
 </h1>
-<p id="rfc.section.6.p.1">This section outlines protocol flows that map to the 3 server policy options described in section <a href="#teap-tunnel-establishment" class="xref">Section 4.1</a>. The protocol flows illustrate a TLS1.2 exchange. Pertinent notes are outlined in the protocol flows.</p>
+<p id="rfc.section.6.p.1">This section outlines protocol flows that map to the three server policy options described in section <a href="#teap-tunnel-establishment" class="xref">Section 4.1</a>. The protocol flows illustrate a TLS1.2 exchange. Pertinent notes are outlined in the protocol flows.</p>
 <h1 id="rfc.section.6.1">
 <a href="#rfc.section.6.1">6.1.</a> <a href="#teap-server-grants-access" id="teap-server-grants-access">TEAP Server Grants Access</a>
 </h1>
@@ -1143,18 +1163,50 @@ TBD9-CSR-Attribute-Fail Unable to supply the requested attributes.
 <h1 id="rfc.section.10">
 <a href="#rfc.section.10">10.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
 </h1>
-<p id="rfc.section.10.p.1">There will be many.</p>
+<p id="rfc.section.10.p.1">BRSKI <a href="#I-D.ietf-anima-bootstrapping-keyinfra" class="xref">[I-D.ietf-anima-bootstrapping-keyinfra]</a> provides a zero touch way for devices to enroll in a certification authority (CA). It assumes the device has IP connectivity. For networks that will not grant IP connectivitiy before authenticating (with a local credential) this poses a Catch-22&#8211; can&#8217;t get on the network without a credential and can&#8217;t get a credential without getting on the network.</p>
+<p id="rfc.section.10.p.2">This protocol provides a way for BRSKI to be in an EAP method which allows the BRSKI conversation to happen as part of EAP authentication and prior to obtaining IP connectivity.</p>
+<p id="rfc.section.10.p.3">The  security considerations of <a href="#I-D.ietf-anima-bootstrapping-keyinfra" class="xref">[I-D.ietf-anima-bootstrapping-keyinfra]</a> apply to this protocol. Running BRSKI through EAP introduces some additional areas of concern though.</p>
+<h1 id="rfc.section.10.1">
+<a href="#rfc.section.10.1">10.1.</a> <a href="#issues-with-provisionally-authenticated-teap" id="issues-with-provisionally-authenticated-teap">Issues with Provisionally Authenticated TEAP</a>
+</h1>
+<p id="rfc.section.10.1.p.1">This protocol establishes an unauthenticated TLS connection and passes data through it. Provided that the only messages passed in this state are self-protected BRSKI messages this does not present a problem.  Passing any other messages or TLVs prior to authentication of the provisional TLS connection could potentially introduce security issues.</p>
+<p id="rfc.section.10.1.p.2">While the TLS connection is unauthenticated, it must still be validated to the fullest extent possible. It is critical that the device and the TEAP server perform all steps in TLS&#8211; checking the validity of the presented certificate, validating the signature using the public key of the certificate, etc&#8211; except ensuring the trust of the presented certificate.</p>
+<h1 id="rfc.section.10.2">
+<a href="#rfc.section.10.2">10.2.</a> <a href="#attack-against-discovery" id="attack-against-discovery">Attack Against Discovery</a>
+</h1>
+<p id="rfc.section.10.2.p.1">The device discovery technique specified in this protocol is the standard EAP server discovery process. Since it is trivial to set up an 802.11 wireless access point and advertise any network, an attacker can impersonate a legitimate wireless network and attract unprovisioned pledges. Given that an unprovisioned device will not know the legitimate network to connect to, it will probably attempt the first network it finds, making the attack that much easier. This allows for a &#8220;rogue registrar&#8221; to provision and take control of the device.</p>
+<p id="rfc.section.10.2.p.2">If the MASA verifies ownership prior to issuance of a voucher, this attack can be thwarted. But if the MASA is in reduced security mode and does not verify ownership this attack cannot be prevented. Registrars SHOULD use the audit log of a MASA when deploying newly purchased equipment in order to mitigate this attack.</p>
+<p id="rfc.section.10.2.p.3">Another way to mitigate this attack is through normal &#8220;rogue AP&#8221; detection and prevention.</p>
+<h1 id="rfc.section.10.3">
+<a href="#rfc.section.10.3">10.3.</a> <a href="#teap-server-as-registration-authority" id="teap-server-as-registration-authority">TEAP Server as Registration Authority</a>
+</h1>
+<p id="rfc.section.10.3.p.1">If the TEAP server is logically separate from the Certification Authority (CA) (see <a href="#arch" class="xref">Section 2</a>) it will be acting as a Registration Authority (RA) when it obtains the PKCS#10 TLV and replies with a PKCS#7 TLV (see <a href="#RFC7170" class="xref">[RFC7170]</a>, Sections 4.2.16 and 4.2.17, respectively). The assurance a RA makes to a CA is that the public key in the presented CSR is bound to an authenticated identity in way that will assure non-repudiation.</p>
+<p id="rfc.section.10.3.p.2">To make such an assurance, the TEAP server MUST authenticate the provisional TLS connection with the device by validating the voucher response received from the MASA. In addition, it is RECOMMENDED that the TEAP server indicate that proof-of-possession (see <a href="#RFC7170" class="xref">[RFC7170]</a>, Section 3.8.2) is required by including the challengePassword OID in the CSR Attributes TLV.</p>
+<h1 id="rfc.section.10.4">
+<a href="#rfc.section.10.4">10.4.</a> <a href="#trust-of-registrar" id="trust-of-registrar">Trust of Registrar</a>
+</h1>
+<p id="rfc.section.10.4.p.1">The device accepts a trusted server (CA) certificate and installs it in its trust anchor database during step 5 (see <a href="#bint" class="xref">Section 3.1</a>). This can happen only after the provisional TLS connection has been authenticated using the voucher and the Crypto-Binding TLV has been validated.</p>
 <h1 id="rfc.section.11">
 <a href="#rfc.section.11">11.</a> <a href="#acknowledgments" id="acknowledgments">Acknowledgments</a>
 </h1>
 <p id="rfc.section.11.p.1">The authors would like to thank Brian Weis for his assistance, and Alan Dakok for improving language consistency.  In addition, with ruthlessly &#8220;borrowed&#8221; the concept around NAI handling from Tuomas Aura and Mohit Sethi.</p>
 <h1 id="rfc.references">
-<a href="#rfc.references">12.</a> Informative References</h1>
+<a href="#rfc.references">12.</a> Normative References</h1>
 <table><tbody>
 <tr>
 <td class="reference"><b id="I-D.ietf-anima-bootstrapping-keyinfra">[I-D.ietf-anima-bootstrapping-keyinfra]</b></td>
 <td class="top">
-<a>Pritikin, M.</a>, <a>Richardson, M.</a>, <a>Behringer, M.</a>, <a>Bjarnason, S.</a> and <a>K. Watsen</a>, "<a href="https://tools.ietf.org/html/draft-ietf-anima-bootstrapping-keyinfra-20">Bootstrapping Remote Secure Key Infrastructures (BRSKI)</a>", Internet-Draft draft-ietf-anima-bootstrapping-keyinfra-20, May 2019.</td>
+<a>Pritikin, M.</a>, <a>Richardson, M.</a>, <a>Behringer, M.</a>, <a>Bjarnason, S.</a> and <a>K. Watsen</a>, "<a href="https://tools.ietf.org/html/draft-ietf-anima-bootstrapping-keyinfra-22">Bootstrapping Remote Secure Key Infrastructures (BRSKI)</a>", Internet-Draft draft-ietf-anima-bootstrapping-keyinfra-22, June 2019.</td>
+</tr>
+<tr>
+<td class="reference"><b id="IEEE8021AR">[IEEE8021AR]</b></td>
+<td class="top">
+<a>Institute for Electrical and Electronics Engineers</a>, "<a>Secure Device Identity</a>", 1998.</td>
+</tr>
+<tr>
+<td class="reference"><b id="IEEE8021X">[IEEE8021X]</b></td>
+<td class="top">
+<a>Institute for Electrical and Electronics Engineers</a>, "<a>IEEE Standard for Local and metropolitan area networks--Port-Based Network Access Control</a>", 2010.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC3748">[RFC3748]</b></td>
@@ -1180,8 +1232,10 @@ TBD9-CSR-Attribute-Fail Unable to supply the requested attributes.
 <h1 id="rfc.appendix.A">
 <a href="#rfc.appendix.A">Appendix A.</a> <a href="#changes-from-earlier-versions" id="changes-from-earlier-versions">Changes from Earlier Versions</a>
 </h1>
-<p id="rfc.section.A.p.1">Draft -01: * Add packet descriptions, IANA considerations, smooth out language.</p>
-<p id="rfc.section.A.p.2">Draft -00:</p>
+<p id="rfc.section.A.p.1">Draft -03: * Merge EAP server and Registrar * Security considerations * References improvements * Add Dan Harkins as co-author</p>
+<p id="rfc.section.A.p.2">Draft -02: * Flow corrections</p>
+<p id="rfc.section.A.p.3">Draft -01: * Add packet descriptions, IANA considerations, smooth out language.</p>
+<p id="rfc.section.A.p.4">Draft -00:</p>
 <p></p>
 
 <ul><li>Initial revision</li></ul>
@@ -1252,6 +1306,28 @@ TBD9-CSR-Attribute-Fail Unable to supply the requested attributes.
 	  <span class="country-name vcardline">United States</span>
 	</span>
 	<span class="vcardline">EMail: <a href="mailto:ncamwing@cisco.com">ncamwing@cisco.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Dan harkins</span> 
+	  <span class="n hidden">
+		<span class="family-name">Harkins</span>
+	  </span>
+	</span>
+	<span class="org vcardline">HP Enterprise</span>
+	<span class="adr">
+	  <span class="vcardline">3333 Scott Boulevard</span>
+
+	  <span class="vcardline">
+		<span class="locality">Santa Clara, CA</span>,  
+		<span class="region"></span>
+		<span class="code">95054</span>
+	  </span>
+	  <span class="country-name vcardline">United States</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:dharkins@arubanetworks.com">dharkins@arubanetworks.com</a></span>
 
   </address>
 </div>
