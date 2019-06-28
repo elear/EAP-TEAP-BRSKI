@@ -910,7 +910,8 @@ Request Response Success Failure TLVs
 
 Fragmentation
 =============
-TLS is expected to provide fragmentation support. Thus EAP-TEAP-BRSKI
+
+TEAP is expected to provide fragmentation support. Thus EAP-TEAP-BRSKI
 does not specifically provide any, as it is only expected to be used
 as an inner method to TEAP.
 

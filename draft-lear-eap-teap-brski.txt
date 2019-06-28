@@ -1223,7 +1223,7 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
 
 8.  Fragmentation
 
-   TLS is expected to provide fragmentation support.  Thus EAP-TEAP-
+   TEAP is expected to provide fragmentation support.  Thus EAP-TEAP-
    BRSKI does not specifically provide any, as it is only expected to be
    used as an inner method to TEAP.
 
