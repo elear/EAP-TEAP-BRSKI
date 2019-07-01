@@ -349,7 +349,7 @@ Once the client has sent its TLS Finished message, the TEAP server can make a po
 
 The TEAP server may delegate policy decisions to the MASA or CA function. For example, the TEAP server may declare EAP success and grant network access if the client presents a valid LDevID singed by a trusted domain CA. However, if the client presents an IDevID signed by a manufacturer CA unknown to the TEAP server, the TEAP server may estabilsh the TLS tunnel but not declare EAP success and grant network access until the client successfully completes a BRSKI Voucher exchange or PKCS#10/PKCS#7 exchange inside that tunnel.
 
-[todo: Need to consider how the TEAP trusts MASAs. Maybe the TEAP server does have a set of trusted manufacturer CAs, and then it extracts teh MASA URI from the IDevID. mYbe it just blindly contacts whatever MASA is specified. Maybe it has a whitelist of MASA domain.]
+[todo: Need to consider how the TEAP trusts MASAs. Maybe the TEAP server does have a set of trusted manufacturer CAs, and then it extracts the MASA URI from the IDevID. Maybe it just blindly contacts whatever MASA is specified. Maybe it has a whitelist of MASA domains.]
 
 It is recommended that the client validate the certificate presented
 by the server in the server's Certificate message, but this may not be
