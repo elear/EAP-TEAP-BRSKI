@@ -143,11 +143,9 @@ the device's voucher request (the TEAP server) is the same entity
 that signs the voucher request (the registrar).
 
 The registrar communicates with the BRSKI MASA service for the
-purposes of getting signed vouchers. \[\[TODO: I guess we should
-mention TEAP server talking to vendor default registrar in the
-cloud\]\]
+purposes of getting signed vouchers.
 
-The registrar also comunicates with a Certificate Authority in order
+The registrar also communicates with a Certificate Authority in order
 to issue LDevIDs. The architecture shows the registrar and CA as being
 two logically separate entities, however the CA may be integrated into
 the registrar. The device is not explicitly aware of whether the CA
@@ -339,18 +337,19 @@ Because this method establishes a client identity, and for purposes of
 partioning of responsibility, the peer uses a generic identity string
 of teap-brsk@TBD1 as its network access identifier (NAI).
 
-The client sends its ClientHello to initiate TLS tunnel
-establishment. It is possible for the TEAP server to restrict the
-certificates that the client can use for tunnel establishment by
-including a list of CA distinguished names in the
-certificate_authorities field in the CertificateRequest
-message. Network operators may want to do this in order to restrict
-network access to clients that have a certificate signed by one of a
-small set of trusted manufacturer/supplier CAs. If the client has both
-an IDevID and an LDevID, the client should present the LDevID in
-preference to its IDevID if allowed by server policy.
+BRSKI section 5.3 outlines the policy decisions a Registrar may make when deciding wheter to accept connections from clients. Similarly, the TEAP server operator may configure a set of trusted CAs for validating incoming TLS connections from clients. The operator may want to 'allow any device from a specific vendor', or from a set of vendors, to access the network. Network operators may do this by restricting network access to clients that have a certificate signed by one of a small set of trusted manufacturer/supplier CAs.
 
-In practice, network operators will likely want to onboard devices from a large number of device manufacturers, with each manufacturer using a different root CA when issuing IDevIDs. If the number of different manufacturer root CAs is large, this could result in very large TLS handshake messages. Operators may prefer to include no CAs in the certificate_authorities field thus allowing devices to present IDevIDs signed by any CA when establishing the TEAP tunnel, and instead enforce policy at LDevID enrollment time.
+When the client sends its ClientHello to initiate TLS tunnel establishment, it is possible for the TEAP server to restrict the certificates that the client can use for tunnel establishment by including a list of CA distinguished names in the certificate_authorities field in the CertificateRequest message. The client should only continue with the handshake if it has a certificate signed by one of the indicated CAs.
+
+In practice, network operators will likely want to onboard devices from a large number of device manufacturers, with each manufacturer using a different root CA when issuing IDevIDs. If the number of different manufacturer root CAs is large, this could result in very large TLS handshake messages. Therefore, the TEAP server may send a CertificateRequest message and not specify any certificate_authorities, thus allowing the client present a certificate signed by any authority in its Certificate message. 
+
+If the client has both an IDevID and an LDevID, the client should present the LDevID in preference to its IDevID, if allowed by server policy.
+
+Once the client has sent its TLS Finished message, the TEAP server can make a policy decision, based on the CA used to sign the client's certificate, on whether to establish the outer TLS tunnel or not.
+
+The TEAP server may delegate policy decisions to the MASA or CA function. For example, the TEAP server may declare EAP success and grant network access if the client presents a valid LDevID singed by a trusted domain CA. However, if the client presents an IDevID signed by a manufacturer CA unknown to the TEAP server, the TEAP server may estabilsh the TLS tunnel but not declare EAP success and grant network access until the client successfully completes a BRSKI Voucher exchange or PKCS#10/PKCS#7 exchange inside that tunnel.
+
+[todo: Need to consider how the TEAP trusts MASAs. Maybe the TEAP server does have a set of trusted manufacturer CAs, and then it extracts teh MASA URI from the IDevID. mYbe it just blindly contacts whatever MASA is specified. Maybe it has a whitelist of MASA domain.]
 
 It is recommended that the client validate the certificate presented
 by the server in the server's Certificate message, but this may not be
