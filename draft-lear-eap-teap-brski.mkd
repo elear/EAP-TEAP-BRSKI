@@ -41,7 +41,7 @@ author:
     email: ncamwing@cisco.com
  -
     ins: D. Harkins
-    name: Dan harkins
+    name: Dan Harkins
     org:  HP Enterprise
     street: 3333 Scott Boulevard
     code: 95054

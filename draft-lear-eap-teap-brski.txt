@@ -5,10 +5,10 @@
 Network Working Group                                            E. Lear
 Internet-Draft                                                  O. Friel
 Intended status: Standards Track                           N. Cam-Winget
-Expires: December 30, 2019                                 Cisco Systems
+Expires: January 6, 2020                                   Cisco Systems
                                                               D. Harkins
                                                            HP Enterprise
-                                                           June 28, 2019
+                                                           July 05, 2019
 
 
                Bootstrapping Key Infrastructure over EAP
@@ -44,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 30, 2019.
+   This Internet-Draft will expire on January 6, 2020.
 
 
 
@@ -53,9 +53,9 @@ Status of This Memo
 
 
 
-Lear, et al.            Expires December 30, 2019               [Page 1]
+Lear, et al.             Expires January 6, 2020                [Page 1]
 
-Internet-Draft               BRSKI TEAP EAP                    June 2019
+Internet-Draft               BRSKI TEAP EAP                    July 2019
 
 
 Copyright Notice
@@ -79,44 +79,45 @@ Table of Contents
      1.1.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   3
    2.  TEAP BRSKI Architecture . . . . . . . . . . . . . . . . . . .   4
    3.  BRSKI Bootstrap and Enroll Operation  . . . . . . . . . . . .   4
-     3.1.  Executing BRSKI in a TEAP Tunnel  . . . . . . . . . . . .   5
+     3.1.  Discovery of Trusted MASA . . . . . . . . . . . . . . . .   5
+     3.2.  Executing BRSKI in a TEAP Tunnel  . . . . . . . . . . . .   5
    4.  PKI Certificate Considerations  . . . . . . . . . . . . . . .   9
      4.1.  TEAP Tunnel Establishment . . . . . . . . . . . . . . . .   9
-     4.2.  BRSKI Trust Establishment . . . . . . . . . . . . . . . .  10
-     4.3.  Certificate Expiration Times  . . . . . . . . . . . . . .  11
-   5.  Channel and Crypto Binding  . . . . . . . . . . . . . . . . .  11
+     4.2.  BRSKI Trust Establishment . . . . . . . . . . . . . . . .  11
+     4.3.  Certificate Expiration Times  . . . . . . . . . . . . . .  12
+   5.  Channel and Crypto Binding  . . . . . . . . . . . . . . . . .  12
    6.  Protocol Flows  . . . . . . . . . . . . . . . . . . . . . . .  12
-     6.1.  TEAP Server Grants Access . . . . . . . . . . . . . . . .  12
+     6.1.  TEAP Server Grants Access . . . . . . . . . . . . . . . .  13
      6.2.  TEAP Server Instructs Client to Perform BRSKI Flow  . . .  14
-     6.3.  TEAP Server Instructs Client to Reenroll  . . . . . . . .  17
-     6.4.  Out of Band Reenroll  . . . . . . . . . . . . . . . . . .  19
-   7.  TEAP TLV Formats  . . . . . . . . . . . . . . . . . . . . . .  19
-     7.1.  BRSKI TLVs  . . . . . . . . . . . . . . . . . . . . . . .  19
-       7.1.1.  BRSKI-RequestVoucher TLV  . . . . . . . . . . . . . .  19
-       7.1.2.  BRSKI-Voucher TLV . . . . . . . . . . . . . . . . . .  20
-       7.1.3.  CSR-Attributes TLV  . . . . . . . . . . . . . . . . .  21
-     7.2.  Existing TEAP TLV Specifications  . . . . . . . . . . . .  21
+     6.3.  TEAP Server Instructs Client to Reenroll  . . . . . . . .  18
+     6.4.  Out of Band Reenroll  . . . . . . . . . . . . . . . . . .  20
+   7.  TEAP TLV Formats  . . . . . . . . . . . . . . . . . . . . . .  20
+     7.1.  BRSKI TLVs  . . . . . . . . . . . . . . . . . . . . . . .  20
+       7.1.1.  BRSKI-RequestVoucher TLV  . . . . . . . . . . . . . .  20
+       7.1.2.  BRSKI-Voucher TLV . . . . . . . . . . . . . . . . . .  21
+       7.1.3.  CSR-Attributes TLV  . . . . . . . . . . . . . . . . .  22
+     7.2.  Existing TEAP TLV Specifications  . . . . . . . . . . . .  22
        7.2.1.  PKCS#10 TLV . . . . . . . . . . . . . . . . . . . . .  22
-     7.3.  TLV Rules . . . . . . . . . . . . . . . . . . . . . . . .  22
-   8.  Fragmentation . . . . . . . . . . . . . . . . . . . . . . . .  22
-   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  23
-   10. Security Considerations . . . . . . . . . . . . . . . . . . .  23
-     10.1.  Issues with Provisionally Authenticated TEAP . . . . . .  23
-     10.2.  Attack Against Discovery . . . . . . . . . . . . . . . .  24
-     10.3.  TEAP Server as Registration Authority  . . . . . . . . .  24
-     10.4.  Trust of Registrar . . . . . . . . . . . . . . . . . . .  25
-   11. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  25
+     7.3.  TLV Rules . . . . . . . . . . . . . . . . . . . . . . . .  23
+   8.  Fragmentation . . . . . . . . . . . . . . . . . . . . . . . .  23
+   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  24
+   10. Security Considerations . . . . . . . . . . . . . . . . . . .  24
+     10.1.  Issues with Provisionally Authenticated TEAP . . . . . .  24
+     10.2.  Attack Against Discovery . . . . . . . . . . . . . . . .  25
+     10.3.  TEAP Server as Registration Authority  . . . . . . . . .  25
+     10.4.  Trust of Registrar . . . . . . . . . . . . . . . . . . .  26
 
 
 
-Lear, et al.            Expires December 30, 2019               [Page 2]
+Lear, et al.             Expires January 6, 2020                [Page 2]
 
-Internet-Draft               BRSKI TEAP EAP                    June 2019
+Internet-Draft               BRSKI TEAP EAP                    July 2019
 
 
-   12. Normative References  . . . . . . . . . . . . . . . . . . . .  25
-   Appendix A.  Changes from Earlier Versions  . . . . . . . . . . .  26
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  26
+   11. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  26
+   12. Normative References  . . . . . . . . . . . . . . . . . . . .  26
+   Appendix A.  Changes from Earlier Versions  . . . . . . . . . . .  27
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  27
 
 1.  Introduction
 
@@ -164,10 +165,9 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
 
 
 
-
-Lear, et al.            Expires December 30, 2019               [Page 3]
+Lear, et al.             Expires January 6, 2020                [Page 3]
 
-Internet-Draft               BRSKI TEAP EAP                    June 2019
+Internet-Draft               BRSKI TEAP EAP                    July 2019
 
 
 2.  TEAP BRSKI Architecture
@@ -187,11 +187,9 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
    signs the voucher request (the registrar).
 
    The registrar communicates with the BRSKI MASA service for the
-   purposes of getting signed vouchers.  [[TODO: I guess we should
-   mention TEAP server talking to vendor default registrar in the
-   cloud]]
+   purposes of getting signed vouchers.
 
-   The registrar also comunicates with a Certificate Authority in order
+   The registrar also communicates with a Certificate Authority in order
    to issue LDevIDs.  The architecture shows the registrar and CA as
    being two logically separate entities, however the CA may be
    integrated into the registrar.  The device is not explicitly aware of
@@ -218,23 +216,22 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
 
    o  Step 2: Device establishes provisional TLS connection to registrar
 
-
-
-
-Lear, et al.            Expires December 30, 2019               [Page 4]
-
-Internet-Draft               BRSKI TEAP EAP                    June 2019
-
-
    o  Step 3: Device sends voucher request message and receives signed
       voucher response
+
+
+
+Lear, et al.             Expires January 6, 2020                [Page 4]
+
+Internet-Draft               BRSKI TEAP EAP                    July 2019
+
 
    o  Step 4: Device validates voucher and validates provisional TLS
       connection to registrar
 
    o  Step 5: Device downloads additional local domain CA information
 
-   o  Step 6: Device downloads Certificate Signing Reqeust (CSR)
+   o  Step 6: Device downloads Certificate Signing Request (CSR)
       attributes
 
    o  Step 7: Device does a certificate enroll to obtain an LDevID
@@ -249,7 +246,20 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
    download additional local domain CA information, or to do an EST
    enroll to obtain an LDevID.
 
-3.1.  Executing BRSKI in a TEAP Tunnel
+3.1.  Discovery of Trusted MASA
+
+   BRSKI section 2.8 outlines how the Registrar discovers the correct
+   MASA to connect with.  BRSKI section 5.3 outlines how the Registrar
+   can make policy decisions about which devices to trust.
+
+   Similar approaches are applicable for TEAP servers executing BRSKI.
+   For example, the TEAP server may be configured with a list of trusted
+   manufacturing CAs.  During device bootstrap, only devices with an
+   IDevID signed by a trusted manufacturing CA may be allowed to
+   etablishes a TLS connection with the TEAP server, and the TEAP server
+   could then extract the MASA URI from the device's IDevID.
+
+3.2.  Executing BRSKI in a TEAP Tunnel
 
    This section outlines how the main BRSKI steps outlined above map to
    TEAP, and how BRSKI and enrollment can be accomplished inside a TEAP
@@ -265,6 +275,13 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
 
    o  Step 1: Device discovers the registrar
 
+
+
+Lear, et al.             Expires January 6, 2020                [Page 5]
+
+Internet-Draft               BRSKI TEAP EAP                    July 2019
+
+
    When BRSKI is executed in a TEAP tunnel, the device exchanges BRSKI
    TLVs with the TEAP server.  The discovery process for devices is
    therefore the standard wired or wireless LAN EAP server discovery
@@ -273,14 +290,6 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
    discovery of the registrar.
 
    o  Step 2: Device establishes provisional TLS connection to registrar
-
-
-
-
-Lear, et al.            Expires December 30, 2019               [Page 5]
-
-Internet-Draft               BRSKI TEAP EAP                    June 2019
-
 
    The device establishes an outer TEAP tunnel with the TEAP server and
    does not validate the server certificate.  The device presents its
@@ -321,6 +330,14 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
    [todo] Question: to nit pick, the server should send a Request-Action
    TLV including a PKCS#10 TLV to tell the client to enroll.  How does
    the server really know that the client has the correct trust
+
+
+
+Lear, et al.             Expires January 6, 2020                [Page 6]
+
+Internet-Draft               BRSKI TEAP EAP                    July 2019
+
+
    established (as previously received by a BRSKI-Voucher)?  If the
    client sends an IDevID, does server always send a Request-Action
    including both BRSKI-VoucherRequest and PKCS#10 TLVs?  Whats the
@@ -330,14 +347,6 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
 
    The TEAP server may also require the device to reenroll, for example,
    if the device presented a valid LDevID that is very closed to
-
-
-
-Lear, et al.            Expires December 30, 2019               [Page 6]
-
-Internet-Draft               BRSKI TEAP EAP                    June 2019
-
-
    expiration.  The server may instruct a device to reenroll by sending
    a Request-Action TLV that includes a zero byte length PKCS#10 TLV.
 
@@ -377,6 +386,14 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
    failed to verify the provisionally accepted outer TLS tunnel server
    identity.
 
+
+
+
+Lear, et al.             Expires January 6, 2020                [Page 7]
+
+Internet-Draft               BRSKI TEAP EAP                    July 2019
+
+
    o  Step 5: Device downloads additional local domain CA information
 
    On completion of the BRSKI flow, the device SHOULD send a Trusted-
@@ -385,14 +402,6 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
    [I-D.ietf-anima-bootstrapping-keyinfra].
 
    o  Step 6: Device downloads CSR attributes
-
-
-
-
-Lear, et al.            Expires December 30, 2019               [Page 7]
-
-Internet-Draft               BRSKI TEAP EAP                    June 2019
-
 
    No later than the completion of step 5, server MUST send a CSR-
    Attributes TLV to peer server in order to discover the correct fields
@@ -434,6 +443,13 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
    is close to expiration without waiting for explicit instruction from
    the TEAP server.  There are two options to do this.
 
+
+
+Lear, et al.             Expires January 6, 2020                [Page 8]
+
+Internet-Draft               BRSKI TEAP EAP                    July 2019
+
+
    Option 1: The device reenrolls for a new LDevID directly with the EST
    CA outside the context of the 802.1X TEAP flow.  The device uses the
    registrar discovery mechanisms oulined in
@@ -442,13 +458,6 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
    registrar endpoint.  No new TEAP TLVs are defined to facilitate
    discover of the registrar or EST endpoints inside the context of the
    TEAP tunnel.
-
-
-
-Lear, et al.            Expires December 30, 2019               [Page 8]
-
-Internet-Draft               BRSKI TEAP EAP                    June 2019
-
 
    Option 2: When the device is performing a periodic 802.1X
    authentication using its current LDevID, it reenrolls for a new
@@ -474,38 +483,62 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
    of partioning of responsibility, the peer uses a generic identity
    string of teap-brsk@TBD1 as its network access identifier (NAI).
 
-   The client sends its ClientHello to initiate TLS tunnel
-   establishment.  It is possible for the TEAP server to restrict the
+   BRSKI section 5.3 outlines the policy decisions a Registrar may make
+   when deciding whether to accept connections from clients.  Similarly,
+   the TEAP server operator may configure a set of trusted CAs for
+   validating incoming TLS connections from clients.  The operator may
+   want to 'allow any device from a specific vendor', or from a set of
+   vendors, to access the network.  Network operators may do this by
+   restricting network access to clients that have a certificate signed
+   by one of a small set of trusted manufacturer/supplier CAs.
+
+   When the client sends its ClientHello to initiate TLS tunnel
+   establishment, it is possible for the TEAP server to restrict the
    certificates that the client can use for tunnel establishment by
    including a list of CA distinguished names in the
-   certificate_authorities field in the CertificateRequest message.
-   Network operators may want to do this in order to restrict network
-   access to clients that have a certificate signed by one of a small
-   set of trusted manufacturer/supplier CAs.  If the client has both an
-   IDevID and an LDevID, the client should present the LDevID in
-   preference to its IDevID if allowed by server policy.
+   certificate_authorities field in the CertificateRequest message.  The
+
+
+
+
+Lear, et al.             Expires January 6, 2020                [Page 9]
+
+Internet-Draft               BRSKI TEAP EAP                    July 2019
+
+
+   client should only continue with the handshake if it has a
+   certificate signed by one of the indicated CAs.
 
    In practice, network operators will likely want to onboard devices
    from a large number of device manufacturers, with each manufacturer
    using a different root CA when issuing IDevIDs.  If the number of
    different manufacturer root CAs is large, this could result in very
-   large TLS handshake messages.  Operators may prefer to include no CAs
-   in the certificate_authorities field thus allowing devices to present
-   IDevIDs signed by any CA when establishing the TEAP tunnel, and
-   instead enforce policy at LDevID enrollment time.
+   large TLS handshake messages.  Therefore, the TEAP server may send a
+   CertificateRequest message and not specify any
+   certificate_authorities, thus allowing the client present a
+   certificate signed by any authority in its Certificate message.
+
+   If the client has both an IDevID and an LDevID, the client should
+   present the LDevID in preference to its IDevID, if allowed by server
+   policy.
+
+   Once the client has sent its TLS Finished message, the TEAP server
+   can make a policy decision, based on the CA used to sign the client's
+   certificate, on whether to establish the outer TLS tunnel or not.
+
+   The TEAP server may delegate policy decisions to the MASA or CA
+   function.  For example, the TEAP server may declare EAP success and
+   grant network access if the client presents a valid LDevID signed by
+   a trusted domain CA.  However, if the client presents an IDevID
+   signed by a trusted manufacturer CA, the TEAP server may establish
+   the TLS tunnel but not declare EAP success and grant network access
+   until the client successfully completes a BRSKI Voucher exchange and
+   PKCS#10/PKCS#7 exchange inside that tunnel.
 
    It is recommended that the client validate the certificate presented
    by the server in the server's Certificate message, but this may not
    be possible for clients that have not yet provisioned appropriate
    trust anchors.  If the client is in the provisioning phase and has
-
-
-
-Lear, et al.            Expires December 30, 2019               [Page 9]
-
-Internet-Draft               BRSKI TEAP EAP                    June 2019
-
-
    not yet completed a BRSKI flow, it will not have trust anchors
    installed yet, and thus will not be able to validate the server's
    certificate.  The client must however note the certificate presented
@@ -521,6 +554,13 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
 
    On establishment of the outer TLS tunnel, the TEAP server will make a
    policy decision on next steps.  Possible policy decisions include:
+
+
+
+Lear, et al.             Expires January 6, 2020               [Page 10]
+
+Internet-Draft               BRSKI TEAP EAP                    July 2019
+
 
    o  Option 1: Server grants client full network access and returns
       EAP-Success.  This will typically happen when the client presents
@@ -553,15 +593,6 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
    proximity-registrar-cert field.  The client signs the request using
    its IDevID.
 
-
-
-
-
-Lear, et al.            Expires December 30, 2019              [Page 10]
-
-Internet-Draft               BRSKI TEAP EAP                    June 2019
-
-
    The server includes all additional information as required by
    [I-D.ietf-anima-bootstrapping-keyinfra] section 5.4 and signs the
    request prior to forwarding to the MASA.
@@ -579,6 +610,14 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
    signature using its built in trust anchor list, and extracts the
    pinned-domain-cert field.  The client must use the CA included in the
    pinned-domain-cert to validate the certificate that was presented by
+
+
+
+Lear, et al.             Expires January 6, 2020               [Page 11]
+
+Internet-Draft               BRSKI TEAP EAP                    July 2019
+
+
    the server when establishing the outer TLS tunnel.  If this
    certificate validation fails, the client must fail the TEAP request
    and not connect to the network.
@@ -593,7 +632,8 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
       notAfter: The latest time a DevID is expected to be used.  Devices
       possessing an IDevID are expected to operate indefinitely into the
       future and should use the value 99991231235959Z.  Solutions
-      verifying a DevID are expected to accept this value indefinitely.
+      verifying an IDevID are expected to accept this value
+      indefinitely.
 
    TEAP servers SHOULD follow the 802.1AR standard when validating
    IDevIDs.
@@ -610,14 +650,6 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
    method, there is no explicit need for exchange of Channel-Binding
    TLVs between the device and the TEAP server.
 
-
-
-
-Lear, et al.            Expires December 30, 2019              [Page 11]
-
-Internet-Draft               BRSKI TEAP EAP                    June 2019
-
-
    The TEAP BRSKI TLVs are expected to occur at the beginning of the
    TEAP Phase 2 and MUST occur before the final Crypto-Binding TLV.
    This draft does not exclude the possibility of having other EAP
@@ -630,6 +662,17 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
    policy options described in section Section 4.1.  The protocol flows
    illustrate a TLS1.2 exchange.  Pertinent notes are outlined in the
    protocol flows.
+
+
+
+
+
+
+
+Lear, et al.             Expires January 6, 2020               [Page 12]
+
+Internet-Draft               BRSKI TEAP EAP                    July 2019
+
 
 6.1.  TEAP Server Grants Access
 
@@ -666,14 +709,6 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
        |                         |                |
        |  EAP-Request/           |                |
        |   Type=TEAP,            |                |
-
-
-
-Lear, et al.            Expires December 30, 2019              [Page 12]
-
-Internet-Draft               BRSKI TEAP EAP                    June 2019
-
-
        |   TLS(ServerHello,      |                |
     (1)|   Certificate,          |                |
        |   ServerKeyExchange,    |                |
@@ -687,6 +722,14 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
        |   ClientKeyExchange,    |                |
        |   CertificateVerify,    |                |
        |   ChangeCipherSpec,     |                |
+
+
+
+Lear, et al.             Expires January 6, 2020               [Page 13]
+
+Internet-Draft               BRSKI TEAP EAP                    July 2019
+
+
        |   Finished)             |                |
        |------------------------>|                |
        |                         |                |
@@ -723,13 +766,6 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
    CertificateRequest message in order to restrict the identity
    certificates that the device is allowed present.
 
-
-
-Lear, et al.            Expires December 30, 2019              [Page 13]
-
-Internet-Draft               BRSKI TEAP EAP                    June 2019
-
-
    (3) The device will present its LDevID, if it has one, in preference
    to its IDevID, if allowed by server policy.
 
@@ -742,6 +778,14 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
    +--------+                | Authenticator/ |    +------+  +----+
    | Client |                |   TEAP-Server  |    | MASA |  | CA |
    +--------+                +----------------+    +------+  +----+
+
+
+
+Lear, et al.             Expires January 6, 2020               [Page 14]
+
+Internet-Draft               BRSKI TEAP EAP                    July 2019
+
+
        |  EAP-Request/               |                |        |
        |   Type=Identity             |                |        |
        |<----------------------------|                |        |
@@ -778,14 +822,6 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
        |   ChangeCipherSpec,         |                |        |
        |   Finished)                 |                |        |
        |---------------------------->|                |        |
-
-
-
-Lear, et al.            Expires December 30, 2019              [Page 14]
-
-Internet-Draft               BRSKI TEAP EAP                    June 2019
-
-
        |                             |                |        |
        |  EAP-Request/               |                |        |
        |   Type=TEAP,                |                |        |
@@ -798,6 +834,14 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
        |  EAP-Response/              |                |        |
        |   Type=TEAP,                |                |        |
        |   {Crypto-Binding TLV,      |                |        |
+
+
+
+Lear, et al.             Expires January 6, 2020               [Page 15]
+
+Internet-Draft               BRSKI TEAP EAP                    July 2019
+
+
        |   Result TLV=Success}       |                |        |
        |---------------------------->|                |        |
        |                             |                |        |
@@ -834,14 +878,6 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
        |                             |                |        |
        |  EAP-Request/               |                |        |
        |   Type=TEAP,                |                |        |
-
-
-
-Lear, et al.            Expires December 30, 2019              [Page 15]
-
-Internet-Draft               BRSKI TEAP EAP                    June 2019
-
-
        |   {Trusted-Server-Root TLV} |                |        |
        |<----------------------------|                |        |
        |                             |                |        |
@@ -854,6 +890,14 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
        |   Type=TEAP,                |                |        |
        |   {CSR-Attributes TLV}      |                |        |
        |<----------------------------|                |        |
+
+
+
+Lear, et al.             Expires January 6, 2020               [Page 16]
+
+Internet-Draft               BRSKI TEAP EAP                    July 2019
+
+
        |                             |                |        |
        |  EAP-Response/              |                |        |
        |   Type=TEAP,                |                |        |
@@ -890,14 +934,6 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
    sending a Request-Action TLV that includes a BRSKI-RequestVoucher
    TLV.  The server also instructs the client to request trust anchors,
    to request CSR Attrites, and to initiate a PKCS certificate
-
-
-
-Lear, et al.            Expires December 30, 2019              [Page 16]
-
-Internet-Draft               BRSKI TEAP EAP                    June 2019
-
-
    enrolment.  As outlined in [RFC7170], the Request-Action TLV is sent
    after the Crypto-Binding TLV and Result TLV exchange.
 
@@ -910,6 +946,14 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
 
    (5) As outlined in [RFC7170], the Trusted-Server-Root TLV is
    exchanged after the Crypto-Binding TLV exchange, and after the client
+
+
+
+Lear, et al.             Expires January 6, 2020               [Page 17]
+
+Internet-Draft               BRSKI TEAP EAP                    July 2019
+
+
    has used the Voucher to authenticate the TEAP server identity.  This
    is equivalent to section [todo] from
    [I-D.ietf-anima-bootstrapping-keyinfra].
@@ -946,14 +990,6 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
        |   Type=TEAP,            |                |        |
        |   TLS(ClientHello)      |                |        |
        |------------------------>|                |        |
-
-
-
-Lear, et al.            Expires December 30, 2019              [Page 17]
-
-Internet-Draft               BRSKI TEAP EAP                    June 2019
-
-
        |                         |                |        |
        |  EAP-Request/           |                |        |
        |   Type=TEAP,            |                |        |
@@ -966,6 +1002,14 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
        |                         |                |        |
        |  EAP-Response/          |                |        |
        |   Type=TEAP,            |                |        |
+
+
+
+Lear, et al.             Expires January 6, 2020               [Page 18]
+
+Internet-Draft               BRSKI TEAP EAP                    July 2019
+
+
        |   TLS(Certificate,      |                |        |
        |   ClientKeyExchange,    |                |        |
        |   CertificateVerify,    |                |        |
@@ -1002,14 +1046,6 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
        |                         |   PKCS#10      |        |
        |  EAP-Request/           |--------------/ | \----->|
        |   Type=TEAP,            |                |        |
-
-
-
-Lear, et al.            Expires December 30, 2019              [Page 18]
-
-Internet-Draft               BRSKI TEAP EAP                    June 2019
-
-
        |   {PKCS#7 TLV,          |   PKCS#7       |        |
        |    Result TLV=Success}  |<-------------/ | \------|
        |<------------------------|                |        |
@@ -1021,6 +1057,13 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
        |                         |                |        |
        |  EAP-Success            |                |        |
        |<------------------------|                |        |
+
+
+
+
+Lear, et al.             Expires January 6, 2020               [Page 19]
+
+Internet-Draft               BRSKI TEAP EAP                    July 2019
 
 
             Figure 3: TEAP Server Instructs Client to Reenroll
@@ -1057,15 +1100,6 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
 
    This TLV is used by the server as part of a Request-Action TLV to
    request from the peer that it initiate a voucher request.  When used
-
-
-
-
-Lear, et al.            Expires December 30, 2019              [Page 19]
-
-Internet-Draft               BRSKI TEAP EAP                    June 2019
-
-
    in this fashion, the length of this TLV will be set to zero.  The
    Status field of the Request-Action TLV MUST be set to Failure.
 
@@ -1073,6 +1107,20 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
    used in this fashion, the length of the TLV will be set to that of
    the voucher request, as encoded and described in Section 3.3 in
    [I-D.ietf-anima-bootstrapping-keyinfra].
+
+
+
+
+
+
+
+
+
+
+Lear, et al.             Expires January 6, 2020               [Page 20]
+
+Internet-Draft               BRSKI TEAP EAP                    July 2019
+
 
        0                   1                   2                   3
        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -1113,15 +1161,6 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 
-
-
-
-
-Lear, et al.            Expires December 30, 2019              [Page 20]
-
-Internet-Draft               BRSKI TEAP EAP                    June 2019
-
-
    Upon receiving this TLV the peer will validate the signature of the
    voucher, using its pre-installed manufacturer trust anchor (LDevID).
    It MUST also validate the certificate used by the server to establish
@@ -1129,6 +1168,15 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
 
    If successful, it installs the new trust anchor contained in the
    voucher.
+
+
+
+
+
+Lear, et al.             Expires January 6, 2020               [Page 21]
+
+Internet-Draft               BRSKI TEAP EAP                    July 2019
+
 
    Otherwise, the peer transmits an TEAP error TLV with one of the
    following error messages:
@@ -1168,19 +1216,23 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
    definition of the TLV is not changed, however clarifications on
    allowed values for the TLV fields is documented.
 
-
-
-
-
-
-Lear, et al.            Expires December 30, 2019              [Page 21]
-
-Internet-Draft               BRSKI TEAP EAP                    June 2019
-
-
 7.2.1.  PKCS#10 TLV
 
    [RFC7170] defines the PKCS#10 TLV as follows:
+
+
+
+
+
+
+
+
+
+
+Lear, et al.             Expires January 6, 2020               [Page 22]
+
+Internet-Draft               BRSKI TEAP EAP                    July 2019
+
 
        0                   1                   2                   3
        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -1229,9 +1281,13 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
 
 
 
-Lear, et al.            Expires December 30, 2019              [Page 22]
+
+
+
+
+Lear, et al.             Expires January 6, 2020               [Page 23]
 
-Internet-Draft               BRSKI TEAP EAP                    June 2019
+Internet-Draft               BRSKI TEAP EAP                    July 2019
 
 
 9.  IANA Considerations
@@ -1285,9 +1341,9 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
 
 
 
-Lear, et al.            Expires December 30, 2019              [Page 23]
+Lear, et al.             Expires January 6, 2020               [Page 24]
 
-Internet-Draft               BRSKI TEAP EAP                    June 2019
+Internet-Draft               BRSKI TEAP EAP                    July 2019
 
 
    of the provisional TLS connection could potentially introduce
@@ -1341,15 +1397,15 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
 
 
 
-Lear, et al.            Expires December 30, 2019              [Page 24]
+Lear, et al.             Expires January 6, 2020               [Page 25]
 
-Internet-Draft               BRSKI TEAP EAP                    June 2019
+Internet-Draft               BRSKI TEAP EAP                    July 2019
 
 
 10.4.  Trust of Registrar
 
    The device accepts a trusted server (CA) certificate and installs it
-   in its trust anchor database during step 5 (see Section 3.1).  This
+   in its trust anchor database during step 5 (see Section 3.2).  This
    can happen only after the provisional TLS connection has been
    authenticated using the voucher and the Crypto-Binding TLV has been
    validated.
@@ -1397,9 +1453,9 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
 
 
 
-Lear, et al.            Expires December 30, 2019              [Page 25]
+Lear, et al.             Expires January 6, 2020               [Page 26]
 
-Internet-Draft               BRSKI TEAP EAP                    June 2019
+Internet-Draft               BRSKI TEAP EAP                    July 2019
 
 
    [RFC8366]  Watsen, K., Richardson, M., Pritikin, M., and T. Eckert,
@@ -1453,12 +1509,12 @@ Authors' Addresses
 
 
 
-Lear, et al.            Expires December 30, 2019              [Page 26]
+Lear, et al.             Expires January 6, 2020               [Page 27]
 
-Internet-Draft               BRSKI TEAP EAP                    June 2019
+Internet-Draft               BRSKI TEAP EAP                    July 2019
 
 
-   Dan harkins
+   Dan Harkins
    HP Enterprise
    3333 Scott Boulevard
    Santa Clara, CA  95054
@@ -1509,4 +1565,4 @@ Internet-Draft               BRSKI TEAP EAP                    June 2019
 
 
 
-Lear, et al.            Expires December 30, 2019              [Page 27]
+Lear, et al.             Expires January 6, 2020               [Page 28]

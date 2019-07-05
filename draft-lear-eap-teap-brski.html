@@ -378,7 +378,8 @@
 <link href="#rfc.section.1.1" rel="Chapter" title="1.1 Terminology">
 <link href="#rfc.section.2" rel="Chapter" title="2 TEAP BRSKI Architecture">
 <link href="#rfc.section.3" rel="Chapter" title="3 BRSKI Bootstrap and Enroll Operation">
-<link href="#rfc.section.3.1" rel="Chapter" title="3.1 Executing BRSKI in a TEAP Tunnel">
+<link href="#rfc.section.3.1" rel="Chapter" title="3.1 Discovery of Trusted MASA">
+<link href="#rfc.section.3.2" rel="Chapter" title="3.2 Executing BRSKI in a TEAP Tunnel">
 <link href="#rfc.section.4" rel="Chapter" title="4 PKI Certificate Considerations">
 <link href="#rfc.section.4.1" rel="Chapter" title="4.1 TEAP Tunnel Establishment">
 <link href="#rfc.section.4.2" rel="Chapter" title="4.2 BRSKI Trust Establishment">
@@ -415,7 +416,7 @@
 
   <meta name="dct.creator" content="Lear, E., Friel, O., Cam-Winget, N., and D. Harkins" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-lear-eap-teap-brski-03" />
-  <meta name="dct.issued" scheme="ISO8601" content="2019-06-28" />
+  <meta name="dct.issued" scheme="ISO8601" content="2019-07-05" />
   <meta name="dct.abstract" content="In certain environments, in order for a device to establish any layer three communications, it is necessary for that device to be properly credentialed.  This is a relatively easy problem to solve when a device is associated with a human being and has both input and display functions.  It is less easy when the human, input, and display functions are not present.  To address this case, this memo specifies extensions to the Tunnel Extensible Authentication Protocol (TEAP) method that leverages Bootstrapping Remote Secure Key Infrastructures (BRSKI) in order to provide a credential to a device at layer two.  The basis of this work is that a manufacturer will introduce the device and the local deployment through cryptographic means.  In this sense the same trust model as BRSKI is used." />
   <meta name="description" content="In certain environments, in order for a device to establish any layer three communications, it is necessary for that device to be properly credentialed.  This is a relatively easy problem to solve when a device is associated with a human being and has both input and display functions.  It is less easy when the human, input, and display functions are not present.  To address this case, this memo specifies extensions to the Tunnel Extensible Authentication Protocol (TEAP) method that leverages Bootstrapping Remote Secure Key Infrastructures (BRSKI) in order to provide a credential to a device at layer two.  The basis of this work is that a manufacturer will introduce the device and the local deployment through cryptographic means.  In this sense the same trust model as BRSKI is used." />
 
@@ -439,7 +440,7 @@
 <td class="right">N. Cam-Winget</td>
 </tr>
 <tr>
-<td class="left">Expires: December 30, 2019</td>
+<td class="left">Expires: January 6, 2020</td>
 <td class="right">Cisco Systems</td>
 </tr>
 <tr>
@@ -452,7 +453,7 @@
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">June 28, 2019</td>
+<td class="right">July 05, 2019</td>
 </tr>
 
     	
@@ -468,7 +469,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on December 30, 2019.</p>
+<p>This Internet-Draft will expire on January 6, 2020.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -486,7 +487,9 @@
 </li>
 <li>3.   <a href="#rfc.section.3">BRSKI Bootstrap and Enroll Operation</a>
 </li>
-<ul><li>3.1.   <a href="#rfc.section.3.1">Executing BRSKI in a TEAP Tunnel</a>
+<ul><li>3.1.   <a href="#rfc.section.3.1">Discovery of Trusted MASA</a>
+</li>
+<li>3.2.   <a href="#rfc.section.3.2">Executing BRSKI in a TEAP Tunnel</a>
 </li>
 </ul><li>4.   <a href="#rfc.section.4">PKI Certificate Considerations</a>
 </li>
@@ -572,8 +575,8 @@
 </h1>
 <p id="rfc.section.2.p.1">The TEAP BRSKI architecture is illustrated in <a href="#brski-architecture" class="xref">Section 3</a>. The device talks to the TEAP server via the Authenticator using any compliant transport such as <a href="#IEEE8021X" class="xref">[IEEE8021X]</a>.  The architecture illustrated shows an Authenticator distinct from the TEAP server. This is a deployment optimization and when so deployed the communication between Authenticator and TEAP server is a AAA protocol such as RADIUS or DIAMETER.</p>
 <p id="rfc.section.2.p.2">The architecture illustrated shows a co-located TEAP server and BRSKI registrar. Not only are these two functions co-located, they MUST be the same entity. This ensures that the entity identified in the device&#8217;s voucher request (the TEAP server) is the same entity that signs the voucher request (the registrar).</p>
-<p id="rfc.section.2.p.3">The registrar communicates with the BRSKI MASA service for the purposes of getting signed vouchers. [[TODO: I guess we should mention TEAP server talking to vendor default registrar in the cloud]]</p>
-<p id="rfc.section.2.p.4">The registrar also comunicates with a Certificate Authority in order to issue LDevIDs. The architecture shows the registrar and CA as being two logically separate entities, however the CA may be integrated into the registrar. The device is not explicitly aware of whether the CA and registrar functions are integrated.</p>
+<p id="rfc.section.2.p.3">The registrar communicates with the BRSKI MASA service for the purposes of getting signed vouchers.</p>
+<p id="rfc.section.2.p.4">The registrar also communicates with a Certificate Authority in order to issue LDevIDs. The architecture shows the registrar and CA as being two logically separate entities, however the CA may be integrated into the registrar. The device is not explicitly aware of whether the CA and registrar functions are integrated.</p>
 <pre>
 +--------+     +---------+     +---------+     +------+
 |        |     |         |     |  TEAP   |&lt;---&gt;| MASA |
@@ -596,15 +599,20 @@
 <li>Step 3: Device sends voucher request message and receives signed voucher response</li>
 <li>Step 4: Device validates voucher and validates provisional TLS connection to registrar</li>
 <li>Step 5: Device downloads additional local domain CA information</li>
-<li>Step 6: Device downloads Certificate Signing Reqeust (CSR) attributes</li>
+<li>Step 6: Device downloads Certificate Signing Request (CSR) attributes</li>
 <li>Step 7: Device does a certificate enroll to obtain an LDevID</li>
 <li>Step 8: Device periodically reenrolls via EST to refresh its LDevID</li>
 </ul>
 <p id="rfc.section.3.p.3">Most of the operational steps require the device, and thus its internal state machine, to automatically complete the next step without being explicitly instructed to do so by the registrar. For example, the registrar does not explicitly tell the device to download additional local domain CA information, or to do an EST enroll to obtain an LDevID.</p>
 <h1 id="rfc.section.3.1">
-<a href="#rfc.section.3.1">3.1.</a> <a href="#bint" id="bint">Executing BRSKI in a TEAP Tunnel</a>
+<a href="#rfc.section.3.1">3.1.</a> <a href="#discovery-of-trusted-masa" id="discovery-of-trusted-masa">Discovery of Trusted MASA</a>
 </h1>
-<p id="rfc.section.3.1.p.1">This section outlines how the main BRSKI steps outlined above map to TEAP, and how BRSKI and enrollment can be accomplished inside a TEAP TLS tunnel. The following new TEAP TLVs are introduced:</p>
+<p id="rfc.section.3.1.p.1">BRSKI section 2.8 outlines how the Registrar discovers the correct MASA to connect with. BRSKI section 5.3 outlines how the Registrar can make policy decisions about which devices to trust.</p>
+<p id="rfc.section.3.1.p.2">Similar approaches are applicable for TEAP servers executing BRSKI. For example, the TEAP server may be configured with a list of trusted manufacturing CAs. During device bootstrap, only devices with an IDevID signed by a trusted manufacturing CA may be allowed to etablishes a TLS connection with the TEAP server, and the TEAP server could then extract the MASA URI from the device&#8217;s IDevID.</p>
+<h1 id="rfc.section.3.2">
+<a href="#rfc.section.3.2">3.2.</a> <a href="#bint" id="bint">Executing BRSKI in a TEAP Tunnel</a>
+</h1>
+<p id="rfc.section.3.2.p.1">This section outlines how the main BRSKI steps outlined above map to TEAP, and how BRSKI and enrollment can be accomplished inside a TEAP TLS tunnel. The following new TEAP TLVs are introduced:</p>
 <p></p>
 
 <ul>
@@ -612,55 +620,55 @@
 <li>BRSKI-Voucher</li>
 <li>CSR-Attributes</li>
 </ul>
-<p id="rfc.section.3.1.p.3">The following steps outline how the above BRSKI flow maps to TEAP.</p>
+<p id="rfc.section.3.2.p.3">The following steps outline how the above BRSKI flow maps to TEAP.</p>
 <p></p>
 
 <ul><li>Step 1: Device discovers the registrar</li></ul>
-<p id="rfc.section.3.1.p.5">When BRSKI is executed in a TEAP tunnel, the device exchanges BRSKI TLVs with the TEAP server. The discovery process for devices is therefore the standard wired or wireless LAN EAP server discovery process. The discovery processes outlined in section 4 of <a href="#I-D.ietf-anima-bootstrapping-keyinfra" class="xref">[I-D.ietf-anima-bootstrapping-keyinfra]</a> are not required for initial discovery of the registrar.</p>
+<p id="rfc.section.3.2.p.5">When BRSKI is executed in a TEAP tunnel, the device exchanges BRSKI TLVs with the TEAP server. The discovery process for devices is therefore the standard wired or wireless LAN EAP server discovery process. The discovery processes outlined in section 4 of <a href="#I-D.ietf-anima-bootstrapping-keyinfra" class="xref">[I-D.ietf-anima-bootstrapping-keyinfra]</a> are not required for initial discovery of the registrar.</p>
 <p></p>
 
 <ul><li>Step 2: Device establishes provisional TLS connection to registrar</li></ul>
-<p id="rfc.section.3.1.p.7">The device establishes an outer TEAP tunnel with the TEAP server and does not validate the server certificate.  The device presents its LDevID as its identity certificate if it has a valid LDevID, otherwise it presents its IDevID. The TEAP server validates the device&#8217;s certificate using its implicit or explicit trust anchor database. If the device presents an IDevID it is verified against a database of trusted manufacturer certificates. Server policy may also be used to control which certificate the device is allowed present, as described in section {pki-certificate-authority-considerations}.</p>
-<p id="rfc.section.3.1.p.8">If the presented credential is sufficient to grant access, the TEAP server can return a TEAP Result TLV indicating success immediately. The device may still send a Request-Action TLV including a BRSKI-VoucherRequest TLV in response to the TEAP Result TLV if it does not have, but requires, provisioning of trust anchors for validating the TEAP server certificate. Note that no inner EAP method is required for this, only an exchange of TEAP TLVs.</p>
-<p id="rfc.section.3.1.p.9">[todo] Question: as the device wants the server to reply with a BRSKI-Voucher TLV, does it really send a Request-Action TLV containing a BRSKI-VoucherRequest TLV, or does it send a Request-Action TLV containing a BRSKI-Voucher TLV?? The TEAP draft is a bit ambiguous here. Normally, if one end sends a Request-Action including XXX-TLV, it means it wants the far end ot send an XXX-TLV&#8230;</p>
-<p id="rfc.section.3.1.p.10">[todo] Question: general TEAP protocol question: does the device have to send a Request-Action w/BRSKI-VoucherRequest or can it send a BRSKI-VoucherRequest on its own? I&#8217;m not clear on this.</p>
-<p id="rfc.section.3.1.p.11">If the TEAP server requires that the device execute a BRSKI flow, the server sends a Request-Action TLV that includes a BRSKI-VoucherRequest TLV. For example, if the device presented its IDevID but the TEAP server requires an LDevID.</p>
-<p id="rfc.section.3.1.p.12">[todo] Question: to nit pick, the server should send a Request-Action TLV including a PKCS#10 TLV to tell the client to enroll. How does the server really know that the client has the correct trust established (as previously received by a BRSKI-Voucher)? If the client sends an IDevID, does server always send a Request-Action including both BRSKI-VoucherRequest and PKCS#10 TLVs? Whats the client behaviour? I assume client can spontaneously send BRSKI-VoucherRequest and/or PCSK#10 without being explicitly instructed to. Just need to get the language correct here.</p>
-<p id="rfc.section.3.1.p.13">The TEAP server may also require the device to reenroll, for example, if the device presented a valid LDevID that is very closed to expiration. The server may instruct a device to reenroll by sending a Request-Action TLV that includes a zero byte length PKCS#10 TLV.</p>
+<p id="rfc.section.3.2.p.7">The device establishes an outer TEAP tunnel with the TEAP server and does not validate the server certificate.  The device presents its LDevID as its identity certificate if it has a valid LDevID, otherwise it presents its IDevID. The TEAP server validates the device&#8217;s certificate using its implicit or explicit trust anchor database. If the device presents an IDevID it is verified against a database of trusted manufacturer certificates. Server policy may also be used to control which certificate the device is allowed present, as described in section {pki-certificate-authority-considerations}.</p>
+<p id="rfc.section.3.2.p.8">If the presented credential is sufficient to grant access, the TEAP server can return a TEAP Result TLV indicating success immediately. The device may still send a Request-Action TLV including a BRSKI-VoucherRequest TLV in response to the TEAP Result TLV if it does not have, but requires, provisioning of trust anchors for validating the TEAP server certificate. Note that no inner EAP method is required for this, only an exchange of TEAP TLVs.</p>
+<p id="rfc.section.3.2.p.9">[todo] Question: as the device wants the server to reply with a BRSKI-Voucher TLV, does it really send a Request-Action TLV containing a BRSKI-VoucherRequest TLV, or does it send a Request-Action TLV containing a BRSKI-Voucher TLV?? The TEAP draft is a bit ambiguous here. Normally, if one end sends a Request-Action including XXX-TLV, it means it wants the far end ot send an XXX-TLV&#8230;</p>
+<p id="rfc.section.3.2.p.10">[todo] Question: general TEAP protocol question: does the device have to send a Request-Action w/BRSKI-VoucherRequest or can it send a BRSKI-VoucherRequest on its own? I&#8217;m not clear on this.</p>
+<p id="rfc.section.3.2.p.11">If the TEAP server requires that the device execute a BRSKI flow, the server sends a Request-Action TLV that includes a BRSKI-VoucherRequest TLV. For example, if the device presented its IDevID but the TEAP server requires an LDevID.</p>
+<p id="rfc.section.3.2.p.12">[todo] Question: to nit pick, the server should send a Request-Action TLV including a PKCS#10 TLV to tell the client to enroll. How does the server really know that the client has the correct trust established (as previously received by a BRSKI-Voucher)? If the client sends an IDevID, does server always send a Request-Action including both BRSKI-VoucherRequest and PKCS#10 TLVs? Whats the client behaviour? I assume client can spontaneously send BRSKI-VoucherRequest and/or PCSK#10 without being explicitly instructed to. Just need to get the language correct here.</p>
+<p id="rfc.section.3.2.p.13">The TEAP server may also require the device to reenroll, for example, if the device presented a valid LDevID that is very closed to expiration. The server may instruct a device to reenroll by sending a Request-Action TLV that includes a zero byte length PKCS#10 TLV.</p>
 <p></p>
 
 <ul><li>Step 3: Device sends voucher request message and receives signed voucher response</li></ul>
-<p id="rfc.section.3.1.p.15">The device sends a BRSKI-RequestVoucher TLV to the TEAP server. The TEAP server forwards the RequestVoucher message to the MASA server, and the MASA server replies with a signed voucher. The TEAP server sends a BRSKI-Voucher TLV to the device.</p>
-<p id="rfc.section.3.1.p.16">If the MASA server does not issue a signed voucher, the TEAP server sends an EAP-Error TLV with a suitable error code to the device.</p>
-<p id="rfc.section.3.1.p.17">For wireless devices in particular, it is important that the MASA server only return a voucher for devices known to be associated with a particular registrar.  In this sense, success indicates that the device is on the correct network, while failure indicates the device should try to provision itself within wireless networks (e.g, go to the next SSID).</p>
+<p id="rfc.section.3.2.p.15">The device sends a BRSKI-RequestVoucher TLV to the TEAP server. The TEAP server forwards the RequestVoucher message to the MASA server, and the MASA server replies with a signed voucher. The TEAP server sends a BRSKI-Voucher TLV to the device.</p>
+<p id="rfc.section.3.2.p.16">If the MASA server does not issue a signed voucher, the TEAP server sends an EAP-Error TLV with a suitable error code to the device.</p>
+<p id="rfc.section.3.2.p.17">For wireless devices in particular, it is important that the MASA server only return a voucher for devices known to be associated with a particular registrar.  In this sense, success indicates that the device is on the correct network, while failure indicates the device should try to provision itself within wireless networks (e.g, go to the next SSID).</p>
 <p></p>
 
 <ul><li>Step 4: Device validates voucher and validates provisional TLS connection to registrar</li></ul>
-<p id="rfc.section.3.1.p.19">The device validates the signed voucher using its manufacturer installed trust anchor, and uses the CA information in the voucher to validate the TLS connection to the TEAP server.</p>
-<p id="rfc.section.3.1.p.20">If the device fails to validate the voucher, then it sends a TEAP-Error TLV indicating failiure to the TEAP server.</p>
-<p id="rfc.section.3.1.p.21">Similarly, if the device validates the voucher, but fails to validate the provisional TLS connection, then it sends a TEAP-Error TLV indicating failure to the TEAP server. Note that the outer TLS tunnel has already been established, thus allowing the client to send a TEAP-Error TLV to the server inside that tunnel to indicate that it failed to verify the provisionally accepted outer TLS tunnel server identity.</p>
+<p id="rfc.section.3.2.p.19">The device validates the signed voucher using its manufacturer installed trust anchor, and uses the CA information in the voucher to validate the TLS connection to the TEAP server.</p>
+<p id="rfc.section.3.2.p.20">If the device fails to validate the voucher, then it sends a TEAP-Error TLV indicating failiure to the TEAP server.</p>
+<p id="rfc.section.3.2.p.21">Similarly, if the device validates the voucher, but fails to validate the provisional TLS connection, then it sends a TEAP-Error TLV indicating failure to the TEAP server. Note that the outer TLS tunnel has already been established, thus allowing the client to send a TEAP-Error TLV to the server inside that tunnel to indicate that it failed to verify the provisionally accepted outer TLS tunnel server identity.</p>
 <p></p>
 
 <ul><li>Step 5: Device downloads additional local domain CA information</li></ul>
-<p id="rfc.section.3.1.p.23">On completion of the BRSKI flow, the device SHOULD send a Trusted-Server-Root TLV to the TEAP server in order to discover additional local domain CAs. This is equivalent to section [todo] from <a href="#I-D.ietf-anima-bootstrapping-keyinfra" class="xref">[I-D.ietf-anima-bootstrapping-keyinfra]</a>.</p>
+<p id="rfc.section.3.2.p.23">On completion of the BRSKI flow, the device SHOULD send a Trusted-Server-Root TLV to the TEAP server in order to discover additional local domain CAs. This is equivalent to section [todo] from <a href="#I-D.ietf-anima-bootstrapping-keyinfra" class="xref">[I-D.ietf-anima-bootstrapping-keyinfra]</a>.</p>
 <p></p>
 
 <ul><li>Step 6: Device downloads CSR attributes</li></ul>
-<p id="rfc.section.3.1.p.25">No later than the completion of step 5, server MUST send a CSR-Attributes TLV to peer server in order to discover the correct fields to include when it enrolls to get an LDevID.</p>
+<p id="rfc.section.3.2.p.25">No later than the completion of step 5, server MUST send a CSR-Attributes TLV to peer server in order to discover the correct fields to include when it enrolls to get an LDevID.</p>
 <p></p>
 
 <ul><li>Step 7: Device does a certificate enroll to obtain an LDevID</li></ul>
-<p id="rfc.section.3.1.p.27">When executing the BRSKI flow inside a TEAP tunnel, the device does not directly leverage EST when doing its initial enroll. Instead, the device uses the existing TEAP PKCS#10 and PCKS#7 TEAP mechanisms.</p>
-<p id="rfc.section.3.1.p.28">Once the BRSKI flow is complete, the device can now send a PKCS#10 TLV to enroll and request an LDevID. If the TEAP server instructed the device to start the BRSKI flow via a Request-Action TLV that includes a BRSKI-RequestVoucher TLV, then the device MUST send a PKCS#10 in order to start the enroll process. The TEAP server will handle the PKCS#10 and ultimately return a PKCS#7 including an LDevID to the device.</p>
-<p id="rfc.section.3.1.p.29">If the TEAP server granted the device access on completion of the outer TEAP TLS tunnel in step 2 without sending a Request-Action TLV, the device does not have to send a PKCS#10 to enroll.</p>
-<p id="rfc.section.3.1.p.30">At this point, the device is said to be provisioned for local network access, and may authenticate in the future via 802.1X with its newly acquired credentials.</p>
+<p id="rfc.section.3.2.p.27">When executing the BRSKI flow inside a TEAP tunnel, the device does not directly leverage EST when doing its initial enroll. Instead, the device uses the existing TEAP PKCS#10 and PCKS#7 TEAP mechanisms.</p>
+<p id="rfc.section.3.2.p.28">Once the BRSKI flow is complete, the device can now send a PKCS#10 TLV to enroll and request an LDevID. If the TEAP server instructed the device to start the BRSKI flow via a Request-Action TLV that includes a BRSKI-RequestVoucher TLV, then the device MUST send a PKCS#10 in order to start the enroll process. The TEAP server will handle the PKCS#10 and ultimately return a PKCS#7 including an LDevID to the device.</p>
+<p id="rfc.section.3.2.p.29">If the TEAP server granted the device access on completion of the outer TEAP TLS tunnel in step 2 without sending a Request-Action TLV, the device does not have to send a PKCS#10 to enroll.</p>
+<p id="rfc.section.3.2.p.30">At this point, the device is said to be provisioned for local network access, and may authenticate in the future via 802.1X with its newly acquired credentials.</p>
 <p></p>
 
 <ul><li>Step 8: Device periodically reenrolls to refresh its LDevID</li></ul>
-<p id="rfc.section.3.1.p.32">When a device&#8217;s LDevID is close to expiration, there are two options for re-enrollment in order to obtain a fresh LDevID. As outlined in Step 2 above, the TEAP server may instruct the device to reenroll by sending a Request-Action TLV including a PKCS#10 TLV. If the TEAP server explicilty instructs the device to reenroll via these TLV exchange, then the device MUST send a PKCS#10 to reenroll and request a fresh LDevID.</p>
-<p id="rfc.section.3.1.p.33">However, the device SHOULD reenroll if it determines that its LDevID is close to expiration without waiting for explicit instruction from the TEAP server. There are two options to do this.</p>
-<p id="rfc.section.3.1.p.34">Option 1: The device reenrolls for a new LDevID directly with the EST CA outside the context of the 802.1X TEAP flow. The device uses the registrar discovery mechanisms oulined in <a href="#I-D.ietf-anima-bootstrapping-keyinfra" class="xref">[I-D.ietf-anima-bootstrapping-keyinfra]</a> to discover the registrar and the device sends the EST reenroll messages to the discovered registrar endpoint. No new TEAP TLVs are defined to facilitate discover of the registrar or EST endpoints inside the context of the TEAP tunnel.</p>
-<p id="rfc.section.3.1.p.35">Option 2: When the device is performing a periodic 802.1X authentication using its current LDevID, it reenrolls for a new LDevID by sending a PKCS#10 TLV inside the TEAP TLS tunnel.</p>
+<p id="rfc.section.3.2.p.32">When a device&#8217;s LDevID is close to expiration, there are two options for re-enrollment in order to obtain a fresh LDevID. As outlined in Step 2 above, the TEAP server may instruct the device to reenroll by sending a Request-Action TLV including a PKCS#10 TLV. If the TEAP server explicilty instructs the device to reenroll via these TLV exchange, then the device MUST send a PKCS#10 to reenroll and request a fresh LDevID.</p>
+<p id="rfc.section.3.2.p.33">However, the device SHOULD reenroll if it determines that its LDevID is close to expiration without waiting for explicit instruction from the TEAP server. There are two options to do this.</p>
+<p id="rfc.section.3.2.p.34">Option 1: The device reenrolls for a new LDevID directly with the EST CA outside the context of the 802.1X TEAP flow. The device uses the registrar discovery mechanisms oulined in <a href="#I-D.ietf-anima-bootstrapping-keyinfra" class="xref">[I-D.ietf-anima-bootstrapping-keyinfra]</a> to discover the registrar and the device sends the EST reenroll messages to the discovered registrar endpoint. No new TEAP TLVs are defined to facilitate discover of the registrar or EST endpoints inside the context of the TEAP tunnel.</p>
+<p id="rfc.section.3.2.p.35">Option 2: When the device is performing a periodic 802.1X authentication using its current LDevID, it reenrolls for a new LDevID by sending a PKCS#10 TLV inside the TEAP TLS tunnel.</p>
 <h1 id="rfc.section.4">
 <a href="#rfc.section.4">4.</a> <a href="#pki-certificate-considerations" id="pki-certificate-considerations">PKI Certificate Considerations</a>
 </h1>
@@ -677,11 +685,15 @@
 <a href="#rfc.section.4.1">4.1.</a> <a href="#teap-tunnel-establishment" id="teap-tunnel-establishment">TEAP Tunnel Establishment</a>
 </h1>
 <p id="rfc.section.4.1.p.1">Because this method establishes a client identity, and for purposes of partioning of responsibility, the peer uses a generic identity string of teap-brsk@TBD1 as its network access identifier (NAI).</p>
-<p id="rfc.section.4.1.p.2">The client sends its ClientHello to initiate TLS tunnel establishment. It is possible for the TEAP server to restrict the certificates that the client can use for tunnel establishment by including a list of CA distinguished names in the certificate_authorities field in the CertificateRequest message. Network operators may want to do this in order to restrict network access to clients that have a certificate signed by one of a small set of trusted manufacturer/supplier CAs. If the client has both an IDevID and an LDevID, the client should present the LDevID in preference to its IDevID if allowed by server policy.</p>
-<p id="rfc.section.4.1.p.3">In practice, network operators will likely want to onboard devices from a large number of device manufacturers, with each manufacturer using a different root CA when issuing IDevIDs. If the number of different manufacturer root CAs is large, this could result in very large TLS handshake messages. Operators may prefer to include no CAs in the certificate_authorities field thus allowing devices to present IDevIDs signed by any CA when establishing the TEAP tunnel, and instead enforce policy at LDevID enrollment time.</p>
-<p id="rfc.section.4.1.p.4">It is recommended that the client validate the certificate presented by the server in the server&#8217;s Certificate message, but this may not be possible for clients that have not yet provisioned appropriate trust anchors. If the client is in the provisioning phase and has not yet completed a BRSKI flow, it will not have trust anchors installed yet, and thus will not be able to validate the server&#8217;s certificate. The client must however note the certificate presented by the server for (i) inclusion in the BRSKI-RequestVoucher TLV and for (ii) validation once the client has discovered the local domain trust anchors.</p>
-<p id="rfc.section.4.1.p.5">If the client does not present a suitable certificate to the server, the server MUST terminate the connection and fail the EAP request. If the TEAP server is unable to validate the client&#8217;s certificate using its implicit or explicit trust anchor database it MUST fail the EAP request.</p>
-<p id="rfc.section.4.1.p.6">On establishment of the outer TLS tunnel, the TEAP server will make a policy decision on next steps. Possible policy decisions include:</p>
+<p id="rfc.section.4.1.p.2">BRSKI section 5.3 outlines the policy decisions a Registrar may make when deciding whether to accept connections from clients. Similarly, the TEAP server operator may configure a set of trusted CAs for validating incoming TLS connections from clients. The operator may want to &#8216;allow any device from a specific vendor&#8217;, or from a set of vendors, to access the network. Network operators may do this by restricting network access to clients that have a certificate signed by one of a small set of trusted manufacturer/supplier CAs.</p>
+<p id="rfc.section.4.1.p.3">When the client sends its ClientHello to initiate TLS tunnel establishment, it is possible for the TEAP server to restrict the certificates that the client can use for tunnel establishment by including a list of CA distinguished names in the certificate_authorities field in the CertificateRequest message. The client should only continue with the handshake if it has a certificate signed by one of the indicated CAs.</p>
+<p id="rfc.section.4.1.p.4">In practice, network operators will likely want to onboard devices from a large number of device manufacturers, with each manufacturer using a different root CA when issuing IDevIDs. If the number of different manufacturer root CAs is large, this could result in very large TLS handshake messages. Therefore, the TEAP server may send a CertificateRequest message and not specify any certificate_authorities, thus allowing the client present a certificate signed by any authority in its Certificate message.</p>
+<p id="rfc.section.4.1.p.5">If the client has both an IDevID and an LDevID, the client should present the LDevID in preference to its IDevID, if allowed by server policy.</p>
+<p id="rfc.section.4.1.p.6">Once the client has sent its TLS Finished message, the TEAP server can make a policy decision, based on the CA used to sign the client&#8217;s certificate, on whether to establish the outer TLS tunnel or not.</p>
+<p id="rfc.section.4.1.p.7">The TEAP server may delegate policy decisions to the MASA or CA function. For example, the TEAP server may declare EAP success and grant network access if the client presents a valid LDevID signed by a trusted domain CA. However, if the client presents an IDevID signed by a trusted manufacturer CA, the TEAP server may establish the TLS tunnel but not declare EAP success and grant network access until the client successfully completes a BRSKI Voucher exchange and PKCS#10/PKCS#7 exchange inside that tunnel.</p>
+<p id="rfc.section.4.1.p.8">It is recommended that the client validate the certificate presented by the server in the server&#8217;s Certificate message, but this may not be possible for clients that have not yet provisioned appropriate trust anchors. If the client is in the provisioning phase and has not yet completed a BRSKI flow, it will not have trust anchors installed yet, and thus will not be able to validate the server&#8217;s certificate. The client must however note the certificate presented by the server for (i) inclusion in the BRSKI-RequestVoucher TLV and for (ii) validation once the client has discovered the local domain trust anchors.</p>
+<p id="rfc.section.4.1.p.9">If the client does not present a suitable certificate to the server, the server MUST terminate the connection and fail the EAP request. If the TEAP server is unable to validate the client&#8217;s certificate using its implicit or explicit trust anchor database it MUST fail the EAP request.</p>
+<p id="rfc.section.4.1.p.10">On establishment of the outer TLS tunnel, the TEAP server will make a policy decision on next steps. Possible policy decisions include:</p>
 <p></p>
 
 <ul>
@@ -704,7 +716,7 @@
 <p><a href="#IEEE8021AR" class="xref">[IEEE8021AR]</a> section 7.2.7.2 states:</p>
 <p></p>
 
-<ul class="empty"><li>notAfter: The latest time a DevID is expected to be used. Devices possessing an IDevID are expected to operate indefinitely into the future and should use the value 99991231235959Z. Solutions verifying a DevID are expected to accept this value indefinitely.</li></ul>
+<ul class="empty"><li>notAfter: The latest time a DevID is expected to be used. Devices possessing an IDevID are expected to operate indefinitely into the future and should use the value 99991231235959Z. Solutions verifying an IDevID are expected to accept this value indefinitely.</li></ul>
 <p id="rfc.section.4.3.p.3">TEAP servers SHOULD follow the 802.1AR standard when validating IDevIDs.</p>
 <p id="rfc.section.4.3.p.4">TEAP servers SHOULD reject LDevIDs with expired certificates and SHOULD NOT allow clients to connect with recently expired LDevIDs. If a client presents a recently expired LDevID it SHOULD be forced to authenticate using its IDevID and then reenroll to obtain a valid LDevID.</p>
 <h1 id="rfc.section.5">
@@ -1185,7 +1197,7 @@ TBD9-CSR-Attribute-Fail Unable to supply the requested attributes.
 <h1 id="rfc.section.10.4">
 <a href="#rfc.section.10.4">10.4.</a> <a href="#trust-of-registrar" id="trust-of-registrar">Trust of Registrar</a>
 </h1>
-<p id="rfc.section.10.4.p.1">The device accepts a trusted server (CA) certificate and installs it in its trust anchor database during step 5 (see <a href="#bint" class="xref">Section 3.1</a>). This can happen only after the provisional TLS connection has been authenticated using the voucher and the Crypto-Binding TLV has been validated.</p>
+<p id="rfc.section.10.4.p.1">The device accepts a trusted server (CA) certificate and installs it in its trust anchor database during step 5 (see <a href="#bint" class="xref">Section 3.2</a>). This can happen only after the provisional TLS connection has been authenticated using the voucher and the Crypto-Binding TLV has been validated.</p>
 <h1 id="rfc.section.11">
 <a href="#rfc.section.11">11.</a> <a href="#acknowledgments" id="acknowledgments">Acknowledgments</a>
 </h1>
@@ -1311,7 +1323,7 @@ TBD9-CSR-Attribute-Fail Unable to supply the requested attributes.
 </div><div class="avoidbreak">
   <address class="vcard">
 	<span class="vcardline">
-	  <span class="fn">Dan harkins</span> 
+	  <span class="fn">Dan Harkins</span> 
 	  <span class="n hidden">
 		<span class="family-name">Harkins</span>
 	  </span>
