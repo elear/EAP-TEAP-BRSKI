@@ -328,12 +328,13 @@ by sending a PKCS#10 TLV inside the TEAP TLS tunnel.
 
 # PKI Certificate Considerations
 
-Careful consideration must be given to PKI certificate authority handling when:
+There are multiple noteworthy PKI certificate handling considerations. These include:
 
-- Establishing the TEAP tunnel
-- Establishing trust using BRSKI
-
-Additionally, consideration must be given to IDevID and LDevID expiration times.
+- PKI CA handling when establishing the TEAP tunnel
+- PKI CA handling establishing trust using BRSKI
+- IDevID and LDevID expiration times
+- Specifying LDevID Subject and Subject Alternative Names
+- PKCS#10 retry handling
 
 These are described in more detail here.
 
@@ -400,6 +401,20 @@ to the MASA\]
 TEAP servers SHOULD follow the 802.1AR standard when validating IDevIDs.
 
 TEAP servers SHOULD reject LDevIDs with expired certificates and SHOULD NOT allow clients to connect with recently expired LDevIDs. If a client presents a recently expired LDevID it SHOULD be forced to authenticate using its IDevID and then reenroll to obtain a valid LDevID.
+
+## LDevID Subject and Subject Alternative Names
+
+BRSKI section 5.9.2 specifies that the pledge MUST send a CSR Attributes request to the registrar. The registrar MAY use this mechanism to instruct the pledge about the identities it should include in the CSR request it sends as part of enrollment. The registrar may use this mechanism to tell the pledge what Subject or Subject Alternative Name identity information to include in its CSR request. This can be useful if the Subject must have a specific value in order to complete enrollment with the CA.
+
+## PKCS#10 Retry Handling
+
+They will be scenarios where the TEAP server is willing to handle a PKCS#10 request from a client and issue a certificate via a PKCS#7 response, however, the TEAP server is unable to immediately completely the request and needs to instruct the client to retry later after a specified time interval.
+
+A new Retry-After TLV is defined that the TEAP server uses to specify a retry interval in seconds. New error codes are defined to handle these two alternate retry scenarios.
+
+- The TEAP tunnel remains up: The client is instructed to resend the PKCS#10 request after a retry interval but inside the same TEAP tunnel. The TEAP server returns a Retry-After TLV to the client, and returns an Error TLV with a new code in the 1000-1999 range. 
+
+- The TEAP tunnel is torn down: The client is instructed to establish a new TEAP connection and TEAP tunnel after a retry interval, and resend the PKCS#10 request indside the new tunnel.  The TEAP server returns a Retry-After TLV to the client, and returns an Error TLV with a new code in the 2000-2999 range.
 
 # Channel and Crypto Binding
 
@@ -753,6 +768,7 @@ device, or Response messages from device to TEAP server.
 | BRSKI-VoucherRequest   | Response |
 | BRSKI-Voucher          | Request  |
 | CSR-Attributes         | Response |
+| Retry-After            | Response |
 +------------------------+----------+
 
 ~~~
@@ -846,6 +862,8 @@ shall include attributes required by the server in any following CSR.
 The value of this TLV is the base64 encoding described in Section
 4.5.2 of {{?RFC7030}}.
 
+The TEAP server MAY use this TLV to specify the subject identity information to include in Subject or Subjecet Alternate Name fields in any following CSR.
+
 ~~~
 
    0                   1                   2                   3
@@ -864,6 +882,24 @@ returned as follows:
 
 TBD9-CSR-Attribute-Fail Unable to supply the requested attributes.
 
+
+### Retry-After TLV
+
+The server MUST transmit this TLV to the peer when repling to a PKCS#10 TLV request from the peer where the server is willing to fulfill the request and issue a certificate via a PKCS#7 response, but is unable to fulfill the request immediately. This TLV is used to tell the peer the mimimum lenght of time it MUST wait before resending the PKCS#10 request. The value of this TLV is the time in seconds that the peer MUST wait before resending the PKCS#10 request. The peer MUST resend the exact same PKCS#10 request.
+
+~~~
+
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |M|R| TLV=TBD10-Retry-After   |         length                  |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   | Value...
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+~~~
+
+Again, the M and R values are set to 0.
 
 ## Existing TEAP TLV Specifications
 
@@ -930,6 +966,7 @@ The following new TEAP TLVs are defined:
 TBD1-VoucherRequest   Described in this document.
 TBD4-Voucher          Described in this document.
 TBD8-CSR-Attributes   Described in this document.
+TBD10-Retry-After Described in this document.
 
 ~~~
 
@@ -945,6 +982,8 @@ TBD6-Invalid-Voucher    The form or content of the voucher is not valid
 TBD7-Invalid-TLS-Signer The certificate used for the TLS connection
                         could not be validated.
 TBD9-CSR-Attribute-Fail Unable to supply the requested attributes.
+TBD11-Retry-PKCS#10     Retry PKCS#10 Request (1000 range code)
+TBD12-Retry-PKCS#10     Retry PKCS#10 Request (2000 range code)
 
 ~~~
 
