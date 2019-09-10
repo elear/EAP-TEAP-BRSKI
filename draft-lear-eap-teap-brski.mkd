@@ -424,7 +424,7 @@ Therefore, the device initially uses the generic identity string of "@eap-teap.n
 
 [[ TODO: It is unclear from EAP {{?RFC3748}} how the server should reply if it is not willing to offer the TEAP method. EAP offers no specific error code to indicate the reason why the request is rejected. ]]
 
-The TEAP server may specify an NAI that it wishes the device to use. For example, the server may want a bootstrapped device to use an NAI of "abc123@exampl.com", or simply an NAI of "@example.com". This could be desirable in order to facilitate roaming scenarios. The server can do this by sending the device an NAI TLV inside the TEAP tunnel.
+The TEAP server may specify an NAI that it wishes the device to use. For example, the server may want a bootstrapped device to use an NAI of "abc123@example.com", or simply an NAI of "@example.com". This could be desirable in order to facilitate roaming scenarios. The server can do this by sending the device an NAI TLV inside the TEAP tunnel.
 
 If the server specifies an NAI TLV, and the device handles the TLV, the device MUST use the specified NAI in all subsequent EAP authentication flows. If the device is not willing to handle the NAI TLV, it MUST reply with an Error TLV.
 
@@ -1021,6 +1021,8 @@ TBD12-Retry-PKCS#10     Retry PKCS#10 Request (2000 range code)
 TBD13-NAI-Rejected      The device will not use the indicated NAI (1000 range code)
 
 ~~~
+
+[[ TODO: is there a registry of NAIs that map to TEAP methods? e.g. @eap-teap.net is reserved to indicate the peer wants to use TEAP method ]]
 
 
 Security Considerations
