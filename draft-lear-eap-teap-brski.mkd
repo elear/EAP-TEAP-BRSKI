@@ -420,7 +420,7 @@ A new Retry-After TLV is defined that the TEAP server uses to specify a retry in
 
 EAP {{?RFC3748}} recommends that "the Identity Response be used primarily for routing purposes and selecting which EAP method to use". NAI {{?RFC7542}} recommends ommitting the username part of an NAI in order to support username privacy, where appropriate.
 
-Therefore, the device initially uses the generic identity string of "@eap-teap.net" as its NAI when sending the EAP Identity Response message. This informs the authenticator that the device wishes to use the TEAP method.
+Therefore, the device initially uses the generic identity string of "@IANA-TBD.ARPA" as its NAI when sending the EAP Identity Response message. This informs the authenticator that the device wishes to use the TEAP method.
 
 [[ TODO: It is unclear from EAP {{?RFC3748}} how the server should reply if it is not willing to offer the TEAP method. EAP offers no specific error code to indicate the reason why the request is rejected. ]]
 
