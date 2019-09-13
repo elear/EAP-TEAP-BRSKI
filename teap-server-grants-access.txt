@@ -1,0 +1,56 @@
+      ,------.             ,----------.
+      |Client|             |TEAPServer|
+      `--+---'             `----+-----'
+         |     EAP-Request/     |      
+         |     Identity         |      
+         | <---------------------      
+         |                      |      
+         |     EAP-Response/    |      
+         |     Type=Identity    |      
+         | --------------------->      
+         |                      |      
+         |   EAP-Request/       |      
+         |   Type=TEAP,         |      
+         |   TEAP Start,        |      
+         |   Authority-ID TLV   |      
+         | <---------------------      
+         |                      |      
+         |   EAP-Response/      |      
+         |   Type=TEAP,         |      
+         |   TLS(ClientHello)   |      
+         | --------------------->      
+         |                      |      
+         |  EAP-Request/        |      
+  ,---!. |  Type=TEAP,          |      
+  |(1)|_\|  TLS(ServerHello,    |      
+  |(2)  ||  ServerKeyExchange,  |      
+  `-----'|  ServerHelloDone)    |      
+         | <---------------------      
+         |                      |      
+         |  EAP-Response/       |      
+         |  Type=TEAP,          |      
+  ,---!. |  ClientKeyExchange,  |      
+  |(3)|_\|  CertificateVerify,  |      
+  `-----'|  ChangeCipherSpec,   |      
+         |  Finished)           |      
+         | --------------------->      
+         |                      |      
+         | EAP-Request/         |      
+         | Type=TEAP,           |      
+         | TLS(ChangeCipherSpec,|      
+         | Finished),           |      
+         | {Crypto-Binding TLV, |      
+         | Result TLV=Success}  |      
+         | <---------------------      
+         |                      |      
+         | EAP-Response/        |      
+         | Type=TEAP,           |      
+         | {Crypto-Binding TLV, |      
+         | Result TLV=Success}  |      
+         | --------------------->      
+         |                      |      
+         |      EAP-Success     |      
+         | <---------------------      
+      ,--+---.             ,----+-----.
+      |Client|             |TEAPServer|
+      `------'             `----------'

@@ -1,0 +1,88 @@
+      ,------.                      ,----------.          ,--.
+      |Client|                      |TEAPServer|          |CA|
+      `--+---'                      `----+-----'          `+-'
+         |          EAP-Request/         |                 |  
+         |          Identity             |                 |  
+         | <------------------------------                 |  
+         |                               |                 |  
+         |         EAP-Response/         |                 |  
+         |         Type=Identity         |                 |  
+         | ------------------------------>                 |  
+         |                               |                 |  
+         |        EAP-Request/           |                 |  
+         |        Type=TEAP,             |                 |  
+         |        TEAP Start,            |                 |  
+         |        Authority-ID TLV       |                 |  
+         | <------------------------------                 |  
+         |                               |                 |  
+         |        EAP-Response/          |                 |  
+         |        Type=TEAP,             |                 |  
+         |        TLS(ClientHello)       |                 |  
+         | ------------------------------>                 |  
+         |                               |                 |  
+         |       EAP-Request/            |                 |  
+         |       Type=TEAP,              |                 |  
+         |       TLS(ServerHello,        |                 |  
+         |       ServerKeyExchange,      |                 |  
+         |       ServerHelloDone)        |                 |  
+         | <------------------------------                 |  
+         |                               |                 |  
+         |       EAP-Response/           |                 |  
+         |       Type=TEAP,              |                 |  
+         |       ClientKeyExchange,      |                 |  
+         |       CertificateVerify,      |                 |  
+         |       ChangeCipherSpec,       |                 |  
+         |       Finished)               |                 |  
+         | ------------------------------>                 |  
+         |                               |                 |  
+         |     EAP-Request/              |                 |  
+         |     Type=TEAP,                |                 |  
+         |     TLS(ChangeCipherSpec,     |                 |  
+         |     Finished),                |                 |  
+         |     {Crypto-Binding TLV,      |                 |  
+         |     Result TLV=Success}       |                 |  
+         | <------------------------------                 |  
+         |                               |                 |  
+         |      EAP-Response/            |                 |  
+         |      Type=TEAP,               |                 |  
+         |      {Crypto-Binding TLV,     |                 |  
+         |      Result TLV=Success}      |                 |  
+         | ------------------------------>                 |  
+         |                               |                 |  
+         | EAP-Request/                  |                 |  
+         | Type=TEAP,{Request-Action TLV:|                 |  
+  ,---!. | Status=Failure,               |                 |  
+  |(1)|_\| Action=Process-TLV,           |                 |  
+  `-----'| TLV=PKCS#10}                  |                 |  
+         | <------------------------------                 |  
+         |                               |                 |  
+         |         EAP-Response/         |                 |  
+         |         Type=TEAP             |                 |  
+         |         {PKCS#10 TLV}         |                 |  
+         | ------------------------------>                 |  
+         |                               |                 |  
+         |                               |     PKCS#10     |  
+         |                               | ---------------->  
+         |                               |                 |  
+         |                               |      PKCS#7     |  
+         |                               | <----------------  
+         |                               |                 |  
+         |      EAP-Request/             |                 |  
+         |      Type=TEAP,               |                 |  
+         |      {PKCS#7 TLV,             |                 |  
+         |      Result TLV=Success}      |                 |  
+         | <------------------------------                 |  
+         |                               |                 |  
+         |      Eap-Response/            |                 |  
+         |      Type=TEAP                |                 |  
+         |      {Result TLV=Success}     |                 |  
+         | ------------------------------>                 |  
+         |                               |                 |  
+         |          EAP-Success          |                 |  
+         | <------------------------------                 |  
+         |                               |                 |  
+         |          EAP-Success          |                 |  
+         | <------------------------------                 |  
+      ,--+---.                      ,----+-----.          ,+-.
+      |Client|                      |TEAPServer|          |CA|
+      `------'                      `----------'          `--'
