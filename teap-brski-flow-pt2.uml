@@ -1,0 +1,13 @@
+@startuml
+
+participant Client
+participant TEAPServer
+participant CA
+
+Client->TEAPServer: EAP-Response/\nType=TEAP\n{PKCS#10 TLV}
+TEAPServer->CA: PKCS#10
+CA->TEAPServer: PKCS#7
+TEAPServer->Client: EAP-Request/\nType=TEAP,\n{PKCS#7 TLV,\nResult TLV=Success}
+Client->TEAPServer: Eap-Response/\nType=TEAP\n{Result TLV=Success}
+TEAPServer->Client: EAP-Success
+@enduml
