@@ -1,0 +1,36 @@
+@startuml
+
+participant Client
+participant TEAPServer
+participant CA
+
+TEAPServer->Client: EAP-Request/\nIdentity
+
+Client->TEAPServer: EAP-Response/\nType=Identity
+
+TEAPServer->Client:  EAP-Request/\nType=TEAP,\nTEAP Start,\nAuthority-ID TLV
+
+Client->TEAPServer:  EAP-Response/\nType=TEAP,\nTLS(ClientHello)
+
+TEAPServer->Client:  EAP-Request/\nType=TEAP,\nTLS(ServerHello,\nServerKeyExchange,\nServerHelloDone)
+
+Client->TEAPServer:  EAP-Response/\nType=TEAP,\nClientKeyExchange,\nCertificateVerify,\nChangeCipherSpec,\nFinished)
+
+TEAPServer->Client: EAP-Request/\nType=TEAP,\nTLS(ChangeCipherSpec,\nFinished),\n{Crypto-Binding TLV,\nResult TLV=Success}
+
+Client->TEAPServer: EAP-Response/\nType=TEAP,\n{Crypto-Binding TLV,\nResult TLV=Success}
+
+TEAPServer->Client: EAP-Request/\nType=TEAP,{Request-Action TLV:\nStatus=Failure,\nAction=Process-TLV,\nTLV=PKCS#10}
+note left
+(1)
+end note
+Client->TEAPServer: EAP-Response/\nType=TEAP\n{PKCS#10 TLV}
+TEAPServer->CA: PKCS#10
+CA->TEAPServer: PKCS#7
+TEAPServer->Client: EAP-Request/\nType=TEAP,\n{PKCS#7 TLV,\nResult TLV=Success}
+Client->TEAPServer: Eap-Response/\nType=TEAP\n{Result TLV=Success}
+TEAPServer->Client: EAP-Success
+
+TEAPServer->Client:  EAP-Success
+
+@enduml
