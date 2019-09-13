@@ -862,10 +862,10 @@ following error messages:
 
 ~~~
 
-TBD5-Invalid-Signature  The signature of the voucher signer is invalid
-TBD6-Invalid-Voucher    The form or content of the voucher is not valid
+TBD5-Invalid-Signature  The signature on the voucher is invalid
+TBD6-Invalid-Voucher    The form or content of the voucher is invalid
 TBD7-Invalid-TLS-Signer The certificate used for the TLS connection
-                       could not be validated.
+                        could not be validated.
 
 ~~~
 
@@ -1011,14 +1011,15 @@ listed here and in previous sections:
 
 TBD2-MASA-Notavailable  MASA unavailable
 TBD3-MASA-Refused       MASA refuses to sign the voucher
-TBD5-Invalid-Signature  The signature of the voucher signer is invalid
-TBD6-Invalid-Voucher    The form or content of the voucher is not valid
+TBD5-Invalid-Signature  The signature on the voucher is invalid
+TBD6-Invalid-Voucher    The form or content of the voucher is invalid
 TBD7-Invalid-TLS-Signer The certificate used for the TLS connection
                         could not be validated.
 TBD9-CSR-Attribute-Fail Unable to supply the requested attributes.
 TBD11-Retry-PKCS#10     Retry PKCS#10 Request (1000 range code)
 TBD12-Retry-PKCS#10     Retry PKCS#10 Request (2000 range code)
-TBD13-NAI-Rejected      The device will not use the indicated NAI (1000 range code)
+TBD13-NAI-Rejected      The device will not use the indicated
+                        NAI (1000 range code)
 
 ~~~
 
