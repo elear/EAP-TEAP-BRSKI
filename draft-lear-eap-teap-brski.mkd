@@ -1,8 +1,9 @@
 ---
-title: Bootstrapping Key Infrastructure over EAP
-abbrev: BRSKI TEAP EAP
-docname: draft-lear-eap-teap-brski-04
+title: TEAP Update and Extensions for Bootstrapping
+abbrev: TEAP Update and Extensions
+docname: draft-lear-eap-teap-brski-05
 category: std
+updates: RFC7170
 
 ipr: trust200902
 keyword: Internet-Draft
@@ -228,13 +229,14 @@ section {pki-certificate-authority-considerations}.
 
 If the presented credential is sufficient to grant access, the TEAP server can return a TEAP Result TLV indicating success immediately. The device may still send a Request-Action TLV including a BRSKI-VoucherRequest TLV in response to the TEAP Result TLV if it does not have, but requires, provisioning of trust anchors for validating the TEAP server certificate. Note that no inner EAP method is required for this, only an exchange of TEAP TLVs.
 
-[todo] Question: as the device wants the server to reply with a BRSKI-Voucher TLV, does it really send a Request-Action TLV containing a BRSKI-VoucherRequest TLV, or does it send a Request-Action TLV containing a BRSKI-Voucher TLV?? The TEAP draft is a bit ambiguous here. Normally, if one end sends a Request-Action including XXX-TLV, it means it wants the far end ot send an XXX-TLV...
+\[todo\] Question: as the device wants the server to reply with a BRSKI-Voucher TLV, does it really send a Request-Action TLV containing a BRSKI-VoucherRequest TLV, or does it send a Request-Action TLV containing a BRSKI-Voucher TLV?? The TEAP draft is a bit ambiguous here. Normally, if one end sends a Request-Action including XXX-TLV, it means it wants the far end ot send an XXX-TLV...
 
-[todo] Question: general TEAP protocol question: does the device have to send a Request-Action w/BRSKI-VoucherRequest or can it send a BRSKI-VoucherRequest on its own? I'm not clear on this.
+\[todo\] Question: general TEAP protocol question: does the device have to send a Request-Action w/BRSKI-VoucherRequest or can it send a BRSKI-VoucherRequest on its own? I'm not clear on this.
+
 
 If the TEAP server requires that the device execute a BRSKI flow, the server sends a Request-Action TLV that includes a BRSKI-VoucherRequest TLV. For example, if the device presented its IDevID but the TEAP server requires an LDevID.
 
-[todo] Question: to nit pick, the server should send a Request-Action TLV including a PKCS#10 TLV to tell the client to enroll. How does the server really know that the client has the correct trust established (as previously received by a BRSKI-Voucher)? If the client sends an IDevID, does server always send a Request-Action including both BRSKI-VoucherRequest and PKCS#10 TLVs? Whats the client behaviour? I assume client can spontaneously send BRSKI-VoucherRequest and/or PCSK#10 without being explicitly instructed to. Just need to get the language correct here.
+\[todo\] Question: to nit pick, the server should send a Request-Action TLV including a PKCS#10 TLV to tell the client to enroll. How does the server really know that the client has the correct trust established (as previously received by a BRSKI-Voucher)? If the client sends an IDevID, does server always send a Request-Action including both BRSKI-VoucherRequest and PKCS#10 TLVs? Whats the client behaviour? I assume client can spontaneously send BRSKI-VoucherRequest and/or PCSK#10 without being explicitly instructed to. Just need to get the language correct here.
 
 The TEAP server may also require the device to reenroll, for example, if the device presented a valid LDevID that is very closed to expiration. The server may instruct a device to reenroll by sending a Request-Action TLV that includes a zero byte length PKCS#10 TLV.
 
@@ -269,7 +271,7 @@ Similarly, if the device validates the voucher, but fails to validate the provis
 
 On completion of the BRSKI flow, the device SHOULD send a
 Trusted-Server-Root TLV to the TEAP server in order to discover
-additional local domain CAs. This is equivalent to section [todo] from {{I-D.ietf-anima-bootstrapping-keyinfra}}.
+additional local domain CAs. This is equivalent to section \[todo\] from {{I-D.ietf-anima-bootstrapping-keyinfra}}.
 
 - Step 6: Device downloads CSR attributes
 
@@ -340,9 +342,10 @@ These are described in more detail here.
 
 ## TEAP Tunnel Establishment
 
-Because this method establishes a client identity, and for purposes of
-partioning of responsibility, the peer uses a generic identity string
-of teap-brsk@TBD1 as its network access identifier (NAI).
+Because this method establishes a client identity, if the peer has not
+been previously bootstrapped, or otherwise cannot successfully
+authenticate, it will use a generic identity string of teap-bootstrap@TBD1
+as its network access identifier (NAI).
 
 BRSKI section 5.3 outlines the policy decisions a Registrar may make when deciding whether to accept connections from clients. Similarly, the TEAP server operator may configure a set of trusted CAs for validating incoming TLS connections from clients. The operator may want to 'allow any device from a specific vendor', or from a set of vendors, to access the network. Network operators may do this by restricting network access to clients that have a certificate signed by one of a small set of trusted manufacturer/supplier CAs.
 
@@ -420,15 +423,18 @@ A new Retry-After TLV is defined that the TEAP server uses to specify a retry in
 
 EAP {{?RFC3748}} recommends that "the Identity Response be used primarily for routing purposes and selecting which EAP method to use". NAI {{?RFC7542}} recommends ommitting the username part of an NAI in order to support username privacy, where appropriate.
 
-Therefore, the device initially uses the generic identity string of "@IANA-TBD.ARPA" as its NAI when sending the EAP Identity Response message. This informs the authenticator that the device wishes to use the TEAP method.
-
-[[ TODO: It is unclear from EAP {{?RFC3748}} how the server should reply if it is not willing to offer the TEAP method. EAP offers no specific error code to indicate the reason why the request is rejected. ]]
+A device that has not been bootstrapped at all SHOULD send an identity of
+teap-bootstrap@TBD1.  Otherwise, a device SHOULD send its configured NAI.
 
 The TEAP server may specify an NAI that it wishes the device to use. For example, the server may want a bootstrapped device to use an NAI of "abc123@example.com", or simply an NAI of "@example.com". This could be desirable in order to facilitate roaming scenarios. The server can do this by sending the device an NAI TLV inside the TEAP tunnel.
 
-If the server specifies an NAI TLV, and the device handles the TLV, the device MUST use the specified NAI in all subsequent EAP authentication flows. If the device is not willing to handle the NAI TLV, it MUST reply with an Error TLV.
+If the server specifies an NAI TLV, and the device handles the TLV, the device MAY use the specified NAI in all subsequent EAP authentication flows. If the device is not willing to handle the NAI TLV, it MUST reply with an Error TLV.
 
-[[ TODO: It is unclear from EAP how the server should reply in a roaming scenario where a device sends an NAI of "@example.com" and the server is unable to handle the request / is not federated with example.com / cannot reach example.com. EAP offers no specific error code to indicate the reason why the request is rejected. ]]
+Authentication servers implementing this specification MAY reply with
+an Error TLV to any unrecognized NAI, or MAY attempt to bootstrap the
+device, regardless of the NAI.  A device receving an Error from the
+server MAY attempt a new session without the NAI in order to
+bootstrap.
 
 # Channel and Crypto Binding
 
@@ -451,67 +457,7 @@ In this flow, the server grants access as server policy allows the client to acc
 
 
 ~~~
-
-
-                      +----------------+
-+--------+            | Authenticator/ |    +------+
-| Client |            |   TEAP-Server  |    | MASA |
-+--------+            +----------------+    +------+
-    |  EAP-Request/           |                |
-    |   Type=Identity         |                |
-    |<------------------------|                |
-    |                         |                |
-    |  EAP-Response/          |                |
-    |   Type=Identity         |                |
-    |------------------------>|                |
-    |                         |                |
-    |  EAP-Request/           |                |
-    |   Type=TEAP,            |                |
-    |   TEAP Start,           |                |
-    |   Authority-ID TLV      |                |
-    |<------------------------|                |
-    |                         |                |
-    |  EAP-Response/          |                |
-    |   Type=TEAP,            |                |
-    |   TLS(ClientHello)      |                |
-    |------------------------>|                |
-    |                         |                |
-    |  EAP-Request/           |                |
-    |   Type=TEAP,            |                |
-    |   TLS(ServerHello,      |                |
- (1)|   Certificate,          |                |
-    |   ServerKeyExchange,    |                |
- (2)|   CertificateRequest,   |                |
-    |   ServerHelloDone)      |                |
-    |<------------------------|                |
-    |                         |                |
-    |  EAP-Response/          |                |
-    |   Type=TEAP,            |                |
- (3)|   TLS(Certificate,      |                |
-    |   ClientKeyExchange,    |                |
-    |   CertificateVerify,    |                |
-    |   ChangeCipherSpec,     |                |
-    |   Finished)             |                |
-    |------------------------>|                |
-    |                         |                |
-    |  EAP-Request/           |                |
-    |   Type=TEAP,            |                |
-    |   TLS(ChangeCipherSpec, |                |
-    |   Finished),            |                |
-    |   {Crypto-Binding TLV,  |                |
-    |   Result TLV=Success}   |                |
-    |<------------------------|                |
-    |                         |                |
-    |  EAP-Response/          |                |
-    |   Type=TEAP,            |                |
-    |   {Crypto-Binding TLV,  |                |
-    |   Result TLV=Success}   |                |
-    |------------------------>|                |
-    |                         |                |
-    |  EAP-Success            |                |
-    |<------------------------|                |
-
-
+{::include teap-server-grants-access.atxt}
 ~~~
 {: #flow-1 title="TEAP Server Grants Access"}
 
@@ -525,134 +471,21 @@ Notes:
 
 ## TEAP Server Instructs Client to Perform BRSKI Flow
 
-In this flow, the server instructs the client to perform a BRSKI flow by exchanging TLVs once the outer TLS tunnel is established.
+In this two part flow, the server instructs the client to perform a BRSKI flow by exchanging TLVs once the outer TLS tunnel is established.  After that, enrollment takes place.
+
+In the first part of the flow, the MASA is depicted on the right.
 
 ~~~
+{::include teap-brski-flow-pt1.atxt}
+~~~
+{: #flow-2a title="TEAP Server Instructs Client to Perform BRSKI Flow"}
 
-                          +----------------+
-+--------+                | Authenticator/ |    +------+  +----+
-| Client |                |   TEAP-Server  |    | MASA |  | CA |
-+--------+                +----------------+    +------+  +----+
-    |  EAP-Request/               |                |        |
-    |   Type=Identity             |                |        |
-    |<----------------------------|                |        |
-    |                             |                |        |
-    |  EAP-Response/              |                |        |
-    |   Type=Identity             |                |        |
-    |---------------------------->|                |        |
-    |                             |                |        |
-    |  EAP-Request/               |                |        |
-    |   Type=TEAP,                |                |        |
-    |   TEAP Start,               |                |        |
-    |   Authority-ID TLV          |                |        |
-    |<----------------------------|                |        |
-    |                             |                |        |
-    |  EAP-Response/              |                |        |
-    |   Type=TEAP,                |                |        |
-    |   TLS(ClientHello)          |                |        |
-    |---------------------------->|                |        |
-    |                             |                |        |
-    |  EAP-Request/               |                |        |
-    |   Type=TEAP,                |                |        |
-    |   TLS(ServerHello,          |                |        |
- (1)|   Certificate,              |                |        |
-    |   ServerKeyExchange,        |                |        |
-    |   CertificateRequest,       |                |        |
-    |   ServerHelloDone)          |                |        |
-    |<----------------------------|                |        |
-    |                             |                |        |
-    |  EAP-Response/              |                |        |
-    |   Type=TEAP,                |                |        |
-    |   TLS(Certificate           |                |        |
-    |   ClientKeyExchange,        |                |        |
-    |   CertificateVerify,        |                |        |
-    |   ChangeCipherSpec,         |                |        |
-    |   Finished)                 |                |        |
-    |---------------------------->|                |        |
-    |                             |                |        |
-    |  EAP-Request/               |                |        |
-    |   Type=TEAP,                |                |        |
-    |   TLS(ChangeCipherSpec,     |                |        |
-    |   Finished),                |                |        |
-    |   {Crypto-Binding TLV,      |                |        |
-    |   Result TLV=Success}       |                |        |
-    |<----------------------------|                |        |
-    |                             |                |        |
-    |  EAP-Response/              |                |        |
-    |   Type=TEAP,                |                |        |
-    |   {Crypto-Binding TLV,      |                |        |
-    |   Result TLV=Success}       |                |        |
-    |---------------------------->|                |        |
-    |                             |                |        |
-  ** At this stage the outer TLS tunnel is established ** 
-  ** The following message exchanges are for BRSKI     **
-    |                             |                |        |
-    |  EAP-Request/               |                |        |
-    |   Type=TEAP,                |                |        |
- (2)|   {Request-Action TLV:      |                |        |
-    |     Status=Failure,         |                |        |
-    |     Action=Process-TLV,     |                |        |
-    |     TLV=Request-Voucher,    |                |        |
-    |     TLV=Trusted-Server-Root,|                |        |
-    |     TLV=CSR-Attributes,     |                |        |
-    |     TLV=PKCS#10}            |                |        |
-    |<----------------------------|                |        |
-    |                             |                |        |
-    |  EAP-Response/              |                |        |
-    |   Type=TEAP,                |                |        |
- (3)|   {Request-Voucher TLV}     |                |        |
-    |---------------------------->| RequestVoucher |        |
-    |                             |--------------->|        |
-    |                             |    Voucher     |        |
-    |                             |<---------------|        |
-    |  EAP-Request/               |                |        |
-    |   Type=TEAP,                |                |        |
- (4)|   {Voucher TLV}             |                |        |
-    |<----------------------------|                |        |
-    |                             |                |        |
-    |  EAP-Response/              |                |        |
-    |   Type=TEAP,                |                |        |
- (5)|   {Trusted-Server-Root TLV} |                |        |
-    |---------------------------->|                |        |
-    |                             |                |        |
-    |  EAP-Request/               |                |        |
-    |   Type=TEAP,                |                |        |
-    |   {Trusted-Server-Root TLV} |                |        |
-    |<----------------------------|                |        |
-    |                             |                |        |
-    |  EAP-Response/              |                |        |
-    |   Type=TEAP,                |                |        |
-    |   {CSR-Attributes TLV}      |                |        |
-    |---------------------------->|                |        |
-    |                             |                |        |
-    |  EAP-Request/               |                |        |
-    |   Type=TEAP,                |                |        |
-    |   {CSR-Attributes TLV}      |                |        |
-    |<----------------------------|                |        |
-    |                             |                |        |
-    |  EAP-Response/              |                |        |
-    |   Type=TEAP,                |                |        |
-    |   {PKCS#10 TLV}             |                |        |
-    |---------------------------->|                |        |
-    |                             |   PKCS#10      |        |
-    |  EAP-Request/               |--------------/ | \----->|
-    |   Type=TEAP,                |                |        |
-    |   {PKCS#7 TLV,              |   PKCS#7       |        |
- (6)|    Result TLV=Success}      |<-------------/ | \------|
-    |<----------------------------|                |        |
-    |                             |                |        |
-    |  EAP-Response/              |                |        |
-    |   Type=TEAP,                |                |        |
-    |   {Result TLV=Success}      |                |        |
-    |---------------------------->|                |        |
-    |                             |                |        |
-    |  EAP-Success                |                |        |
-    |<----------------------------|                |        |
-
-
+The second part of the flow depicts the CA on the right.
 
 ~~~
-{: #flow-2 title="TEAP Server Instructs Client to Perform BRSKI Flow"}
+{::include teap-brski-flow-pt2.atxt}
+~~~
+{: #flow-2b title="Enrollment after BRSKI Flow"}
 
 Notes:
 
@@ -664,7 +497,7 @@ Notes:
 
 (4) Once the client receives and validates the voucher signed by the MASA, it must verify the certificate it previously received from the server.
 
-(5) As outlined in {{!RFC7170}}, the Trusted-Server-Root TLV is exchanged after the Crypto-Binding TLV exchange, and after the client has used the Voucher to authenticate the TEAP server identity. This is equivalent to section [todo] from {{I-D.ietf-anima-bootstrapping-keyinfra}}.
+(5) As outlined in {{!RFC7170}}, the Trusted-Server-Root TLV is exchanged after the Crypto-Binding TLV exchange, and after the client has used the Voucher to authenticate the TEAP server identity. This is equivalent to section \[todo\] from {{I-D.ietf-anima-bootstrapping-keyinfra}}.
 
 (6) There is no need for an additional Crypto-Binding TLV exchange as there is no inner EAP method. All BRSKI exchanges are simply TLVs exchanged inside the outer TLS tunnel.
 
@@ -673,89 +506,7 @@ Notes:
 In this flow, the server instructs the client to reenroll and get a new LDevID by exchanging TLVs once the outer TLS tunnel is established.
 
 ~~~
-
-                      +----------------+
-+--------+            | Authenticator/ |    +------+  +----+
-| Client |            |   TEAP-Server  |    | MASA |  | CA |
-+--------+            +----------------+    +------+  +----+
-    |  EAP-Request/           |                |        |
-    |   Type=Identity         |                |        |
-    |<------------------------|                |        |
-    |                         |                |        |
-    |  EAP-Response/          |                |        |
-    |   Type=Identity         |                |        |
-    |------------------------>|                |        |
-    |                         |                |        |
-    |  EAP-Request/           |                |        |
-    |   Type=TEAP,            |                |        |
-    |   TEAP Start,           |                |        |
-    |   Authority-ID TLV      |                |        |
-    |<------------------------|                |        |
-    |                         |                |        |
-    |  EAP-Response/          |                |        |
-    |   Type=TEAP,            |                |        |
-    |   TLS(ClientHello)      |                |        |
-    |------------------------>|                |        |
-    |                         |                |        |
-    |  EAP-Request/           |                |        |
-    |   Type=TEAP,            |                |        |
-    |   TLS(ServerHello,      |                |        |
-    |   Certificate,          |                |        |
-    |   ServerKeyExchange,    |                |        |
-    |   CertificateRequest,   |                |        |
-    |   ServerHelloDone)      |                |        |
-    |<------------------------|                |        |
-    |                         |                |        |
-    |  EAP-Response/          |                |        |
-    |   Type=TEAP,            |                |        |
-    |   TLS(Certificate,      |                |        |
-    |   ClientKeyExchange,    |                |        |
-    |   CertificateVerify,    |                |        |
-    |   ChangeCipherSpec,     |                |        |
-    |   Finished)             |                |        |
-    |------------------------>|                |        |
-    |                         |                |        |
-    |  EAP-Request/           |                |        |
-    |   Type=TEAP,            |                |        |
-    |   TLS(ChangeCipherSpec, |                |        |
-    |   Finished),            |                |        |
-    |   {Crypto-Binding TLV,  |                |        |
-    |   Result TLV=Success}   |                |        |
-    |<------------------------|                |        |
-    |                         |                |        |
-    |  EAP-Response/          |                |        |
-    |   Type=TEAP,            |                |        |
-    |   {Crypto-Binding TLV,  |                |        |
-    |   Result TLV=Success}   |                |        |
-    |------------------------>|                |        |
-    |                         |                |        |
-    |  EAP-Request/           |                |        |
-    |   Type=TEAP,            |                |        |
- (1)|   {Request-Action TLV:  |                |        |
-    |     Status=Failure,     |                |        |
-    |     Action=Process-TLV, |                |        |
-    |     TLV=PKCS#10}        |                |        |
-    |<------------------------|                |        |
-    |                         |                |        |
-    |  EAP-Response/          |                |        |
-    |   Type=TEAP,            |                |        |
-    |   {PKCS#10 TLV}         |                |        |
-    |------------------------>|                |        |
-    |                         |   PKCS#10      |        |
-    |  EAP-Request/           |--------------/ | \----->|
-    |   Type=TEAP,            |                |        |
-    |   {PKCS#7 TLV,          |   PKCS#7       |        |
-    |    Result TLV=Success}  |<-------------/ | \------|
-    |<------------------------|                |        |
-    |                         |                |        |
-    |  EAP-Response/          |                |        |
-    |   Type=TEAP,            |                |        |
-    |   {Result TLV=Success}  |                |        |
-    |------------------------>|                |        |
-    |                         |                |        |
-    |  EAP-Success            |                |        |
-    |<------------------------|                |        |
-
+{::include reenroll.atxt}
 ~~~
 {: #flow-3 title="TEAP Server Instructs Client to Reenroll"}
 
@@ -1023,7 +774,7 @@ TBD13-NAI-Rejected      The device will not use the indicated
 
 ~~~
 
-[[ TODO: is there a registry of NAIs that map to TEAP methods? e.g. @eap-teap.net is reserved to indicate the peer wants to use TEAP method ]]
+\[\[ TODO: is there a registry of NAIs that map to TEAP methods? e.g. @eap-teap.net is reserved to indicate the peer wants to use TEAP method \]\]
 
 
 Security Considerations
